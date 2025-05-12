@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradingView Benzeri Uygulama</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Üst Menü -->
+    <header class="header">
+      <div class="logo">
+        <h1>TradeViz</h1>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="symbolSearch" placeholder="Sembol ara..." data-i18n="header.search">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+      <div class="user-menu">
+        <button id="loginBtn" class="btn btn-primary" data-i18n="header.login">Giriş Yap</button>
+        <button id="registerBtn" class="btn" data-i18n="header.register">Kaydol</button>
+        <div class="language-switcher">
+          <button class="language-btn" data-lang="tr">TR</button>
+          <button class="language-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Ana İçerik -->
+    <main class="main-content">
+      <!-- Sol Panel - Sembol Listesi -->
+      <aside class="left-panel">
+        <h2 data-i18n="watchlist.title">İzleme Listesi</h2>
+        <ul id="watchlist" class="stock-list">
+          <!-- Buraya semboller JavaScript ile eklenecek -->
+        </ul>
+      </aside>
+
+      <!-- Orta Panel - Grafik -->
+      <section class="chart-container">
+        <div class="chart-header">
+          <h2 id="chartSymbol">BTCUSDT</h2>
+          <div class="timeframe-selector">
+            <button class="timeframe active" data-timeframe="1m" data-i18n="chart.intervals.1d">1g</button>
+            <button class="timeframe" data-timeframe="5m" data-i18n="chart.intervals.1h">1s</button>
+            <button class="timeframe" data-timeframe="15m" data-i18n="chart.intervals.4h">4s</button>
+            <button class="timeframe" data-timeframe="1h" data-i18n="chart.intervals.1w">1h</button>
+          </div>
+        </div>
+        <div id="chart"></div>
+      </section>
+
+      <!-- Sağ Panel - Detaylar -->
+      <aside class="right-panel">
+        <div class="market-info">
+          <h2 data-i18n="marketInfo.title">Piyasa Bilgisi</h2>
+          <div class="market-data">
+            <div class="data-row">
+              <span class="label" data-i18n="marketInfo.price">Fiyat:</span>
+              <span id="currentPrice" class="value">$45,678.90</span>
+            </div>
+            <div class="data-row">
+              <span class="label" data-i18n="marketInfo.change">Değişim:</span>
+              <span id="priceChange" class="value up">+2.34%</span>
+            </div>
+            <div class="data-row">
+              <span class="label" data-i18n="marketInfo.high">24s Yüksek:</span>
+              <span id="high24h" class="value">$46,123.45</span>
+            </div>
+            <div class="data-row">
+              <span class="label" data-i18n="marketInfo.low">24s Düşük:</span>
+              <span id="low24h" class="value">$44,789.01</span>
+            </div>
+            <div class="data-row">
+              <span class="label" data-i18n="marketInfo.volume">Hacim:</span>
+              <span id="volume" class="value">$1.23B</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Modal - Giriş -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 data-i18n="auth.loginTitle">Giriş Yap</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginUsername" data-i18n="auth.username">Kullanıcı Adı</label>
+          <input type="text" id="loginUsername" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword" data-i18n="auth.password">Şifre</label>
+          <input type="password" id="loginPassword" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" data-i18n="auth.loginButton">Giriş Yap</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal - Kaydol -->
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 data-i18n="auth.registerTitle">Kaydol</h2>
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="registerUsername" data-i18n="auth.username">Kullanıcı Adı</label>
+          <input type="text" id="registerUsername" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="registerEmail" data-i18n="auth.email">E-posta</label>
+          <input type="email" id="registerEmail" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="registerPassword" data-i18n="auth.password">Şifre</label>
+          <input type="password" id="registerPassword" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" data-i18n="auth.registerButton">Kaydol</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dil dosyaları -->
+  <script src="js/i18n.js"></script>
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html> 

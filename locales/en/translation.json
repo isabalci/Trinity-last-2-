@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "TradingView-like Platform",
+    "welcome": "Welcome!"
+  },
+  "header": {
+    "search": "Search symbol...",
+    "login": "Login",
+    "register": "Register",
+    "account": "My Account",
+    "logout": "Logout"
+  },
+  "chart": {
+    "intervals": {
+      "1d": "1 day",
+      "1h": "1 hour",
+      "4h": "4 hours",
+      "1w": "1 week"
+    }
+  },
+  "marketInfo": {
+    "title": "Market Information",
+    "price": "Price",
+    "change": "Change",
+    "high": "24h High",
+    "low": "24h Low",
+    "volume": "Volume"
+  },
+  "watchlist": {
+    "title": "Watchlist",
+    "add": "Add to List",
+    "create": "Create New List",
+    "edit": "Edit List",
+    "delete": "Delete List"
+  },
+  "auth": {
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "loginTitle": "Login",
+    "registerTitle": "Register",
+    "loginButton": "Login",
+    "registerButton": "Register",
+    "required": "This field is required",
+    "loginSuccess": "Login successful",
+    "registerSuccess": "Registration successful"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "save": "Save"
+  },
+  "errors": {
+    "general": "An error occurred",
+    "login": "An error occurred during login",
+    "register": "An error occurred during registration",
+    "notFound": "Page not found"
+  }
+} 
