@@ -51,16 +51,17 @@ document.addEventListener('DOMContentLoaded', function() {
    * Grafiklerin Başlatılması
    */
   function initializeCharts() {
-    // Ana grafik
+    // Üst grafik olarak Nasdaq göster (açılış sayfası)
     chartManager.initializeChart();
+    chartManager.changeSymbol('NASDAQ');
     
-    // Nasdaq grafiği
+    // Nasdaq grafiği - ikinci grafik olarak başka bir veri gösterebiliriz
     nasdaqChartManager.initializeChart();
-    nasdaqChartManager.changeSymbol('NASDAQ');
+    nasdaqChartManager.changeSymbol('BTCUSDT'); // Bitcoin verilerini gösterelim
     
-    // Featured indeks grafiği
+    // Featured S&P 500 grafiği
     if (featuredChartEl) {
-      loadFeaturedChart(activeIndex, activeTimeframe);
+      loadFeaturedChart('nasdaq', '1D'); // Nasdaq'ı gösterelim
     }
   }
   
@@ -301,17 +302,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Zaman Dilimi Seçimi
-    timeframeButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        timeframeButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        
-        const timeframe = this.getAttribute('data-timeframe');
-        chartManager.changeTimeframe(timeframe);
-      });
-    });
-    
     // Dil Değiştirme
     if (languageSelector) {
       languageSelector.addEventListener('change', function() {
@@ -329,20 +319,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Market İndeksleri Tıklama
     marketIndices.forEach(indexEl => {
       indexEl.addEventListener('click', function() {
+        // Aktif sınıfını kaldır
+        marketIndices.forEach(idx => idx.classList.remove('active'));
+        
+        // Bu öğeyi aktif yap
+        this.classList.add('active');
+        
+        // İndeks ID'sini al ve grafiği güncelle
         activeIndex = this.dataset.index;
         loadFeaturedChart(activeIndex, activeTimeframe);
       });
     });
     
-    // İndeks Sekme Tıklama
-    indexTabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        indexTabs.forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-      });
-    });
-    
-    // Zaman Butonu Tıklama
+    // Zaman Butonu Tıklama (S&P 500 Grafiği için)
     timeButtons.forEach(btn => {
       btn.addEventListener('click', function() {
         timeButtons.forEach(b => b.classList.remove('active'));
