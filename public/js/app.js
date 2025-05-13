@@ -267,17 +267,15 @@ document.addEventListener('DOMContentLoaded', function() {
   function addEventListeners() {
     // Giriş modal açma
     if (loginBtn) {
-      loginBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        loginModal.style.display = 'block';
+      loginBtn.addEventListener('click', function() {
+        loginModal.style.display = 'flex';
       });
     }
     
     // Ayarlar modal açma
     if (settingsBtn) {
-      settingsBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        settingsModal.style.display = 'block';
+      settingsBtn.addEventListener('click', function() {
+        settingsModal.style.display = 'flex';
       });
     }
     
@@ -301,14 +299,17 @@ document.addEventListener('DOMContentLoaded', function() {
       button.addEventListener('click', function() {
         timeframeButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
-        chartManager.changeTimeframe(this.dataset.timeframe);
+        
+        const timeframe = this.getAttribute('data-timeframe');
+        chartManager.changeTimeframe(timeframe);
       });
     });
     
     // Dil Değiştirme
     if (languageSelector) {
       languageSelector.addEventListener('change', function() {
-        i18next.changeLanguage(this.value).then(() => {
+        const lang = this.value;
+        i18next.changeLanguage(lang, function() {
           updateLanguage();
         });
       });
@@ -339,9 +340,51 @@ document.addEventListener('DOMContentLoaded', function() {
       btn.addEventListener('click', function() {
         timeButtons.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-        activeTimeframe = this.dataset.timeframe;
+        activeTimeframe = this.getAttribute('data-timeframe');
         loadFeaturedChart(activeIndex, activeTimeframe);
       });
+    });
+
+    // Göster/gizle tıklamaları için event delegation
+    document.body.addEventListener('click', function(e) {
+      // Tüm açık dropdown'ları kapat, ancak şimdi tıklanan hariç
+      const dropdowns = document.querySelectorAll('.dropdown-menu.show');
+      dropdowns.forEach(function(dropdown) {
+        if (e.target.closest('.tool-btn') !== dropdown.previousElementSibling) {
+          dropdown.classList.remove('show');
+        }
+      });
+      
+      // Indicator dropdown toggle
+      if (e.target.closest('#indicatorsBtn')) {
+        document.getElementById('indicatorsDropdown').classList.toggle('show');
+      }
+      
+      // Comparison dropdown toggle
+      if (e.target.closest('#addComparison')) {
+        document.getElementById('comparisonDropdown').classList.toggle('show');
+      }
+      
+      // Export dropdown toggle
+      if (e.target.closest('#exportChart')) {
+        document.getElementById('exportDropdown').classList.toggle('show');
+      }
+      
+      // İndikatör seçimi
+      if (e.target.closest('.indicator-item')) {
+        const type = e.target.closest('.indicator-item').getAttribute('data-type');
+        // İndikatör ekle
+        chartManager.addIndicator(type);
+        document.getElementById('indicatorsDropdown').classList.remove('show');
+      }
+    });
+
+    // Pencere boyutu değişikliklerinde grafikleri yeniden boyutlandır
+    window.addEventListener('resize', function() {
+      chartManager.handleResize();
+      if (featuredChartManager) {
+        featuredChartManager.handleResize();
+      }
     });
   }
   

@@ -402,9 +402,18 @@ body {
   border-bottom: 1px solid #2a2e39;
 }
 
+.timeframe-selector-container {
+  padding: 10px 15px;
+  background-color: #1e222d;
+  border-top: 1px solid #2a2e39;
+  display: flex;
+  justify-content: center;
+}
+
 .timeframe-selector {
   display: flex;
   gap: 5px;
+  justify-content: center;
 }
 
 .timeframe {
@@ -1315,13 +1324,23 @@ body {
   font-weight: 500;
 }
 
+/* Featured Chart Container */
+.featured-chart-container {
+  background-color: #1e222d;
+  border-radius: 8px;
+  padding: 15px;
+  height: 470px;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Market Indeksleri */
 .market-indices {
   display: flex;
   gap: 15px;
-  margin-bottom: 30px;
   overflow-x: auto;
   padding-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .market-index {
@@ -1333,6 +1352,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 190px;
+  border: 1px solid #2a2e39;
 }
 
 .market-index:hover {
@@ -1407,14 +1427,6 @@ body {
   font-size: 14px;
 }
 
-/* Featured Chart Container */
-.featured-chart-container {
-  background-color: #1e222d;
-  border-radius: 8px;
-  padding: 15px;
-  height: 400px;
-}
-
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -1444,9 +1456,25 @@ body {
   font-weight: 600;
 }
 
+.featured-chart {
+  flex: 1;
+  width: 100%;
+  min-height: 300px;
+  margin-bottom: 10px;
+}
+
+/* Zaman Butonları Containeri (Grafiğin Altına) */
+.timeframe-buttons-container {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(42, 46, 57, 0.5);
+}
+
 .timeframe-buttons {
   display: flex;
   gap: 5px;
+  justify-content: center;
 }
 
 .time-btn {
@@ -1471,7 +1499,52 @@ body {
   color: white;
 }
 
-.featured-chart {
-  height: calc(100% - 40px);
-  width: 100%;
+/* Modify market-indices in chart-toolbar */
+.chart-toolbar .market-indices {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  max-width: 70%;
+}
+
+.chart-toolbar .market-index {
+  min-width: 130px;
+  padding: 8px 10px;
+  background-color: #1e222d;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #2a2e39;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chart-toolbar .index-badge {
+  margin-right: 5px;
+}
+
+.chart-toolbar .badge-circle {
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.chart-toolbar .index-details {
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.chart-toolbar .index-name {
+  font-size: 12px;
+}
+
+.chart-toolbar .index-price {
+  font-size: 11px;
+}
+
+.chart-toolbar .index-change {
+  font-size: 12px;
 } 

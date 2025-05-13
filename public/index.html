@@ -53,78 +53,7 @@
     <section class="chart-container" id="marketSummary">
       <!-- Üst Araç Çubuğu -->
       <div class="chart-toolbar">
-        <div class="timeframe-selector">
-          <button class="timeframe active" data-timeframe="1m">1d</button>
-          <button class="timeframe" data-timeframe="5m">5d</button>
-          <button class="timeframe" data-timeframe="15m">15d</button>
-          <button class="timeframe" data-timeframe="1h">1s</button>
-          <button class="timeframe" data-timeframe="4h">4s</button>
-          <button class="timeframe" data-timeframe="1d">1g</button>
-          <button class="timeframe" data-timeframe="1w">1h</button>
-        </div>
-        
-        <div class="chart-tools">
-          <button id="indicatorsBtn" class="tool-btn" title="Göstergeler">
-            <i class="fas fa-chart-line"></i>
-          </button>
-          <div id="indicatorsDropdown" class="dropdown-menu">
-            <div class="indicator-item" data-type="ma">Hareketli Ortalama (MA)</div>
-            <div class="indicator-item" data-type="bb">Bollinger Bantları (BB)</div>
-            <div class="indicator-item" data-type="rsi">Göreceli Güç Endeksi (RSI)</div>
-            <div class="indicator-item" data-type="macd">MACD</div>
-            <div class="indicator-item" data-type="volume">Hacim</div>
-          </div>
-          
-          <button id="addComparison" class="tool-btn" title="Karşılaştır">
-            <i class="fas fa-chart-area"></i>
-          </button>
-          <div id="comparisonDropdown" class="dropdown-menu">
-            <div class="dropdown-header">
-              <input type="text" id="comparisonSearch" placeholder="Sembol ara...">
-            </div>
-            <div id="comparisonSuggestions" class="comparison-suggestions"></div>
-          </div>
-          
-          <button id="exportChart" class="tool-btn" title="Dışa Aktar">
-            <i class="fas fa-download"></i>
-          </button>
-          <div id="exportDropdown" class="dropdown-menu">
-            <div class="export-item" data-format="png">PNG Olarak Kaydet</div>
-            <div class="export-item" data-format="csv">CSV Olarak İndir</div>
-            <div class="export-item" data-format="json">JSON Olarak İndir</div>
-          </div>
-          
-          <button id="settingsChart" class="tool-btn" title="Ayarlar">
-            <i class="fas fa-cog"></i>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Karşılaştırma Sembolleri Görüntüleme Alanı -->
-      <div id="activeComparisons" class="active-comparisons"></div>
-      
-      <!-- Ana Grafik -->
-      <div id="chart" class="chart"></div>
-      
-      <!-- Market Summary Bölümü -->
-      <div class="market-summary-section">
-        <h2 class="section-title">
-          <span>Market Summary</span>
-          <i class="fas fa-chevron-right"></i>
-        </h2>
-        
-        <!-- Index Kategori Sekmeleri -->
-        <div class="index-tabs">
-          <button class="index-tab active" data-category="indices">Endeksler</button>
-          <button class="index-tab" data-category="stocks">Hisseler</button>
-          <button class="index-tab" data-category="crypto">Kripto</button>
-          <button class="index-tab" data-category="futures">Futures</button>
-          <button class="index-tab" data-category="forex">Forex</button>
-          <button class="index-tab" data-category="bonds">Bonds</button>
-          <button class="index-tab" data-category="etfs">ETF'ler</button>
-        </div>
-        
-        <!-- Index Butonları (Yukarı Çekildi) -->
+        <!-- Market Indices moved to top -->
         <div class="market-indices">
           <div class="market-index" data-index="sp500">
             <div class="index-badge">
@@ -182,14 +111,96 @@
           </div>
         </div>
         
-        <!-- Seçilen İndeks Grafiği -->
+        <div class="chart-tools">
+          <button id="indicatorsBtn" class="tool-btn" title="Göstergeler">
+            <i class="fas fa-chart-line"></i>
+          </button>
+          <div id="indicatorsDropdown" class="dropdown-menu">
+            <div class="indicator-item" data-type="ma">Hareketli Ortalama (MA)</div>
+            <div class="indicator-item" data-type="bb">Bollinger Bantları (BB)</div>
+            <div class="indicator-item" data-type="rsi">Göreceli Güç Endeksi (RSI)</div>
+            <div class="indicator-item" data-type="macd">MACD</div>
+            <div class="indicator-item" data-type="volume">Hacim</div>
+          </div>
+          
+          <button id="addComparison" class="tool-btn" title="Karşılaştır">
+            <i class="fas fa-chart-area"></i>
+          </button>
+          <div id="comparisonDropdown" class="dropdown-menu">
+            <div class="dropdown-header">
+              <input type="text" id="comparisonSearch" placeholder="Sembol ara...">
+            </div>
+            <div id="comparisonSuggestions" class="comparison-suggestions"></div>
+          </div>
+          
+          <button id="exportChart" class="tool-btn" title="Dışa Aktar">
+            <i class="fas fa-download"></i>
+          </button>
+          <div id="exportDropdown" class="dropdown-menu">
+            <div class="export-item" data-format="png">PNG Olarak Kaydet</div>
+            <div class="export-item" data-format="csv">CSV Olarak İndir</div>
+            <div class="export-item" data-format="json">JSON Olarak İndir</div>
+          </div>
+          
+          <button id="settingsChart" class="tool-btn" title="Ayarlar">
+            <i class="fas fa-cog"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Karşılaştırma Sembolleri Görüntüleme Alanı -->
+      <div id="activeComparisons" class="active-comparisons"></div>
+      
+      <!-- Ana Grafik -->
+      <div id="chart" class="chart"></div>
+      
+      <!-- Timeframe Selector moved to bottom -->
+      <div class="timeframe-selector-container">
+        <div class="timeframe-selector">
+          <button class="timeframe active" data-timeframe="1m">1d</button>
+          <button class="timeframe" data-timeframe="5m">5d</button>
+          <button class="timeframe" data-timeframe="15m">15d</button>
+          <button class="timeframe" data-timeframe="1h">1s</button>
+          <button class="timeframe" data-timeframe="4h">4s</button>
+          <button class="timeframe" data-timeframe="1d">1g</button>
+          <button class="timeframe" data-timeframe="1w">1h</button>
+        </div>
+      </div>
+      
+      <!-- Market Summary Bölümü -->
+      <div class="market-summary-section">
+        <h2 class="section-title">
+          <span>Market Summary</span>
+          <i class="fas fa-chevron-right"></i>
+        </h2>
+        
+        <!-- Index Kategori Sekmeleri -->
+        <div class="index-tabs">
+          <button class="index-tab active" data-category="indices">Endeksler</button>
+          <button class="index-tab" data-category="stocks">Hisseler</button>
+          <button class="index-tab" data-category="crypto">Kripto</button>
+          <button class="index-tab" data-category="futures">Futures</button>
+          <button class="index-tab" data-category="forex">Forex</button>
+          <button class="index-tab" data-category="bonds">Bonds</button>
+          <button class="index-tab" data-category="etfs">ETF'ler</button>
+        </div>
+        
+        <!-- Seçilen İndeks Grafiği Bölümü -->
         <div class="featured-chart-container">
+          <!-- Grafik Başlık Bölümü -->
           <div class="chart-header">
             <div class="selected-index-info">
               <span id="selectedIndexName">S&P 500</span>
               <span id="selectedIndexPrice">5,844.20</span>
               <span id="selectedIndexChange" class="up">+3.26%</span>
             </div>
+          </div>
+          
+          <!-- Grafik -->
+          <div id="featuredChart" class="featured-chart"></div>
+          
+          <!-- Zaman Butonları (Grafiğin Altına Taşındı) -->
+          <div class="timeframe-buttons-container">
             <div class="timeframe-buttons">
               <button class="time-btn active" data-timeframe="1D">1D</button>
               <button class="time-btn" data-timeframe="1M">1M</button>
@@ -199,7 +210,6 @@
               <button class="time-btn" data-timeframe="ALL">All</button>
             </div>
           </div>
-          <div id="featuredChart" class="featured-chart"></div>
         </div>
       </div>
     </section>
