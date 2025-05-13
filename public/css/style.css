@@ -1258,4 +1258,220 @@ body {
   color: #fff;
   border-bottom: 1px solid #363c4e;
   padding-bottom: 8px;
+}
+
+/* Market Summary Bölümü */
+.market-summary-section {
+  padding: 20px;
+  background-color: #131722;
+  border-top: 1px solid #2a2e39;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  color: #e0e3eb;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.section-title i {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Index Kategori Sekmeleri */
+.index-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2a2e39;
+}
+
+.index-tab {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.index-tab:hover {
+  color: #e0e3eb;
+  background-color: rgba(42, 46, 57, 0.5);
+}
+
+.index-tab.active {
+  color: #e0e3eb;
+  background-color: #2a2e39;
+  font-weight: 500;
+}
+
+/* Market Indeksleri */
+.market-indices {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  overflow-x: auto;
+  padding-bottom: 15px;
+}
+
+.market-index {
+  display: flex;
+  gap: 10px;
+  padding: 12px 15px;
+  background-color: #1e222d;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 190px;
+}
+
+.market-index:hover {
+  background-color: #2a2e39;
+  transform: translateY(-2px);
+}
+
+.market-index.active {
+  border: 1px solid rgba(41, 98, 255, 0.5);
+  background-color: rgba(41, 98, 255, 0.05);
+}
+
+.index-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.badge-circle.sp500 {
+  background-color: #5460E6;
+}
+
+.badge-circle.nasdaq {
+  background-color: #2962FF;
+}
+
+.badge-circle.dow {
+  background-color: #339DFF;
+}
+
+.badge-circle.japan {
+  background-color: #E91E63;
+}
+
+.badge-circle.ftse {
+  background-color: #00BCD4;
+}
+
+.index-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.index-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #e0e3eb;
+  margin-bottom: 2px;
+}
+
+.index-price {
+  font-size: 13px;
+  color: #a0a7b4;
+  margin-bottom: 3px;
+}
+
+.index-change {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Featured Chart Container */
+.featured-chart-container {
+  background-color: #1e222d;
+  border-radius: 8px;
+  padding: 15px;
+  height: 400px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.selected-index-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#selectedIndexName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e0e3eb;
+}
+
+#selectedIndexPrice {
+  font-size: 16px;
+  color: #a0a7b4;
+}
+
+#selectedIndexChange {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.timeframe-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.time-btn {
+  padding: 5px 10px;
+  background-color: transparent;
+  border: 1px solid #2a2e39;
+  border-radius: 4px;
+  color: #6b7280;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.time-btn:hover {
+  color: #e0e3eb;
+  background-color: #2a2e39;
+}
+
+.time-btn.active {
+  background-color: #2962FF;
+  border-color: #2962FF;
+  color: white;
+}
+
+.featured-chart {
+  height: calc(100% - 40px);
+  width: 100%;
 } 

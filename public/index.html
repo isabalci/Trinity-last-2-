@@ -106,60 +106,100 @@
       <!-- Ana Grafik -->
       <div id="chart" class="chart"></div>
       
-      <!-- Piyasa İzleme Bölümü -->
-      <div class="market-watchlist">
-        <div class="market-category-tabs">
-          <button class="market-category active">Endeksler</button>
-          <button class="market-category">Hisseler</button>
-          <button class="market-category">Kripto</button>
-          <button class="market-category">Forex</button>
-          <button class="market-category">ETF'ler</button>
+      <!-- Market Summary Bölümü -->
+      <div class="market-summary-section">
+        <h2 class="section-title">
+          <span>Market Summary</span>
+          <i class="fas fa-chevron-right"></i>
+        </h2>
+        
+        <!-- Index Kategori Sekmeleri -->
+        <div class="index-tabs">
+          <button class="index-tab active" data-category="indices">Endeksler</button>
+          <button class="index-tab" data-category="stocks">Hisseler</button>
+          <button class="index-tab" data-category="crypto">Kripto</button>
+          <button class="index-tab" data-category="futures">Futures</button>
+          <button class="index-tab" data-category="forex">Forex</button>
+          <button class="index-tab" data-category="bonds">Bonds</button>
+          <button class="index-tab" data-category="etfs">ETF'ler</button>
         </div>
         
-        <div class="market-items">
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge">500</div>
-              <div class="market-details">
-                <div class="symbol-name">S&P 500</div>
-                <div class="symbol-price">5,844.20<span class="price-unit">USD</span></div>
-              </div>
+        <!-- Index Butonları (Yukarı Çekildi) -->
+        <div class="market-indices">
+          <div class="market-index" data-index="sp500">
+            <div class="index-badge">
+              <div class="badge-circle sp500">500</div>
             </div>
-            <div class="market-change up">+3.26%</div>
+            <div class="index-details">
+              <div class="index-name">S&P 500</div>
+              <div class="index-price">5,844.20<span class="price-unit">USD</span></div>
+              <div class="index-change up">+3.26%</div>
+            </div>
           </div>
           
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge nasdaq">100</div>
-              <div class="market-details">
-                <div class="symbol-name">Nasdaq 100</div>
-                <div class="symbol-price">20,868.15<span class="price-unit">USD</span></div>
-              </div>
+          <div class="market-index" data-index="nasdaq">
+            <div class="index-badge">
+              <div class="badge-circle nasdaq">100</div>
             </div>
-            <div class="market-change up">+4.02%</div>
+            <div class="index-details">
+              <div class="index-name">Nasdaq 100</div>
+              <div class="index-price">20,868.15<span class="price-unit">USD</span></div>
+              <div class="index-change up">+4.02%</div>
+            </div>
           </div>
           
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge dow">30</div>
-              <div class="market-details">
-                <div class="symbol-name">Dow 30</div>
-                <div class="symbol-price">42,410.11<span class="price-unit">USD</span></div>
-              </div>
+          <div class="market-index" data-index="dow">
+            <div class="index-badge">
+              <div class="badge-circle dow">30</div>
             </div>
-            <div class="market-change up">+2.81%</div>
+            <div class="index-details">
+              <div class="index-name">Dow 30</div>
+              <div class="index-price">42,410.11<span class="price-unit">USD</span></div>
+              <div class="index-change up">+2.81%</div>
+            </div>
           </div>
           
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge japan">225</div>
-              <div class="market-details">
-                <div class="symbol-name">Japan 225</div>
-                <div class="symbol-price">38,183.04<span class="price-unit">JPY</span></div>
-              </div>
+          <div class="market-index" data-index="japan">
+            <div class="index-badge">
+              <div class="badge-circle japan">225</div>
             </div>
-            <div class="market-change up">+1.43%</div>
+            <div class="index-details">
+              <div class="index-name">Japan 225</div>
+              <div class="index-price">38,183.04<span class="price-unit">JPY</span></div>
+              <div class="index-change up">+1.43%</div>
+            </div>
           </div>
+          
+          <div class="market-index" data-index="ftse">
+            <div class="index-badge">
+              <div class="badge-circle ftse">100</div>
+            </div>
+            <div class="index-details">
+              <div class="index-name">FTSE 100</div>
+              <div class="index-price">8,602.92<span class="price-unit">GBP</span></div>
+              <div class="index-change down">-0.02%</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Seçilen İndeks Grafiği -->
+        <div class="featured-chart-container">
+          <div class="chart-header">
+            <div class="selected-index-info">
+              <span id="selectedIndexName">S&P 500</span>
+              <span id="selectedIndexPrice">5,844.20</span>
+              <span id="selectedIndexChange" class="up">+3.26%</span>
+            </div>
+            <div class="timeframe-buttons">
+              <button class="time-btn active" data-timeframe="1D">1D</button>
+              <button class="time-btn" data-timeframe="1M">1M</button>
+              <button class="time-btn" data-timeframe="3M">3M</button>
+              <button class="time-btn" data-timeframe="1Y">1Y</button>
+              <button class="time-btn" data-timeframe="5Y">5Y</button>
+              <button class="time-btn" data-timeframe="ALL">All</button>
+            </div>
+          </div>
+          <div id="featuredChart" class="featured-chart"></div>
         </div>
       </div>
     </section>
