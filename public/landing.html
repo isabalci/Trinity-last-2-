@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity | Finansal Grafik Platformu</title>
+    <style>
+        :root {
+            --primary-color: #2962FF;
+            --text-color: #131722;
+            --light-text: #787b86;
+            --dark-bg: #131722;
+            --light-bg: #ffffff;
+            --border-color: #e0e3eb;
+            --success-color: #26a69a;
+            --danger-color: #ef5350;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .auth-buttons a {
+            text-decoration: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: rgba(41, 98, 255, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #1e56e8;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--light-text);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Chart Preview */
+        .chart-preview {
+            position: relative;
+            margin: 40px auto;
+            max-width: 1000px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-preview img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--light-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--light-text);
+        }
+
+        /* Stats */
+        .stats {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-item h3 {
+            font-size: 42px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: var(--light-text);
+            font-size: 18px;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 100px 0;
+            background-color: var(--dark-bg);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            color: #ccc;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0;
+            background-color: #f8f9fa;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--light-text);
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--light-text);
+            font-size: 14px;
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-switcher select {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+            color: var(--text-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="img/logo.png" alt="Trinity Logo">
+                <span>Trinity</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#">Ürünler</a>
+                <a href="#">Araçlar</a>
+                <a href="#">Grafik</a>
+                <a href="#">İşlem</a>
+                <a href="#">Göstergeler</a>
+                <a href="#">Topluluk</a>
+            </nav>
+            
+            <div class="auth-buttons">
+                <div class="language-switcher">
+                    <select id="languageSelector">
+                        <option value="tr">Türkçe</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <a href="#" class="btn btn-outline" id="loginBtn">Giriş Yap</a>
+                <a href="#" class="btn btn-primary" id="registerBtn">Kaydol</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>En iyi yatırımlar için profesyonel analiz</h1>
+            <p>Finansal piyasaları analiz edin, trendleri takip edin ve yatırım kararlarınızı güçlendirin.</p>
+            <a href="/app" class="btn btn-primary">Hemen Başlayın</a>
+            
+            <div class="chart-preview">
+                <img src="img/chart-preview.png" alt="Trinity Finansal Grafik" onerror="this.src='https://via.placeholder.com/1000x500?text=Trinity+Finansal+Grafik+Platformu'">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Gelişmiş Analiz Araçları</h2>
+                <p>Trinity'nin güçlü özellikleri ile finansal piyasaları derinlemesine inceleyin.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Gelişmiş Grafikler</h3>
+                    <p>Çeşitli zaman dilimleri ve grafik tipleri ile piyasaları analiz edin. Mum, çizgi ve alan grafikleri arasında kolayca geçiş yapın.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Teknik Göstergeler</h3>
+                    <p>100+ teknik gösterge ile analizlerinizi güçlendirin. SMA, EMA, RSI, MACD ve daha fazlası tek tıkla grafiğinize ekleyin.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Fiyat Alarmları</h3>
+                    <p>Fiyat belirlediğiniz seviyeye ulaştığında anında bildirim alın. Fırsatları kaçırmayın ve riskleri yönetin.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <h3>İzleme Listeleri</h3>
+                    <p>Favori varlıklarınızı izleme listelerine ekleyin ve piyasa hareketlerini kolayca takip edin. Çoklu liste oluşturma imkanı.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3>Piyasa Haberleri</h3>
+                    <p>Güncel piyasa haberlerine doğrudan erişin. Yatırım kararlarınızı etkileyen gelişmeleri kaçırmayın.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3>Koyu/Açık Tema</h3>
+                    <p>Gözlerinizi yormayan tema seçenekleri ile gece gündüz rahatça çalışın. Tamamen özelleştirilebilir grafik görünümü.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="container">
+            <div class="section-title">
+                <h2>Rakamlarla Trinity</h2>
+                <p>Kullanıcılarımızın güveni ve platformumuzun performansı</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>10K+</h3>
+                    <p>Aktif Kullanıcı</p>
+                </div>
+                
+                <div class="stat-item">
+                    <h3>100+</h3>
+                    <p>Teknik Gösterge</p>
+                </div>
+                
+                <div class="stat-item">
+                    <h3>2000+</h3>
+                    <p>Desteklenen Sembol</p>
+                </div>
+                
+                <div class="stat-item">
+                    <h3>%99.9</h3>
+                    <p>Çalışma Süresi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>Finansal geleceğinizi şekillendirmeye başlayın</h2>
+            <p>Trinity ile profesyonel analiz araçlarına ücretsiz erişin ve yatırımlarınızı bir sonraki seviyeye taşıyın.</p>
+            <a href="/app" class="btn btn-primary">Hemen Başlayın</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Trinity Hakkında</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Biz Kimiz</a></li>
+                        <li><a href="#">Manifesto</a></li>
+                        <li><a href="#">Kariyer</a></li>
+                        <li><a href="#">İletişim</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Ürünler</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Grafikler</a></li>
+                        <li><a href="#">Göstergeler</a></li>
+                        <li><a href="#">İzleme Listeleri</a></li>
+                        <li><a href="#">Alarmlar</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Kaynaklar</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Yardım Merkezi</a></li>
+                        <li><a href="#">API Dokümantasyonu</a></li>
+                        <li><a href="#">Eğitim Materyalleri</a></li>
+                        <li><a href="#">Sıkça Sorulan Sorular</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Yasal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Kullanım Koşulları</a></li>
+                        <li><a href="#">Gizlilik Politikası</a></li>
+                        <li><a href="#">Çerez Politikası</a></li>
+                        <li><a href="#">Sorumluluk Reddi</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Trinity Finansal Grafik Platformu. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dil değiştirme işlevselliği
+        const languageSelector = document.querySelector('.language-switcher select');
+        languageSelector.addEventListener('change', function() {
+            // Dil değiştirme işlemleri burada yapılacak
+            console.log('Dil değiştirildi:', this.value);
+        });
+    </script>
+</body>
+</html> 

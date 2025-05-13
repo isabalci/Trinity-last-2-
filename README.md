@@ -1,75 +1,136 @@
-# TradingView Benzeri Web Uygulaması
+# Trinity TradingView Clone
 
-Bu proje, finansal grafikleri görüntülemek ve analiz etmek için TradingView benzeri bir web uygulamasıdır.
+TradingView benzeri finansal grafik analiz platformu.
 
-## Özellikler
+## 🌟 Özellikler
 
-- Finansal grafik görüntüleme
-- PostgreSQL veritabanı bağlantısı
-- Kullanıcı hesapları
-- Çoklu dil desteği (Türkçe, İngilizce)
-- Temel teknik analiz araçları
-- Responsive tasarım
+- 📊 Gelişmiş finansal grafikler (mum, çizgi, alan)
+- 📈 Gerçek zamanlı veri güncellemeleri 
+- 📉 Birden fazla hisse senedi/kripto para takibi
+- 🔍 Teknik göstergeler (SMA, EMA, RSI, MACD, Bollinger Bandları)
+- 📰 Piyasa haberleri
+- 🔔 Fiyat alarmları
+- 👥 Kullanıcı hesapları (kayıt, giriş)
+- 📋 Kişiselleştirilmiş izleme listeleri
+- 🎨 Koyu/Açık mod tema seçenekleri
+- 🌐 Çoklu dil desteği (Türkçe, İngilizce)
+- 📱 Mobil uyumlu tasarım
 
-## Teknolojiler
+## 🚀 Kurulum
 
-- Node.js ve Express
-- PostgreSQL
-- JWT kimlik doğrulama
-- Lightweight Charts (TradingView tarafından geliştirilmiş)
-- HTML, CSS, JavaScript
-- i18next (çoklu dil desteği)
+### Ön Koşullar
 
-## Kurulum
+- Node.js (v14 veya üzeri)
+- PostgreSQL veritabanı
 
-1. Projeyi klonlayın:
-   ```
-   git clone https://github.com/username/Trinity-last-2.git
-   cd Trinity-last-2
+### Adımlar
+
+1. Depoyu klonlayın:
+   ```bash
+   git clone https://github.com/kullanici/tradingview-clone.git
+   cd tradingview-clone
    ```
 
 2. Bağımlılıkları yükleyin:
-   ```
+   ```bash
    npm install
    ```
 
-3. `.env` dosyasını oluşturun:
+3. `.env` dosyasını oluşturun (örnek olarak `env.example` dosyasını kullanabilirsiniz):
    ```
-   PORT=3000
+   PORT=3003
    DB_HOST=localhost
    DB_USER=postgres
-   DB_PASSWORD=postgres123
-   DB_NAME=tradingview_clone
+   DB_PASSWORD=trinity123
+   DB_NAME=trinity
    DB_PORT=5432
-   JWT_SECRET=your_jwt_secret_key
+   JWT_SECRET=your_jwt_secret
    ```
 
-4. PostgreSQL veritabanını oluşturun:
-   ```
-   createdb tradingview_clone
+4. Veritabanını başlatın ve tabloları oluşturun:
+   ```bash
+   npm run db:init
    ```
 
 5. Uygulamayı başlatın:
-   ```
+   ```bash
    npm start
    ```
 
-## Klasör Yapısı
+6. Tarayıcınızda şu adresi açın: `http://localhost:3003`
 
-- `config/`: Yapılandırma dosyaları
-- `public/`: Statik dosyalar (HTML, CSS, JavaScript)
-- `routes/`: API endpoint'leri
-- `locales/`: Çeviri dosyaları
-- `server.js`: Ana uygulama dosyası
+## 💻 Teknolojiler
 
-## Ekran Görüntüleri
+### Frontend
+- HTML5, CSS3, JavaScript
+- Lightweight Charts (TradingView'in açık kaynak grafik kütüphanesi)
+- i18next (çoklu dil desteği)
 
-(Ekran görüntüleri eklenecek)
+### Backend
+- Node.js & Express.js
+- PostgreSQL (veri depolama)
+- WebSockets (gerçek zamanlı veri akışı)
+- JWT (kimlik doğrulama)
 
-## Katkıda Bulunma
+## 📝 API Endpoints
 
-1. Bu projenin bir fork'unu oluşturun
-2. Özelliğiniz için yeni bir branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
-4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
-5. Bir Pull Request açın 
+### Kullanıcı İşlemleri
+- `POST /api/users/register` - Yeni kullanıcı kaydı
+- `POST /api/users/login` - Kullanıcı girişi
+- `GET /api/users/watchlists` - Kullanıcının izleme listelerini getir
+- `POST /api/users/watchlists` - Yeni izleme listesi oluştur
+
+### Market Verileri
+- `GET /api/market-data/stocks` - Tüm hisseleri listele
+- `GET /api/market-data/stocks/:symbol` - Belirli bir hissenin detaylarını getir
+- `GET /api/market-data/candles/:symbol` - Mum verilerini getir
+- `GET /api/market-data/news` - Piyasa haberlerini getir
+
+## 🔄 Gerçek Zamanlı Veri
+
+Uygulama, WebSocket bağlantısı üzerinden gerçek zamanlı veri güncellemeleri sunar:
+
+- `/ws/market-data/:symbol` - Belirli bir sembol için gerçek zamanlı veri akışı
+
+## 📊 Teknik Göstergeler
+
+Uygulama çeşitli teknik göstergeleri destekler:
+
+- **Hareketli Ortalamalar**
+  - Basit Hareketli Ortalama (SMA)
+  - Üssel Hareketli Ortalama (EMA)
+  
+- **Osilatörler**
+  - Göreceli Güç Endeksi (RSI)
+  - MACD (Moving Average Convergence Divergence)
+  
+- **Volatilite Göstergeleri**
+  - Bollinger Bantları
+
+- **Hacim Göstergeleri**
+  - Hacim (Volume)
+
+## 📱 Ekran Görüntüleri
+
+[Buraya ekran görüntüleri eklenecek]
+
+## 🤝 Katkıda Bulunma
+
+Katkılarınızı memnuniyetle karşılıyoruz! Lütfen şu adımları izleyin:
+
+1. Bu depoyu çatallayın (fork)
+2. Yeni bir dal (branch) oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi kaydedin (`git commit -m 'Add some amazing feature'`)
+4. Dalınıza itin (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
+
+## 📄 Lisans
+
+Bu proje MIT Lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakınız.
+
+## 🙏 Teşekkürler
+
+- [TradingView Lightweight Charts](https://github.com/tradingview/lightweight-charts) - Grafik kütüphanesi
+- [Express.js](https://expressjs.com/) - Web framework
+- [PostgreSQL](https://www.postgresql.org/) - Veritabanı
+- [i18next](https://www.i18next.com/) - Çoklu dil desteği 

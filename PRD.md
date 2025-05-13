@@ -13,6 +13,7 @@ Trinity Finansal Grafik Uygulaması, finansal pazarlardaki hisse senetleri, krip
 ### Temel Proje Prensipleri
 1. Veritabanı: pgAdmin 4 kullanılarak oluşturulan "Trinity DB server" (şifre: postgres123)
 2. Kod Versiyonlama: GitHub'da "Trinity-last-2-" deposunda tutulacak
+   - GitHub Repo URL: https://github.com/isabalci/Trinity-last-2-
 3. Geliştirme: Adım adım ilerlenecek, her adım belgelenecek
 4. Hata Yönetimi: Site açılışında ve kullanımda kullanıcıya hata ekranı gösterilmeyecek
 5. Dil: Arayüz Türkçe ve İngilizce dil desteğine sahip olacak

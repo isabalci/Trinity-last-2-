@@ -63,9 +63,13 @@ const initDatabase = async () => {
         id SERIAL PRIMARY KEY,
         symbol VARCHAR(20) NOT NULL UNIQUE,
         name VARCHAR(100) NOT NULL,
-        last_price DECIMAL(10, 2),
-        change_percent DECIMAL(5, 2),
-        last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        description TEXT,
+        sector VARCHAR(100),
+        market_cap NUMERIC,
+        pe_ratio NUMERIC,
+        dividend_yield NUMERIC,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
@@ -101,6 +105,23 @@ const initDatabase = async () => {
         theme VARCHAR(20) DEFAULT 'dark',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id)
+      )
+    `);
+
+    // Market_news tablosu (Piyasa haberleri)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS market_news (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        summary TEXT,
+        content TEXT,
+        source VARCHAR(100),
+        url TEXT,
+        image_url TEXT,
+        symbol VARCHAR(20),
+        related_symbols TEXT, -- Virgülle ayrılmış semboller (ör: "BTCUSDT,ETHUSDT")
+        published_at TIMESTAMP WITH TIME ZONE,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
 

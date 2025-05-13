@@ -3,203 +3,517 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trinity Finansal Grafik Uygulaması</title>
+  <title>Trinity | Finansal Grafik Platformu</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-  <div class="app-container">
-    <!-- Üst Menü -->
-    <header class="header">
-      <div class="logo">
-        <h1>Trinity</h1>
-      </div>
-      <div class="search-bar">
-        <input type="text" id="symbolSearch" placeholder="Sembol ara..." data-i18n="header.search">
-        <button><i class="fas fa-search"></i></button>
-      </div>
-      <div class="user-menu">
-        <button id="loginBtn" class="btn btn-primary" data-i18n="header.login">Giriş Yap</button>
-        <button id="registerBtn" class="btn" data-i18n="header.register">Kaydol</button>
-        <div class="language-switcher">
-          <button class="language-btn" data-lang="tr">TR</button>
-          <button class="language-btn" data-lang="en">EN</button>
-        </div>
-      </div>
-    </header>
+<body class="dark-theme">
 
-    <!-- Market Özeti Bölümü -->
-    <div class="market-summary">
-      <h2>Market Özeti</h2>
-      <div class="market-categories">
-        <button class="category-btn active">Endeksler</button>
-        <button class="category-btn">Hisseler</button>
-        <button class="category-btn">Kripto</button>
-        <button class="category-btn">Futures</button>
-        <button class="category-btn">Forex</button>
-        <button class="category-btn">Tahviller</button>
-        <button class="category-btn">ETF'ler</button>
+  <!-- Üst Menü -->
+  <header class="main-header">
+    <div class="logo">
+      <img src="img/logo.png" alt="Trinity Logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%232962FF\'/><text x=\'50\' y=\'65\' font-size=\'50\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>T</text></svg>'">
+      <span>Trinity</span>
+    </div>
+    
+    <div class="search-bar">
+      <input type="text" id="symbolSearch" placeholder="Sembol ara..." data-i18n="[placeholder]header.search">
+      <button><i class="fas fa-search"></i></button>
+    </div>
+    
+    <!-- Sayfa Butonları -->
+    <div class="main-pages">
+      <nav>
+        <ul>
+          <li><a href="#" class="page-link">Ürünler</a></li>
+          <li><a href="#" class="page-link">Topluluk</a></li>
+          <li><a href="#" class="page-link">Piyasalar</a></li>
+          <li><a href="#" class="page-link">Aracılar</a></li>
+          <li><a href="#" class="page-link">Daha Fazla</a></li>
+        </ul>
+      </nav>
+    </div>
+    
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#" id="loginBtn" data-i18n="header.login">Giriş Yap</a></li>
+        <li><a href="#" id="registerBtn" data-i18n="header.register">Kaydol</a></li>
+        <li>
+          <select id="languageSelector">
+            <option value="tr">Türkçe</option>
+            <option value="en">English</option>
+          </select>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Ana İçerik -->
+  <main class="main-content">
+    <!-- Sol Kenar Çubuğu -->
+    <aside class="sidebar left-sidebar">
+      <div class="market-info">
+        <h3 id="chartSymbol">BTCUSDT</h3>
+        <div class="price-info">
+          <span data-i18n="sidebar.price">Fiyat:</span>
+          <span id="currentPrice" class="value">$45,689.20</span>
+        </div>
+        <div class="change-info">
+          <span data-i18n="sidebar.change">Değişim:</span>
+          <span id="priceChange" class="value up">+2.34%</span>
+        </div>
+        <div class="high-low-info">
+          <div>
+            <span data-i18n="sidebar.high">Yüksek:</span>
+            <span id="high24h" class="value">$46,123.45</span>
+          </div>
+          <div>
+            <span data-i18n="sidebar.low">Düşük:</span>
+            <span id="low24h" class="value">$44,987.65</span>
+          </div>
+        </div>
+        <div class="volume-info">
+          <span data-i18n="sidebar.volume">Hacim:</span>
+          <span id="volume" class="value">$1.2B</span>
+        </div>
       </div>
-      <div class="market-items">
-        <div class="market-item">
-          <div class="market-item-header">
-            <span class="market-symbol">S&P 500</span>
-            <span class="market-value">5,828.13</span>
-          </div>
-          <div class="market-item-change up">+2.97%</div>
+      
+      <div class="watchlist-container">
+        <div class="watchlist-header">
+          <h3 data-i18n="sidebar.watchlist">İzleme Listesi</h3>
+          <button class="add-btn" title="Yeni İzleme Listesi"><i class="fas fa-plus"></i></button>
         </div>
-        <div class="market-item">
-          <div class="market-item-header">
-            <span class="market-symbol">Nasdaq 100</span>
-            <span class="market-value">20,796.56</span>
-          </div>
-          <div class="market-item-change up">+3.66%</div>
+        <div class="watchlist-filter">
+          <input type="text" placeholder="Filtrele..." data-i18n="[placeholder]sidebar.filter">
         </div>
-        <div class="market-item">
-          <div class="market-item-header">
-            <span class="market-symbol">Dow 30</span>
-            <span class="market-value">42,319.50</span>
-          </div>
-          <div class="market-item-change up">+2.59%</div>
+        <ul id="watchlist" class="watchlist">
+          <!-- JavaScript ile doldurulacak -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Grafik ve Araçlar Ana Bölümü -->
+    <section class="chart-container">
+      <!-- Üst Araç Çubuğu -->
+      <div class="chart-toolbar">
+        <div class="timeframe-selector">
+          <button class="timeframe active" data-timeframe="1m">1d</button>
+          <button class="timeframe" data-timeframe="5m">5d</button>
+          <button class="timeframe" data-timeframe="15m">15d</button>
+          <button class="timeframe" data-timeframe="1h">1s</button>
+          <button class="timeframe" data-timeframe="4h">4s</button>
+          <button class="timeframe" data-timeframe="1d">1g</button>
+          <button class="timeframe" data-timeframe="1w">1h</button>
         </div>
-        <div class="market-item">
-          <div class="market-item-header">
-            <span class="market-symbol">BIST 100</span>
-            <span class="market-value">9,437.94</span>
+        
+        <div class="chart-tools">
+          <button id="indicatorsBtn" class="tool-btn" title="Göstergeler">
+            <i class="fas fa-chart-line"></i>
+          </button>
+          <div id="indicatorsDropdown" class="dropdown-menu">
+            <div class="indicator-item" data-type="ma">Hareketli Ortalama (MA)</div>
+            <div class="indicator-item" data-type="bb">Bollinger Bantları (BB)</div>
+            <div class="indicator-item" data-type="rsi">Göreceli Güç Endeksi (RSI)</div>
+            <div class="indicator-item" data-type="macd">MACD</div>
+            <div class="indicator-item" data-type="volume">Hacim</div>
           </div>
-          <div class="market-item-change up">+1.24%</div>
+          
+          <button id="addComparison" class="tool-btn" title="Karşılaştır">
+            <i class="fas fa-chart-area"></i>
+          </button>
+          <div id="comparisonDropdown" class="dropdown-menu">
+            <div class="dropdown-header">
+              <input type="text" id="comparisonSearch" placeholder="Sembol ara...">
+            </div>
+            <div id="comparisonSuggestions" class="comparison-suggestions"></div>
+          </div>
+          
+          <button id="exportChart" class="tool-btn" title="Dışa Aktar">
+            <i class="fas fa-download"></i>
+          </button>
+          <div id="exportDropdown" class="dropdown-menu">
+            <div class="export-item" data-format="png">PNG Olarak Kaydet</div>
+            <div class="export-item" data-format="csv">CSV Olarak İndir</div>
+            <div class="export-item" data-format="json">JSON Olarak İndir</div>
+          </div>
+          
+          <button id="settingsChart" class="tool-btn" title="Ayarlar">
+            <i class="fas fa-cog"></i>
+          </button>
         </div>
+      </div>
+      
+      <!-- Karşılaştırma Sembolleri Görüntüleme Alanı -->
+      <div id="activeComparisons" class="active-comparisons"></div>
+      
+      <!-- Ana Grafik -->
+      <div id="chart" class="chart"></div>
+      
+      <!-- Alt Sekmeler -->
+      <div class="chart-tabs">
+        <div id="dataTabBtn" class="nav-tab active" data-tab="dataTab" data-i18n="tabs.data">Veriler</div>
+        <div id="newsTabBtn" class="nav-tab" data-tab="newsTab" data-i18n="tabs.news">Haberler</div>
+        <div id="alertsTabBtn" class="nav-tab" data-tab="alertsTab" data-i18n="tabs.alerts">Alarmlar</div>
+      </div>
+      
+      <!-- Sekme İçerikleri -->
+      <div class="tab-content">
+        <!-- Veri Sekmesi -->
+        <div id="dataTab" class="tab-pane active">
+          <div class="data-filters">
+            <div class="filter-group">
+              <button class="category-btn active" data-category="overview" data-i18n="data.overview">Genel Bakış</button>
+              <button class="category-btn" data-category="financials" data-i18n="data.financials">Finansallar</button>
+              <button class="category-btn" data-category="statistics" data-i18n="data.statistics">İstatistikler</button>
+            </div>
+            <div class="filter-group">
+              <button class="range-btn active" data-range="1d" data-i18n="data.daily">Günlük</button>
+              <button class="range-btn" data-range="1w" data-i18n="data.weekly">Haftalık</button>
+              <button class="range-btn" data-range="1m" data-i18n="data.monthly">Aylık</button>
+              <button class="range-btn" data-range="1y" data-i18n="data.yearly">Yıllık</button>
+            </div>
+          </div>
+          
+          <div class="data-content">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-i18n="data.metric">Metrik</th>
+                  <th data-i18n="data.value">Değer</th>
+                  <th data-i18n="data.change">Değişim</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-i18n="data.open">Açılış</td>
+                  <td>$45,123.45</td>
+                  <td class="up">+1.2%</td>
+                </tr>
+                <tr>
+                  <td data-i18n="data.high">Yüksek</td>
+                  <td>$46,789.12</td>
+                  <td class="up">+3.4%</td>
+                </tr>
+                <tr>
+                  <td data-i18n="data.low">Düşük</td>
+                  <td>$44,567.89</td>
+                  <td class="down">-0.8%</td>
+                </tr>
+                <tr>
+                  <td data-i18n="data.volume">Hacim</td>
+                  <td>$1.23B</td>
+                  <td class="up">+5.7%</td>
+                </tr>
+                <tr>
+                  <td data-i18n="data.marketCap">Piyasa Değeri</td>
+                  <td>$850.45B</td>
+                  <td class="up">+2.1%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Haberler Sekmesi -->
+        <div id="newsTab" class="tab-pane">
+          <div id="marketNews" class="market-news">
+            <!-- Haberler JavaScript ile doldurulacak -->
+            <div class="loading">Haberler yükleniyor...</div>
+          </div>
+          <button id="loadMoreNews" class="load-more-btn" data-i18n="news.loadMore">Daha Fazla Yükle</button>
+        </div>
+        
+        <!-- Alarmlar Sekmesi -->
+        <div id="alertsTab" class="tab-pane">
+          <div class="alerts-container">
+            <div class="new-alert">
+              <h3 data-i18n="alerts.newAlert">Yeni Alarm</h3>
+              <form id="newAlertForm">
+                <div class="form-group">
+                  <label data-i18n="alerts.condition">Koşul:</label>
+                  <select name="condition">
+                    <option value="price_above" data-i18n="alerts.priceAbove">Fiyat Üzerine Çıktığında</option>
+                    <option value="price_below" data-i18n="alerts.priceBelow">Fiyat Altına Düştüğünde</option>
+                    <option value="volume_above" data-i18n="alerts.volumeAbove">Hacim Üzerine Çıktığında</option>
+                    <option value="volume_below" data-i18n="alerts.volumeBelow">Hacim Altına Düştüğünde</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label data-i18n="alerts.value">Değer:</label>
+                  <input type="number" name="value" step="0.01">
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary" data-i18n="alerts.create">Oluştur</button>
+                </div>
+              </form>
+            </div>
+            
+            <div class="active-alerts">
+              <h3 data-i18n="alerts.activeAlerts">Aktif Alarmlar</h3>
+              <div class="alert-list">
+                <div class="alert-item">
+                  <div class="alert-info">
+                    <span class="alert-condition" data-i18n="alerts.priceAbove">Fiyat Üzerine Çıktığında</span>
+                    <span class="alert-value">$46,000.00</span>
+                  </div>
+                  <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="alert-item">
+                  <div class="alert-info">
+                    <span class="alert-condition" data-i18n="alerts.volumeAbove">Hacim Üzerine Çıktığında</span>
+                    <span class="alert-value">$1.5B</span>
+                  </div>
+                  <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Market Özeti Bölümü -->
+  <section class="market-summary">
+    <div class="container">
+      <h2 class="summary-title">
+        Piyasa Özeti <i class="fas fa-chevron-right"></i>
+      </h2>
+      
+      <div class="market-categories">
+        <button class="market-category active">Endeksler</button>
+        <button class="market-category">Hisseler</button>
+        <button class="market-category">Kripto</button>
+        <button class="market-category">Vadeli İşlemler</button>
+        <button class="market-category">Forex</button>
+        <button class="market-category">Tahviller</button>
+        <button class="market-category">ETF'ler</button>
+      </div>
+      
+      <div class="market-items-wrapper">
+        <div class="market-items">
+          <div class="market-item">
+            <div class="market-symbol-badge">
+              <div class="symbol-badge">500</div>
+              <div class="market-details">
+                <div class="symbol-name">S&P 500</div>
+                <div class="symbol-price">5,844.20<span class="price-unit">USD</span></div>
+              </div>
+            </div>
+            <div class="market-change up">+3.26%</div>
+          </div>
+          
+          <div class="market-item">
+            <div class="market-symbol-badge">
+              <div class="symbol-badge nasdaq">100</div>
+              <div class="market-details">
+                <div class="symbol-name">Nasdaq 100</div>
+                <div class="symbol-price">20,868.15<span class="price-unit">USD</span></div>
+              </div>
+            </div>
+            <div class="market-change up">+4.02%</div>
+          </div>
+          
+          <div class="market-item">
+            <div class="market-symbol-badge">
+              <div class="symbol-badge dow">30</div>
+              <div class="market-details">
+                <div class="symbol-name">Dow 30</div>
+                <div class="symbol-price">42,410.11<span class="price-unit">USD</span></div>
+              </div>
+            </div>
+            <div class="market-change up">+2.81%</div>
+          </div>
+          
+          <div class="market-item">
+            <div class="market-symbol-badge">
+              <div class="symbol-badge japan">225</div>
+              <div class="market-details">
+                <div class="symbol-name">Japan 225</div>
+                <div class="symbol-price">38,183.04<span class="price-unit">JPY</span></div>
+              </div>
+            </div>
+            <div class="market-change up">+1.43%</div>
+          </div>
+          
+          <div class="market-item">
+            <div class="market-symbol-badge">
+              <div class="symbol-badge ftse">100</div>
+              <div class="market-details">
+                <div class="symbol-name">FTSE 100</div>
+                <div class="symbol-price">8,606.40<span class="price-unit">GBP</span></div>
+              </div>
+            </div>
+            <div class="market-change up">+0.02%</div>
+          </div>
+        </div>
+        
+        <button class="market-scroll-btn right">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      <div class="featured-chart">
+        <div class="chart-header">
+          <div class="chart-symbol">S&P 500</div>
+          <div class="time-selector">
+            <button class="time-btn active">1D</button>
+            <button class="time-btn">1M</button>
+            <button class="time-btn">3M</button>
+            <button class="time-btn">1Y</button>
+            <button class="time-btn">5Y</button>
+            <button class="time-btn">Tümü</button>
+          </div>
+        </div>
+        <div id="featuredChart" class="featured-chart-container"></div>
       </div>
     </div>
+  </section>
 
-    <!-- Ana İçerik -->
-    <main class="main-content">
-      <!-- Sol Panel - Piyasa Bilgisi -->
-      <aside class="left-panel">
-        <div class="market-info">
-          <h2 data-i18n="marketInfo.title">Piyasa Bilgisi</h2>
-          <div class="market-data">
-            <div class="data-row">
-              <span class="label" data-i18n="marketInfo.price">Fiyat:</span>
-              <span id="currentPrice" class="value">$45,678.90</span>
-            </div>
-            <div class="data-row">
-              <span class="label" data-i18n="marketInfo.change">Değişim:</span>
-              <span id="priceChange" class="value up">+2.34%</span>
-            </div>
-            <div class="data-row">
-              <span class="label" data-i18n="marketInfo.high">24s Yüksek:</span>
-              <span id="high24h" class="value">$46,123.45</span>
-            </div>
-            <div class="data-row">
-              <span class="label" data-i18n="marketInfo.low">24s Düşük:</span>
-              <span id="low24h" class="value">$44,789.01</span>
-            </div>
-            <div class="data-row">
-              <span class="label" data-i18n="marketInfo.volume">Hacim:</span>
-              <span id="volume" class="value">$1.23B</span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Orta Panel - Grafik -->
-      <section class="chart-container">
-        <div class="chart-header">
-          <h2 id="chartSymbol">BTCUSDT</h2>
-          <div class="timeframe-selector">
-            <button class="timeframe active" data-timeframe="1d" data-i18n="chart.intervals.1d">1g</button>
-            <button class="timeframe" data-timeframe="1h" data-i18n="chart.intervals.1h">1s</button>
-            <button class="timeframe" data-timeframe="4h" data-i18n="chart.intervals.4h">4s</button>
-            <button class="timeframe" data-timeframe="1w" data-i18n="chart.intervals.1w">1h</button>
-          </div>
-        </div>
-        <div id="chart"></div>
-        <div class="time-range">
-          <button class="range-btn active">1G</button>
-          <button class="range-btn">1A</button>
-          <button class="range-btn">3A</button>
-          <button class="range-btn">1Y</button>
-          <button class="range-btn">5Y</button>
-          <button class="range-btn">Tümü</button>
-        </div>
-      </section>
-
-      <!-- Sağ Panel - İzleme Listesi -->
-      <aside class="right-panel">
-        <h2 data-i18n="watchlist.title">İzleme Listesi</h2>
-        <ul id="watchlist" class="stock-list">
-          <li>
-            <span class="stock-symbol">BTC/USDT</span>
-            <span class="stock-price up">$45,678.90</span>
-          </li>
-          <li>
-            <span class="stock-symbol">ETH/USDT</span>
-            <span class="stock-price up">$3,156.23</span>
-          </li>
-          <li>
-            <span class="stock-symbol">XRP/USDT</span>
-            <span class="stock-price down">$0.4782</span>
-          </li>
-          <li>
-            <span class="stock-symbol">DOGE/USDT</span>
-            <span class="stock-price up">$0.1253</span>
-          </li>
-          <li>
-            <span class="stock-symbol">ADA/USDT</span>
-            <span class="stock-price down">$0.5372</span>
-          </li>
-        </ul>
-      </aside>
-    </main>
-  </div>
-
-  <!-- Modal - Giriş -->
+  <!-- Giriş Modalı -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2 data-i18n="auth.loginTitle">Giriş Yap</h2>
+      <h2 data-i18n="login.title">Giriş Yap</h2>
       <form id="loginForm">
         <div class="form-group">
-          <label for="loginUsername" data-i18n="auth.username">Kullanıcı Adı</label>
-          <input type="text" id="loginUsername" name="username" required>
+          <label for="loginUsername" data-i18n="login.username">Kullanıcı Adı:</label>
+          <input type="text" id="loginUsername" required>
         </div>
         <div class="form-group">
-          <label for="loginPassword" data-i18n="auth.password">Şifre</label>
-          <input type="password" id="loginPassword" name="password" required>
+          <label for="loginPassword" data-i18n="login.password">Şifre:</label>
+          <input type="password" id="loginPassword" required>
         </div>
-        <button type="submit" class="btn btn-primary" data-i18n="auth.loginButton">Giriş Yap</button>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" data-i18n="login.submit">Giriş Yap</button>
+          <a href="#" class="forgot-password" data-i18n="login.forgot">Şifremi Unuttum</a>
+        </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal - Kaydol -->
+  <!-- Kayıt Modalı -->
   <div id="registerModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2 data-i18n="auth.registerTitle">Kaydol</h2>
+      <h2 data-i18n="register.title">Kaydol</h2>
       <form id="registerForm">
         <div class="form-group">
-          <label for="registerUsername" data-i18n="auth.username">Kullanıcı Adı</label>
-          <input type="text" id="registerUsername" name="username" required>
+          <label for="registerUsername" data-i18n="register.username">Kullanıcı Adı:</label>
+          <input type="text" id="registerUsername" required>
         </div>
         <div class="form-group">
-          <label for="registerEmail" data-i18n="auth.email">E-posta</label>
-          <input type="email" id="registerEmail" name="email" required>
+          <label for="registerEmail" data-i18n="register.email">E-posta:</label>
+          <input type="email" id="registerEmail" required>
         </div>
         <div class="form-group">
-          <label for="registerPassword" data-i18n="auth.password">Şifre</label>
-          <input type="password" id="registerPassword" name="password" required>
+          <label for="registerPassword" data-i18n="register.password">Şifre:</label>
+          <input type="password" id="registerPassword" required>
         </div>
-        <button type="submit" class="btn btn-primary" data-i18n="auth.registerButton">Kaydol</button>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" data-i18n="register.submit">Kaydol</button>
+        </div>
       </form>
     </div>
   </div>
 
-  <!-- Dil dosyaları ve JavaScript -->
-  <script src="js/i18n.js"></script>
+  <!-- Grafik Ayarları Modalı -->
+  <div id="chartSettingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 data-i18n="settings.title">Grafik Ayarları</h2>
+      <form id="chartSettingsForm">
+        <div class="settings-group">
+          <h3 data-i18n="settings.appearance">Görünüm</h3>
+          <div class="form-group">
+            <label for="chartBackground" data-i18n="settings.background">Arka Plan:</label>
+            <input type="color" id="chartBackground" value="#131722">
+          </div>
+          <div class="form-group">
+            <label for="gridColor" data-i18n="settings.grid">Izgara Rengi:</label>
+            <input type="color" id="gridColor" value="#1e222d">
+          </div>
+          <div class="form-group">
+            <label for="textColor" data-i18n="settings.text">Metin Rengi:</label>
+            <input type="color" id="textColor" value="#d1d4dc">
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3 data-i18n="settings.candlestick">Mum Grafik</h3>
+          <div class="form-group">
+            <label for="upColor" data-i18n="settings.upColor">Yükseliş Rengi:</label>
+            <input type="color" id="upColor" value="#26a69a">
+          </div>
+          <div class="form-group">
+            <label for="downColor" data-i18n="settings.downColor">Düşüş Rengi:</label>
+            <input type="color" id="downColor" value="#ef5350">
+          </div>
+          <div class="form-group">
+            <label for="wickVisible" data-i18n="settings.wickVisible">Fitil Görünümü:</label>
+            <input type="checkbox" id="wickVisible" checked>
+          </div>
+          <div class="form-group">
+            <label for="borderVisible" data-i18n="settings.borderVisible">Kenar Görünümü:</label>
+            <input type="checkbox" id="borderVisible">
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3 data-i18n="settings.volume">Hacim</h3>
+          <div class="form-group">
+            <label for="volumeVisible" data-i18n="settings.volumeVisible">Hacim Göster:</label>
+            <input type="checkbox" id="volumeVisible" checked>
+          </div>
+          <div class="form-group">
+            <label for="volumeUpColor" data-i18n="settings.volumeUpColor">Yükseliş Rengi:</label>
+            <input type="color" id="volumeUpColor" value="#26a69a">
+          </div>
+          <div class="form-group">
+            <label for="volumeDownColor" data-i18n="settings.volumeDownColor">Düşüş Rengi:</label>
+            <input type="color" id="volumeDownColor" value="#ef5350">
+          </div>
+        </div>
+        
+        <div class="settings-group">
+          <h3 data-i18n="settings.timeScale">Zaman Ölçeği</h3>
+          <div class="form-group">
+            <label for="timeVisible" data-i18n="settings.timeVisible">Zaman Göster:</label>
+            <input type="checkbox" id="timeVisible" checked>
+          </div>
+          <div class="form-group">
+            <label for="timeFormat" data-i18n="settings.timeFormat">Zaman Formatı:</label>
+            <select id="timeFormat">
+              <option value="yyyy-MM-dd">YYYY-MM-DD</option>
+              <option value="dd/MM/yyyy">DD/MM/YYYY</option>
+              <option value="MM/dd/yyyy">MM/DD/YYYY</option>
+              <option value="dd.MM.yyyy">DD.MM.YYYY</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" data-i18n="settings.apply">Uygula</button>
+          <button type="button" id="resetSettings" class="btn" data-i18n="settings.reset">Sıfırla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Gösterge Parametreleri Modalı -->
+  <div id="indicatorModal" class="modal">
+    <!-- JavaScript ile doldurulacak -->
+  </div>
+
+  <!-- Bildirim Konteyneri -->
+  <div id="notificationContainer" class="notification-container"></div>
+
+  <!-- Lightweight Charts kütüphanesi -->
   <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  
+  <!-- Uygulama Scriptleri -->
   <script src="js/api.js"></script>
+  <script src="js/indicators.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/app.js"></script>
 </body>

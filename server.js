@@ -36,14 +36,19 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Ana sayfa
+// Ana sayfa - Landing Page
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'landing.html'));
+});
+
+// Uygulama ana sayfası
+app.get('/app', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 404 sayfası
 app.use((req, res) => {
-  res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.status(200).sendFile(path.join(__dirname, 'public', 'landing.html'));
 });
 
 // Server başlat
