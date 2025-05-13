@@ -1,0 +1,62 @@
+{
+  "app": {
+    "title": "TradingView Benzeri Platform",
+    "welcome": "Hoş Geldiniz!"
+  },
+  "header": {
+    "search": "Sembol ara...",
+    "login": "Giriş Yap",
+    "register": "Kaydol",
+    "account": "Hesabım",
+    "logout": "Çıkış Yap"
+  },
+  "chart": {
+    "intervals": {
+      "1d": "1 gün",
+      "1h": "1 saat",
+      "4h": "4 saat",
+      "1w": "1 hafta"
+    }
+  },
+  "marketInfo": {
+    "title": "Piyasa Bilgisi",
+    "price": "Fiyat",
+    "change": "Değişim",
+    "high": "24s Yüksek",
+    "low": "24s Düşük",
+    "volume": "Hacim"
+  },
+  "watchlist": {
+    "title": "İzleme Listesi",
+    "add": "Listeye Ekle",
+    "create": "Yeni Liste Oluştur",
+    "edit": "Listeyi Düzenle",
+    "delete": "Listeyi Sil"
+  },
+  "auth": {
+    "username": "Kullanıcı Adı",
+    "email": "E-posta",
+    "password": "Şifre",
+    "loginTitle": "Giriş Yap",
+    "registerTitle": "Kaydol",
+    "loginButton": "Giriş Yap",
+    "registerButton": "Kaydol",
+    "required": "Bu alan gereklidir",
+    "loginSuccess": "Giriş başarılı",
+    "registerSuccess": "Kayıt başarılı"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "language": "Dil",
+    "theme": "Tema",
+    "dark": "Koyu",
+    "light": "Açık",
+    "save": "Kaydet"
+  },
+  "errors": {
+    "general": "Bir hata oluştu",
+    "login": "Giriş yapılırken bir hata oluştu",
+    "register": "Kayıt olurken bir hata oluştu",
+    "notFound": "Sayfa bulunamadı"
+  }
+} 
