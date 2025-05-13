@@ -559,6 +559,15 @@ body {
   flex: 1;
   position: relative;
   overflow: hidden;
+  height: 45%;
+}
+
+.nasdaq-chart {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  height: 45%;
+  margin-top: 20px;
 }
 
 /* Sekme Stili */

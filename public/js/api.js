@@ -200,46 +200,63 @@ class ApiService {
    * @returns {Array} - Mum verileri
    */
   static generateDemoCandleData(symbol, timeframe) {
-    // Sembol bilgilerini al
-    const stock = ApiService.getDemoStocks().find(s => s.symbol === symbol) || {
-      symbol: 'BTCUSDT',
-      price: 45000,
-      change: 2
-    };
+    // Özel semboller için başlangıç fiyatı ve dalgalanma seviyesi belirle
+    let startPrice = 100;
+    let volatility = 1;
+    let trend = 0.1; // Pozitif değer yükselen trend, negatif değer düşen trend
     
-    // Zaman aralığına göre veri sayısını belirle
-    let dataPoints = 100;
-    let timeMultiplier = 60; // varsayılan: dakikalık
+    if (symbol === 'BTCUSDT') {
+      startPrice = 45000;
+      volatility = 500;
+      trend = 0.2;
+    } else if (symbol === 'ETHUSDT') {
+      startPrice = 3000;
+      volatility = 100;
+      trend = 0.15;
+    } else if (symbol === 'AAPL') {
+      startPrice = 190;
+      volatility = 2;
+      trend = 0.05;
+    } else if (symbol === 'NASDAQ') {
+      startPrice = 20000;
+      volatility = 50;
+      trend = 0.1;
+    }
+    
+    // Zaman dilimine göre veri noktası sayısını belirle
+    let dataPoints = 200;
+    let timeIncrement = 24 * 60 * 60; // 1 gün (saniye cinsinden)
     
     switch (timeframe) {
       case '1m':
-        dataPoints = 200;
-        timeMultiplier = 60;
+        dataPoints = 60;
+        timeIncrement = 60; // 1 dakika
         break;
       case '5m':
-        dataPoints = 180;
-        timeMultiplier = 60 * 5;
+        dataPoints = 60;
+        timeIncrement = 5 * 60; // 5 dakika
         break;
       case '15m':
-        dataPoints = 160;
-        timeMultiplier = 60 * 15;
+        dataPoints = 60;
+        timeIncrement = 15 * 60; // 15 dakika
         break;
       case '1h':
-        dataPoints = 140;
-        timeMultiplier = 60 * 60;
+        dataPoints = 60;
+        timeIncrement = 60 * 60; // 1 saat
+        break;
+      case '4h':
+        dataPoints = 60;
+        timeIncrement = 4 * 60 * 60; // 4 saat
         break;
       case '1d':
         dataPoints = 90;
-        timeMultiplier = 60 * 60 * 24;
+        timeIncrement = 24 * 60 * 60; // 1 gün
         break;
-      default:
-        dataPoints = 120;
-        timeMultiplier = 60 * 60;
+      case '1w':
+        dataPoints = 52;
+        timeIncrement = 7 * 24 * 60 * 60; // 1 hafta
+        break;
     }
-    
-    // Başlangıç fiyatını belirle
-    const basePrice = stock.price * 0.95;
-    const volatility = stock.price * 0.07; // fiyatın %7'si kadar dalgalanma
     
     // Şimdiki zaman
     const now = new Date();
@@ -249,11 +266,11 @@ class ApiService {
     
     for (let i = 0; i < dataPoints; i++) {
       // Zaman
-      const time = Math.floor(now.getTime() / 1000) - (dataPoints - i) * timeMultiplier;
+      const time = Math.floor(now.getTime() / 1000) - (dataPoints - i) * timeIncrement;
       
       // Rastgele değerler oluştur
-      const open = basePrice + volatility * Math.sin(i * 0.1) + (Math.random() - 0.5) * volatility;
-      const close = open + (Math.random() - 0.5) * volatility * 0.5;
+      const open = startPrice + Math.random() * volatility * trend;
+      const close = open + Math.random() * volatility * 0.5;
       const high = Math.max(open, close) + Math.random() * volatility * 0.3;
       const low = Math.min(open, close) - Math.random() * volatility * 0.3;
       const volume = 10000 + Math.random() * 50000;

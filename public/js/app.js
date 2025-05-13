@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Chart Manager'ı başlat
   const chartManager = new ChartManager();
   
+  // Nasdaq Chart Manager'ı başlat
+  const nasdaqChartManager = new ChartManager('nasdaqChart');
+  
   // Auth managment
   let currentUser = null;
   let authToken = localStorage.getItem('authToken');
@@ -50,6 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
   function initializeCharts() {
     // Ana grafik
     chartManager.initializeChart();
+    
+    // Nasdaq grafiği
+    nasdaqChartManager.initializeChart();
+    nasdaqChartManager.changeSymbol('NASDAQ');
     
     // Featured indeks grafiği
     if (featuredChartEl) {
@@ -412,12 +419,12 @@ document.addEventListener('DOMContentLoaded', function() {
  * TradingView Lightweight Charts API'si kullanılarak grafik yönetimi
  */
 class ChartManager {
-  constructor() {
+  constructor(containerId = 'chart') {
     this.chart = null;
     this.series = {};
     this.timeframe = '1d';
-    this.currentSymbol = 'AAPL';
-    this.container = null;
+    this.currentSymbol = containerId === 'nasdaqChart' ? 'NASDAQ' : 'AAPL';
+    this.container = document.getElementById(containerId) || null;
   }
   
   /**
@@ -425,7 +432,7 @@ class ChartManager {
    * @param {HTMLElement} container - Grafik container elementi
    * @param {Object} options - Chart ayarları
    */
-  initializeChart(container = document.getElementById('chart'), options = {}) {
+  initializeChart(container = this.container, options = {}) {
     if (!container) return;
     
     this.container = container;
@@ -468,7 +475,34 @@ class ChartManager {
     // Responsiveness için resize listener ekle
     this.handleResize();
     
+    // Sembol verisini yükle
+    this.loadChartData();
+    
     return this.chart;
+  }
+  
+  /**
+   * Sembol için grafik verisi yükle
+   */
+  loadChartData() {
+    // Demo veri oluştur
+    ApiService.generateDemoCandleData(this.currentSymbol, this.timeframe)
+      .then(data => {
+        if (data && data.length > 0) {
+          // Ana seri ekle
+          this.series[this.currentSymbol] = this.chart.addAreaSeries({
+            lineColor: '#2962FF',
+            topColor: 'rgba(41, 98, 255, 0.3)',
+            bottomColor: 'rgba(41, 98, 255, 0.05)',
+          });
+          
+          // Veriyi ayarla
+          this.series[this.currentSymbol].setData(data);
+          
+          // Grafiği içeriğe göre ayarla
+          this.chart.timeScale().fitContent();
+        }
+      });
   }
   
   /**
@@ -580,9 +614,19 @@ class ChartManager {
    * @param {string} symbol - Yeni sembol
    */
   changeSymbol(symbol) {
+    if (this.currentSymbol === symbol) return;
+    
     this.currentSymbol = symbol;
-    // Yeni sembol için veri getir
     console.log(`Symbol changed to ${symbol}`);
+    
+    // Eski seriyi kaldır
+    if (this.series[this.currentSymbol]) {
+      this.chart.removeSeries(this.series[this.currentSymbol]);
+      delete this.series[this.currentSymbol];
+    }
+    
+    // Yeni sembol için veri yükle
+    this.loadChartData();
   }
   
   /**
