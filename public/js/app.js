@@ -24,9 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const toolButtons = document.querySelectorAll('.tool-btn');
   const symbolSearchInput = document.getElementById('symbolSearch');
   
-  // Main Menu Navigation
-  const mainMenuLinks = document.querySelectorAll('.main-pages .page-link');
-  const sidebarSections = document.querySelectorAll('.sidebar-section');
+  // Ana Navigasyon Menüsü
+  const navLinks = document.querySelectorAll('.main-nav-menu .nav-link');
   
   // Market watchlist tabs
   const marketCategoryTabs = document.querySelectorAll('.market-category-tabs .market-category');
@@ -52,12 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const indicatorsBtn = document.getElementById('indicatorsBtn');
   const indicatorsDropdown = document.getElementById('indicatorsDropdown');
   const indicatorItems = document.querySelectorAll('.indicator-item');
-  
-  // Market Özeti Elementleri
-  const marketCategories = document.querySelectorAll('.market-category');
-  const marketScrollBtn = document.querySelector('.market-scroll-btn');
-  const timeButtons = document.querySelectorAll('.time-btn');
-  const featuredChartEl = document.getElementById('featuredChart');
   
   // Comparison colors
   const comparisonColors = [
@@ -187,25 +180,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Ana menü navigasyonu
-  if (mainMenuLinks.length > 0) {
-    mainMenuLinks.forEach(link => {
+  // Ana navigasyon menüsü
+  if (navLinks.length > 0) {
+    navLinks.forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         
-        const targetSection = this.getAttribute('href').substring(1);
-        
         // Tüm menü linklerden active sınıfını kaldır
-        mainMenuLinks.forEach(l => l.classList.remove('active'));
+        navLinks.forEach(l => l.classList.remove('active'));
         
         // Tıklanan menü linkine active sınıfı ekle
         this.classList.add('active');
         
-        // İlgili sidebar bölümüne scroll yap
-        const sidebarSection = document.querySelector(`.sidebar-section h3:contains('${targetSection}')`);
-        if (sidebarSection) {
-          sidebarSection.scrollIntoView({ behavior: 'smooth' });
-        }
+        // İlgili sayfa içeriğini göster
+        const targetSection = this.getAttribute('href').substring(1);
+        
+        // Burada farklı sayfa içeriklerini gösterme kodları eklenebilir
+        console.log(`${targetSection} sayfası gösteriliyor...`);
+        
+        // Örneğin, sayfa başlığını değiştirme:
+        document.title = `Trinity | ${targetSection.charAt(0).toUpperCase() + targetSection.slice(1)}`;
       });
     });
   }
@@ -762,231 +756,79 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Market kategorileri için etkinlik
-  if (marketCategories.length > 0) {
-    marketCategories.forEach(category => {
-      category.addEventListener('click', function() {
-        // Aktif kategoriyi kaldır
-        marketCategories.forEach(cat => cat.classList.remove('active'));
-        // Tıklanan kategoriyi aktif yap
-        this.classList.add('active');
-        // Kategori değişince içeriği güncellenebilir
-      });
-    });
-  }
-  
-  // Market summary kaydırma butonu
-  if (marketScrollBtn) {
-    marketScrollBtn.addEventListener('click', function() {
-      const marketItems = document.querySelector('.market-items');
-      marketItems.scrollLeft += 300; // 300px sağa kaydır
-    });
-  }
-  
-  // Zaman butonu tıklama olayları
-  if (timeButtons.length > 0) {
-    timeButtons.forEach(btn => {
-      btn.addEventListener('click', function() {
-        // Tüm butonları sıfırla
-        timeButtons.forEach(b => b.classList.remove('active'));
-        // Tıklanan butonu aktif yap
-        this.classList.add('active');
-        // Grafiği güncelle
-        updateFeaturedChart(this.textContent);
-      });
-    });
-  }
-  
-  // Dil değiştirici
-  const languageSelector = document.getElementById('languageSelector');
-  if (languageSelector) {
-    languageSelector.addEventListener('change', function() {
-      const selectedLang = this.value;
-      changeLanguage(selectedLang);
-    });
-  }
-  
-  // Dil değiştirme fonksiyonu
-  function changeLanguage(lang) {
-    localStorage.setItem('preferredLanguage', lang);
-    
-    // i18next kütüphanesi kullanılıyorsa
-    if (window.i18next) {
-      window.i18next.changeLanguage(lang).then(() => {
-        // UI'daki metinleri güncelle
-        updateUITexts();
-      });
-    } else {
-      // Manuel dil değişimi
-      location.reload();
-    }
-  }
-  
-  // UI metinlerini güncelle
-  function updateUITexts() {
-    // Data-i18n attribute'una sahip tüm elementleri bul
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-      const key = element.getAttribute('data-i18n');
-      
-      if (window.i18next) {
-        // Normal metin içeriği
-        if (!key.includes('[')) {
-          element.textContent = window.i18next.t(key);
-        } 
-        // Attribute içeriği (örn: placeholder)
-        else {
-          const parts = key.match(/\[(.*?)\](.*)/);
-          if (parts && parts.length >= 3) {
-            const attr = parts[1];
-            const attrKey = parts[2];
-            element.setAttribute(attr, window.i18next.t(attrKey));
-          }
-        }
-      }
-    });
-  }
-  
-  // Uygulamayı başlat
+  // Uygulama başlangıcı
   function initApp() {
-    // Watchlist'i doldur
+    // Market Summary sayfasını varsayılan olarak göster
+    document.getElementById('marketSummary').style.display = 'flex';
+    
+    // Varsayılan olarak Markets nav linkini active yap
+    const summaryLink = document.querySelector('.main-nav-menu .nav-link[href="#summary"]');
+    if (summaryLink) {
+      summaryLink.classList.add('active');
+    }
+    
+    // İzleme listesini oluştur
     populateWatchlist();
     
-    // Ana grafik için ilk sembolü ayarla
-    chartManager.initChart('BTCUSDT');
+    // Grafiği başlat
+    chartManager.init('chart', 'BTCUSDT', '1d');
     
-    // Market özeti grafik
-    if (featuredChartEl) {
-      createFeaturedChart();
+    // Event listener'ları ekle
+    if (loginBtn) loginBtn.addEventListener('click', () => openModal(loginModal));
+    if (settingsBtn) settingsBtn.addEventListener('click', () => openModal(settingsModal));
+    
+    // Dil değiştirme
+    const languageSelector = document.getElementById('languageSelector');
+    if (languageSelector) {
+      languageSelector.addEventListener('change', function() {
+        changeLanguage(this.value);
+      });
     }
     
-    // Kullanıcı giriş yapmışsa UI'ı güncelle
-    if (authToken && currentUser) {
-      updateUIForLoggedInUser();
+    // Zaman dilimi butonları
+    if (timeframeButtons.length > 0) {
+      timeframeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          timeframeButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          chartManager.changeTimeframe(this.getAttribute('data-timeframe'));
+        });
+      });
     }
     
-    // Tercih edilen dil varsa yükle
-    const preferredLang = localStorage.getItem('preferredLanguage');
-    if (preferredLang && languageSelector) {
-      languageSelector.value = preferredLang;
-      changeLanguage(preferredLang);
+    // İndikatör butonları
+    if (indicatorsBtn) {
+      indicatorsBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown(indicatorsDropdown);
+      });
     }
+    
+    // Karşılaştırma butonu
+    if (addComparisonBtn) {
+      addComparisonBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown(comparisonDropdown);
+        if (comparisonSearch) {
+          comparisonSearch.focus();
+        }
+      });
+    }
+    
+    // Export butonu
+    if (exportChartBtn) {
+      exportChartBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown(exportDropdown);
+      });
+    }
+    
+    // Belge tıklamasında açık dropdown'ları kapat
+    document.addEventListener('click', function() {
+      closeAllDropdowns();
+    });
   }
   
   // Uygulamayı başlat
   initApp();
-  
-  // Featured Chart oluşturma
-  function createFeaturedChart() {
-    if (!featuredChartEl) return;
-    
-    const chart = LightweightCharts.createChart(featuredChartEl, {
-      width: featuredChartEl.clientWidth,
-      height: featuredChartEl.clientHeight,
-      layout: {
-        background: { color: '#1e222d' },
-        textColor: '#d1d4dc',
-      },
-      grid: {
-        vertLines: { color: '#2a2e39' },
-        horzLines: { color: '#2a2e39' },
-      },
-      rightPriceScale: {
-        borderColor: '#2a2e39',
-      },
-      timeScale: {
-        borderColor: '#2a2e39',
-      },
-      crosshair: {
-        mode: LightweightCharts.CrosshairMode.Normal,
-        vertLine: {
-          color: '#4c525e',
-          width: 1,
-          style: LightweightCharts.LineStyle.Dotted,
-        },
-        horzLine: {
-          color: '#4c525e',
-          width: 1,
-          style: LightweightCharts.LineStyle.Dotted,
-        }
-      },
-    });
-    
-    const areaSeries = chart.addAreaSeries({
-      topColor: 'rgba(41, 98, 255, 0.56)',
-      bottomColor: 'rgba(41, 98, 255, 0.04)',
-      lineColor: 'rgba(41, 98, 255, 1)',
-      lineWidth: 2,
-    });
-    
-    const sampleData = generateSampleData();
-    areaSeries.setData(sampleData);
-    
-    // Pencere boyutu değiştiğinde grafiği yeniden boyutlandır
-    window.addEventListener('resize', function() {
-      chart.resize(featuredChartEl.clientWidth, featuredChartEl.clientHeight);
-    });
-    
-    // Grafiği global değişkene ata
-    window.featuredChart = {
-      chart: chart,
-      areaSeries: areaSeries
-    };
-  }
-  
-  // Örnek veri oluşturma
-  function generateSampleData() {
-    const startTime = Date.UTC(2023, 0, 1, 0, 0, 0, 0) / 1000;
-    const points = 500;
-    const data = [];
-    
-    let lastClose = 5000 + Math.random() * 500;
-    
-    for (let i = 0; i < points; i++) {
-      const time = startTime + i * 3600 * 24;
-      const open = lastClose + (Math.random() - 0.5) * 30;
-      const high = open + Math.random() * 20;
-      const low = open - Math.random() * 20;
-      const close = (open + high + low) / 3 + (Math.random() - 0.5) * 10;
-      
-      data.push({
-        time: time,
-        open: open,
-        high: high,
-        low: low,
-        close: close
-      });
-      
-      lastClose = close;
-    }
-    
-    return data;
-  }
-  
-  // Zaman aralığına göre grafiği güncelleme
-  function updateFeaturedChart(timeframe) {
-    if (!window.featuredChart) return;
-    
-    const { chart } = window.featuredChart;
-    
-    switch(timeframe) {
-      case '1D':
-        chart.timeScale().setVisibleLogicalRange({ from: 0, to: 24 });
-        break;
-      case '1M':
-        chart.timeScale().setVisibleLogicalRange({ from: 0, to: 30 });
-        break;
-      case '3M':
-        chart.timeScale().setVisibleLogicalRange({ from: 0, to: 90 });
-        break;
-      case '1Y':
-        chart.timeScale().setVisibleLogicalRange({ from: 0, to: 365 });
-        break;
-      case '5Y':
-        chart.timeScale().setVisibleLogicalRange({ from: 0, to: 1825 });
-        break;
-      case 'Tümü':
-        chart.timeScale().fitContent();
-        break;
-    }
-  }
 }); 

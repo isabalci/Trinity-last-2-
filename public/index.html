@@ -21,22 +21,21 @@
       <button><i class="fas fa-search"></i></button>
     </div>
     
-    <!-- Sayfa Butonları -->
-    <div class="main-pages">
-      <nav>
-        <ul>
-          <li><a href="#markets" class="page-link">Markets</a></li>
-          <li><a href="#community" class="page-link">Community</a></li>
-          <li><a href="#tools" class="page-link">Araçlar</a></li>
-          <li><a href="#news" class="page-link">News</a></li>
-          <li><a href="#summary" class="page-link">Summary</a></li>
-        </ul>
-      </nav>
-    </div>
-    
-    <nav class="main-nav">
+    <!-- Ana Navigasyon Menüsü -->
+    <nav class="main-nav-menu">
       <ul>
-        <li><a href="#" id="loginBtn" data-i18n="header.login"><i class="fas fa-user"></i> Giriş Yap</a></li>
+        <li><a href="#markets" class="nav-link active">Markets</a></li>
+        <li><a href="#community" class="nav-link">Community</a></li>
+        <li><a href="#tools" class="nav-link">Araçlar</a></li>
+        <li><a href="#news" class="nav-link">News</a></li>
+        <li><a href="#summary" class="nav-link">Summary</a></li>
+      </ul>
+    </nav>
+    
+    <!-- Sağ Üst Menü - Giriş ve Ayarlar -->
+    <div class="user-nav">
+      <ul>
+        <li><a href="#" id="loginBtn"><i class="fas fa-user"></i> Giriş Yap</a></li>
         <li><a href="#" id="settingsBtn"><i class="fas fa-cog"></i></a></li>
         <li>
           <select id="languageSelector">
@@ -45,70 +44,13 @@
           </select>
         </li>
       </ul>
-    </nav>
+    </div>
   </header>
 
   <!-- Ana İçerik -->
   <main class="main-content">
-    <!-- Sol Kenar Çubuğu - İçerik Menüsü -->
-    <aside class="sidebar left-sidebar">
-      <div class="left-sidebar-menu">
-        <div class="sidebar-section">
-          <h3>Markets</h3>
-          <ul class="sidebar-menu-list">
-            <li><a href="#">Hisse Senetleri</a></li>
-            <li><a href="#">Kripto Para</a></li>
-            <li><a href="#">Forex</a></li>
-            <li><a href="#">Emtialar</a></li>
-            <li><a href="#">Endeksler</a></li>
-            <li><a href="#">ETFs</a></li>
-          </ul>
-        </div>
-        
-        <div class="sidebar-section">
-          <h3>Community</h3>
-          <ul class="sidebar-menu-list">
-            <li><a href="#">Tartışmalar</a></li>
-            <li><a href="#">Analistler</a></li>
-            <li><a href="#">Yayınlar</a></li>
-            <li><a href="#">Etkinlikler</a></li>
-          </ul>
-        </div>
-        
-        <div class="sidebar-section">
-          <h3>Araçlar</h3>
-          <ul class="sidebar-menu-list">
-            <li><a href="#">Teknik Göstergeler</a></li>
-            <li><a href="#">Ekonomik Takvim</a></li>
-            <li><a href="#">Hesaplayıcılar</a></li>
-            <li><a href="#">Piyasa Tarayıcı</a></li>
-          </ul>
-        </div>
-        
-        <div class="sidebar-section">
-          <h3>News</h3>
-          <ul class="sidebar-menu-list">
-            <li><a href="#">Güncel Haberler</a></li>
-            <li><a href="#">Ekonomi</a></li>
-            <li><a href="#">Şirket Haberleri</a></li>
-            <li><a href="#">Kriptopara</a></li>
-          </ul>
-        </div>
-        
-        <div class="sidebar-section">
-          <h3>Summary</h3>
-          <ul class="sidebar-menu-list">
-            <li><a href="#">Piyasa Özetleri</a></li>
-            <li><a href="#">Gün Sonu Raporları</a></li>
-            <li><a href="#">Haftalık Görünüm</a></li>
-            <li><a href="#">Top Movers</a></li>
-          </ul>
-        </div>
-      </div>
-    </aside>
-
     <!-- Grafik ve Araçlar Ana Bölümü -->
-    <section class="chart-container">
+    <section class="chart-container" id="marketSummary">
       <!-- Üst Araç Çubuğu -->
       <div class="chart-toolbar">
         <div class="timeframe-selector">
@@ -249,8 +191,8 @@
               <span class="stock-name">Microsoft Corp.</span>
             </div>
             <div class="stock-price">
-              <span class="price-value">$428.38</span>
-              <span class="price-change up">+0.87%</span>
+              <span class="price-value">$426.96</span>
+              <span class="price-change up">+2.51%</span>
             </div>
           </li>
           <li>
@@ -259,8 +201,8 @@
               <span class="stock-name">Alphabet Inc.</span>
             </div>
             <div class="stock-price">
-              <span class="price-value">$165.84</span>
-              <span class="price-change down">-0.32%</span>
+              <span class="price-value">$161.84</span>
+              <span class="price-change up">+1.73%</span>
             </div>
           </li>
           <li>
@@ -270,7 +212,7 @@
             </div>
             <div class="stock-price">
               <span class="price-value">$178.08</span>
-              <span class="price-change up">+1.52%</span>
+              <span class="price-change up">+1.73%</span>
             </div>
           </li>
           <li>
@@ -280,7 +222,7 @@
             </div>
             <div class="stock-price">
               <span class="price-value">$950.02</span>
-              <span class="price-change up">+3.78%</span>
+              <span class="price-change up">+2.85%</span>
             </div>
           </li>
           <li>
@@ -289,8 +231,8 @@
               <span class="stock-name">Tesla Inc.</span>
             </div>
             <div class="stock-price">
-              <span class="price-value">$219.55</span>
-              <span class="price-change down">-1.45%</span>
+              <span class="price-value">$219.96</span>
+              <span class="price-change down">-0.81%</span>
             </div>
           </li>
           <li>
@@ -299,8 +241,8 @@
               <span class="stock-name">Bitcoin USD</span>
             </div>
             <div class="stock-price">
-              <span class="price-value">$65,432.18</span>
-              <span class="price-change up">+2.14%</span>
+              <span class="price-value">$68,443.98</span>
+              <span class="price-change up">+3.02%</span>
             </div>
           </li>
           <li>
@@ -309,112 +251,15 @@
               <span class="stock-name">Ethereum USD</span>
             </div>
             <div class="stock-price">
-              <span class="price-value">$3,456.78</span>
-              <span class="price-change up">+1.82%</span>
+              <span class="price-value">$3,448.76</span>
+              <span class="price-change up">+2.48%</span>
             </div>
           </li>
         </ul>
       </div>
     </aside>
   </main>
-
-  <!-- Piyasa Özeti Bölümü -->
-  <section class="market-summary" id="summary">
-    <div class="container">
-      <h2 class="summary-title">
-        Piyasa Özeti <i class="fas fa-chevron-right"></i>
-      </h2>
-      
-      <div class="market-categories">
-        <button class="market-category active">Endeksler</button>
-        <button class="market-category">Hisseler</button>
-        <button class="market-category">Kripto</button>
-        <button class="market-category">Vadeli İşlemler</button>
-        <button class="market-category">Forex</button>
-        <button class="market-category">Tahviller</button>
-        <button class="market-category">ETF'ler</button>
-      </div>
-      
-      <div class="market-items-wrapper">
-        <div class="market-items">
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge">500</div>
-              <div class="market-details">
-                <div class="symbol-name">S&P 500</div>
-                <div class="symbol-price">5,844.20<span class="price-unit">USD</span></div>
-              </div>
-            </div>
-            <div class="market-change up">+3.26%</div>
-          </div>
-          
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge nasdaq">100</div>
-              <div class="market-details">
-                <div class="symbol-name">Nasdaq 100</div>
-                <div class="symbol-price">20,868.15<span class="price-unit">USD</span></div>
-              </div>
-            </div>
-            <div class="market-change up">+4.02%</div>
-          </div>
-          
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge dow">30</div>
-              <div class="market-details">
-                <div class="symbol-name">Dow 30</div>
-                <div class="symbol-price">42,410.11<span class="price-unit">USD</span></div>
-              </div>
-            </div>
-            <div class="market-change up">+2.81%</div>
-          </div>
-          
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge japan">225</div>
-              <div class="market-details">
-                <div class="symbol-name">Japan 225</div>
-                <div class="symbol-price">38,183.04<span class="price-unit">JPY</span></div>
-              </div>
-            </div>
-            <div class="market-change up">+1.43%</div>
-          </div>
-          
-          <div class="market-item">
-            <div class="market-symbol-badge">
-              <div class="symbol-badge ftse">100</div>
-              <div class="market-details">
-                <div class="symbol-name">FTSE 100</div>
-                <div class="symbol-price">8,606.40<span class="price-unit">GBP</span></div>
-              </div>
-            </div>
-            <div class="market-change up">+0.02%</div>
-          </div>
-        </div>
-        
-        <button class="market-scroll-btn right">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-      
-      <div class="featured-chart">
-        <div class="chart-header">
-          <div class="chart-symbol">S&P 500</div>
-          <div class="time-selector">
-            <button class="time-btn active">1D</button>
-            <button class="time-btn">1M</button>
-            <button class="time-btn">3M</button>
-            <button class="time-btn">1Y</button>
-            <button class="time-btn">5Y</button>
-            <button class="time-btn">Tümü</button>
-          </div>
-        </div>
-        <div id="featuredChart" class="featured-chart-container"></div>
-      </div>
-    </div>
-  </section>
-
+  
   <!-- Giriş Modalı -->
   <div id="loginModal" class="modal">
     <div class="modal-content">
@@ -422,12 +267,12 @@
       <h2 data-i18n="login.title">Giriş Yap</h2>
       <form id="loginForm">
         <div class="form-group">
-          <label for="loginUsername" data-i18n="login.username">Kullanıcı Adı:</label>
-          <input type="text" id="loginUsername" required>
+          <label for="email" data-i18n="login.email">E-posta</label>
+          <input type="email" id="email" name="email" required>
         </div>
         <div class="form-group">
-          <label for="loginPassword" data-i18n="login.password">Şifre:</label>
-          <input type="password" id="loginPassword" required>
+          <label for="password" data-i18n="login.password">Şifre</label>
+          <input type="password" id="password" name="password" required>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" data-i18n="login.submit">Giriş Yap</button>
@@ -436,164 +281,108 @@
       </form>
     </div>
   </div>
-
+  
   <!-- Ayarlar Modalı -->
   <div id="settingsModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2>Ayarlar</h2>
+      <h2 data-i18n="settings.title">Ayarlar</h2>
       <div class="settings-container">
         <div class="settings-section">
-          <h3>Genel Ayarlar</h3>
+          <h3 data-i18n="settings.appearance">Görünüm</h3>
           <div class="form-group">
-            <label for="themeSelector">Tema:</label>
-            <select id="themeSelector">
-              <option value="dark">Karanlık Tema</option>
-              <option value="light">Aydınlık Tema</option>
+            <label for="theme" data-i18n="settings.theme">Tema</label>
+            <select id="theme">
+              <option value="dark" data-i18n="settings.dark">Koyu</option>
+              <option value="light" data-i18n="settings.light">Açık</option>
             </select>
           </div>
           <div class="form-group">
-            <label>
-              <input type="checkbox" id="enableNotifications" checked> 
-              Bildirimleri Etkinleştir
-            </label>
-          </div>
-        </div>
-        
-        <div class="settings-section">
-          <h3>Grafik Ayarları</h3>
-          <div class="form-group">
-            <label for="defaultTimeframe">Varsayılan Zaman Dilimi:</label>
-            <select id="defaultTimeframe">
-              <option value="1d">1 Gün</option>
-              <option value="1w">1 Hafta</option>
-              <option value="1m">1 Ay</option>
-              <option value="3m">3 Ay</option>
-              <option value="1y">1 Yıl</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="chartType">Grafik Tipi:</label>
+            <label for="chartType" data-i18n="settings.chartType">Grafik Tipi</label>
             <select id="chartType">
-              <option value="candle">Mum</option>
-              <option value="line">Çizgi</option>
-              <option value="bar">Bar</option>
-              <option value="area">Alan</option>
+              <option value="candle" data-i18n="settings.candle">Mum</option>
+              <option value="line" data-i18n="settings.line">Çizgi</option>
+              <option value="bar" data-i18n="settings.bar">Çubuk</option>
+              <option value="area" data-i18n="settings.area">Alan</option>
             </select>
           </div>
         </div>
         
         <div class="settings-section">
-          <h3>Hesap Ayarları</h3>
+          <h3 data-i18n="settings.preferences">Tercihler</h3>
           <div class="form-group">
-            <label for="accountEmail">E-posta Adresiniz:</label>
-            <input type="email" id="accountEmail" value="kullanici@example.com">
+            <label for="language" data-i18n="settings.language">Dil</label>
+            <select id="language">
+              <option value="tr" data-i18n="settings.turkish">Türkçe</option>
+              <option value="en" data-i18n="settings.english">İngilizce</option>
+            </select>
           </div>
           <div class="form-group">
-            <button class="btn">Şifre Değiştir</button>
+            <label for="defaultPage" data-i18n="settings.defaultPage">Varsayılan Sayfa</label>
+            <select id="defaultPage">
+              <option value="markets" data-i18n="settings.marketsPage">Piyasalar</option>
+              <option value="watchlist" data-i18n="settings.watchlistPage">İzleme Listesi</option>
+              <option value="chart" data-i18n="settings.chartPage">Grafik</option>
+            </select>
           </div>
         </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn btn-primary">Kaydet</button>
-        <button class="btn">İptal</button>
       </div>
     </div>
   </div>
-
-  <!-- Grafik Ayarları Modalı -->
-  <div id="chartSettingsModal" class="modal">
+  
+  <!-- Gösterge Ayarları Modalı (Her gösterge tipi için) -->
+  <div id="indicatorSettingsModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2 data-i18n="settings.title">Grafik Ayarları</h2>
-      <form id="chartSettingsForm">
-        <div class="settings-group">
-          <h3 data-i18n="settings.appearance">Görünüm</h3>
-          <div class="form-group">
-            <label for="chartBackground" data-i18n="settings.background">Arka Plan:</label>
-            <input type="color" id="chartBackground" value="#131722">
-          </div>
-          <div class="form-group">
-            <label for="gridColor" data-i18n="settings.grid">Izgara Rengi:</label>
-            <input type="color" id="gridColor" value="#1e222d">
-          </div>
-          <div class="form-group">
-            <label for="textColor" data-i18n="settings.text">Metin Rengi:</label>
-            <input type="color" id="textColor" value="#d1d4dc">
-          </div>
+      <h2 id="indicatorTitle">Gösterge Ayarları</h2>
+      <form id="indicatorSettingsForm">
+        <div id="indicatorParams" class="form-group">
+          <!-- Gösterge parametreleri dinamik olarak eklenecek -->
         </div>
-        
-        <div class="settings-group">
-          <h3 data-i18n="settings.candlestick">Mum Grafik</h3>
-          <div class="form-group">
-            <label for="upColor" data-i18n="settings.upColor">Yükseliş Rengi:</label>
-            <input type="color" id="upColor" value="#26a69a">
-          </div>
-          <div class="form-group">
-            <label for="downColor" data-i18n="settings.downColor">Düşüş Rengi:</label>
-            <input type="color" id="downColor" value="#ef5350">
-          </div>
-          <div class="form-group">
-            <label for="wickVisible" data-i18n="settings.wickVisible">Fitil Görünümü:</label>
-            <input type="checkbox" id="wickVisible" checked>
-          </div>
-          <div class="form-group">
-            <label for="borderVisible" data-i18n="settings.borderVisible">Kenar Görünümü:</label>
-            <input type="checkbox" id="borderVisible">
-          </div>
-        </div>
-        
-        <div class="settings-group">
-          <h3 data-i18n="settings.volume">Hacim</h3>
-          <div class="form-group">
-            <label for="volumeVisible" data-i18n="settings.volumeVisible">Hacim Göster:</label>
-            <input type="checkbox" id="volumeVisible" checked>
-          </div>
-          <div class="form-group">
-            <label for="volumeUpColor" data-i18n="settings.volumeUpColor">Yükseliş Rengi:</label>
-            <input type="color" id="volumeUpColor" value="#26a69a">
-          </div>
-          <div class="form-group">
-            <label for="volumeDownColor" data-i18n="settings.volumeDownColor">Düşüş Rengi:</label>
-            <input type="color" id="volumeDownColor" value="#ef5350">
-          </div>
-        </div>
-        
-        <div class="settings-group">
-          <h3 data-i18n="settings.timeScale">Zaman Ölçeği</h3>
-          <div class="form-group">
-            <label for="timeVisible" data-i18n="settings.timeVisible">Zaman Göster:</label>
-            <input type="checkbox" id="timeVisible" checked>
-          </div>
-          <div class="form-group">
-            <label for="timeFormat" data-i18n="settings.timeFormat">Zaman Formatı:</label>
-            <select id="timeFormat">
-              <option value="yyyy-MM-dd">YYYY-MM-DD</option>
-              <option value="dd/MM/yyyy">DD/MM/YYYY</option>
-              <option value="MM/dd/yyyy">MM/DD/YYYY</option>
-              <option value="dd.MM.yyyy">DD.MM.YYYY</option>
-            </select>
-          </div>
-        </div>
-        
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary" data-i18n="settings.apply">Uygula</button>
-          <button type="button" id="resetSettings" class="btn" data-i18n="settings.reset">Sıfırla</button>
+          <button type="submit" class="btn btn-primary">Uygula</button>
+          <button type="button" id="removeIndicator" class="btn">Kaldır</button>
         </div>
       </form>
     </div>
   </div>
-
-  <!-- Bildirim Konteyneri -->
-  <div id="notificationContainer" class="notification-container"></div>
-
-  <!-- Lightweight Charts kütüphanesi -->
-  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
   
-  <!-- Uygulama Scriptleri -->
-  <script src="js/api.js"></script>
+  <!-- Grafik Ayarları Modalı -->
+  <div id="chartSettingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 data-i18n="chartSettings.title">Grafik Ayarları</h2>
+      <form id="chartSettingsForm">
+        <div class="form-group">
+          <label for="chartBackground" data-i18n="chartSettings.background">Grafik Arkaplanı</label>
+          <input type="color" id="chartBackground" name="chartBackground" value="#131722">
+        </div>
+        <div class="form-group">
+          <label for="gridLines" data-i18n="chartSettings.gridLines">Izgara Çizgileri</label>
+          <select id="gridLines" name="gridLines">
+            <option value="all" data-i18n="chartSettings.all">Hepsi</option>
+            <option value="horizontal" data-i18n="chartSettings.horizontal">Yatay</option>
+            <option value="vertical" data-i18n="chartSettings.vertical">Dikey</option>
+            <option value="none" data-i18n="chartSettings.none">Hiçbiri</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="watermarkOpacity" data-i18n="chartSettings.watermark">Filigran Opaklığı</label>
+          <input type="range" id="watermarkOpacity" name="watermarkOpacity" min="0" max="100" value="15">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" data-i18n="chartSettings.apply">Uygula</button>
+          <button type="button" id="resetSettings" class="btn" data-i18n="chartSettings.reset">Sıfırla</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script src="js/i18n.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
   <script src="js/indicators.js"></script>
   <script src="js/chart.js"></script>
+  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html> 
