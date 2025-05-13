@@ -13,20 +13,23 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // UI elementleri
   const loginBtn = document.getElementById('loginBtn');
-  const registerBtn = document.getElementById('registerBtn');
+  const settingsBtn = document.getElementById('settingsBtn');
   const loginModal = document.getElementById('loginModal');
-  const registerModal = document.getElementById('registerModal');
+  const settingsModal = document.getElementById('settingsModal');
   const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
   const closeButtons = document.querySelectorAll('.close');
   const timeframeButtons = document.querySelectorAll('.timeframe');
   const watchlistEl = document.getElementById('watchlist');
   const watchlistFilter = document.querySelector('.watchlist-filter input');
-  const navTabs = document.querySelectorAll('.nav-tab');
-  const categoryButtons = document.querySelectorAll('.category-btn');
-  const rangeButtons = document.querySelectorAll('.range-btn');
   const toolButtons = document.querySelectorAll('.tool-btn');
   const symbolSearchInput = document.getElementById('symbolSearch');
+  
+  // Main Menu Navigation
+  const mainMenuLinks = document.querySelectorAll('.main-pages .page-link');
+  const sidebarSections = document.querySelectorAll('.sidebar-section');
+  
+  // Market watchlist tabs
+  const marketCategoryTabs = document.querySelectorAll('.market-category-tabs .market-category');
   
   // Comparison UI Elements
   const addComparisonBtn = document.getElementById('addComparison');
@@ -50,21 +53,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const indicatorsDropdown = document.getElementById('indicatorsDropdown');
   const indicatorItems = document.querySelectorAll('.indicator-item');
   
-  // Market News Elements
-  const newsContainer = document.getElementById('marketNews');
-  const newsTabBtn = document.getElementById('newsTabBtn');
-  const loadMoreNewsBtn = document.getElementById('loadMoreNews');
-  
   // Market Özeti Elementleri
   const marketCategories = document.querySelectorAll('.market-category');
   const marketScrollBtn = document.querySelector('.market-scroll-btn');
   const timeButtons = document.querySelectorAll('.time-btn');
   const featuredChartEl = document.getElementById('featuredChart');
-  
-  // Haberler için değişkenler
-  let currentNewsPage = 1;
-  const newsPerPage = 5;
-  let allNews = [];
   
   // Comparison colors
   const comparisonColors = [
@@ -101,16 +94,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Watchlist'i örnek verilerle doldur
   function populateWatchlist(stocks = demoStocks) {
+    if (!watchlistEl) return;
+    
     watchlistEl.innerHTML = '';
     
     stocks.forEach(stock => {
       const li = document.createElement('li');
       li.innerHTML = `
-        <span class="stock-symbol">${stock.symbol}</span>
-        <span class="stock-price">
-          <span>$${stock.price.toFixed(2)}</span>
-          <span class="${stock.change >= 0 ? 'up' : 'down'}">${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%</span>
-        </span>
+        <div class="stock-info">
+          <span class="stock-symbol">${stock.symbol}</span>
+          <span class="stock-name">${stock.name}</span>
+        </div>
+        <div class="stock-price">
+          <span class="price-value">$${stock.price.toFixed(2)}</span>
+          <span class="price-change ${stock.change >= 0 ? 'up' : 'down'}">${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%</span>
+        </div>
       `;
       
       // İlk sıradaki hisseyi aktif yap
@@ -128,14 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Tıklanan öğeyi aktif yap
         li.classList.add('active');
-        
-        // Grafik sembolünü güncelle
-        document.getElementById('chartSymbol').textContent = stock.symbol;
-        
-        // Sol paneldeki piyasa bilgilerini güncelle
-        document.getElementById('currentPrice').textContent = `$${stock.price.toFixed(2)}`;
-        document.getElementById('priceChange').textContent = `${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%`;
-        document.getElementById('priceChange').className = `value ${stock.change >= 0 ? 'up' : 'down'}`;
         
         // Grafiği değiştir
         chartManager.changeSymbol(stock.symbol);
@@ -197,38 +187,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Navigasyon sekmeleri arası geçiş
-  navTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-      // Aktif sekmeyi kaldır
-      navTabs.forEach(t => t.classList.remove('active'));
-      
-      // Tıklanan sekmeyi aktif yap
-      this.classList.add('active');
+  // Ana menü navigasyonu
+  if (mainMenuLinks.length > 0) {
+    mainMenuLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetSection = this.getAttribute('href').substring(1);
+        
+        // Tüm menü linklerden active sınıfını kaldır
+        mainMenuLinks.forEach(l => l.classList.remove('active'));
+        
+        // Tıklanan menü linkine active sınıfı ekle
+        this.classList.add('active');
+        
+        // İlgili sidebar bölümüne scroll yap
+        const sidebarSection = document.querySelector(`.sidebar-section h3:contains('${targetSection}')`);
+        if (sidebarSection) {
+          sidebarSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
     });
-  });
+  }
 
-  // Kategori butonları arası geçiş
-  categoryButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      // Aktif kategoriyi kaldır
-      categoryButtons.forEach(btn => btn.classList.remove('active'));
-      
-      // Tıklanan kategoriyi aktif yap
-      this.classList.add('active');
+  // Market kategorileri için tıklama olayı
+  if (marketCategoryTabs.length > 0) {
+    marketCategoryTabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Aktif sekmeden active sınıfını kaldır
+        marketCategoryTabs.forEach(t => t.classList.remove('active'));
+        
+        // Tıklanan sekmeye active sınıfı ekle
+        this.classList.add('active');
+        
+        // Burada ilgili kategori verilerini yükleme kodları olabilir
+      });
     });
-  });
-
-  // Zaman aralığı butonları arası geçiş
-  rangeButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      // Aktif zaman aralığını kaldır
-      rangeButtons.forEach(btn => btn.classList.remove('active'));
-      
-      // Tıklanan zaman aralığını aktif yap
-      this.classList.add('active');
-    });
-  });
+  }
 
   // Grafik araçları butonları için işlevsellik
   toolButtons.forEach(button => {
@@ -263,88 +258,55 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   // Login butonu
-  loginBtn.addEventListener('click', function() {
-    openModal(loginModal);
-  });
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function() {
+      openModal(loginModal);
+    });
+  }
   
-  // Register butonu
-  registerBtn.addEventListener('click', function() {
-    openModal(registerModal);
-  });
+  // Ayarlar butonu
+  if (settingsBtn) {
+    settingsBtn.addEventListener('click', function() {
+      openModal(settingsModal);
+    });
+  }
   
   // Login formu submit
-  loginForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    try {
-      const response = await ApiService.login({ username, password });
+  if (loginForm) {
+    loginForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
       
-      // Token'ı kaydet
-      authToken = response.token;
-      localStorage.setItem('authToken', authToken);
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
       
-      // Kullanıcı bilgilerini kaydet
-      currentUser = response.user;
-      
-      // UI'ı güncelle
-      updateUIForLoggedInUser();
-      
-      // Modalı kapat
-      closeModal(loginModal);
-      
-      // Formu temizle
-      loginForm.reset();
-    } catch (error) {
-      alert(`Giriş başarısız: ${error.message}`);
-    }
-  });
-  
-  // Register formu submit
-  registerForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('registerUsername').value;
-    const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
-    
-    try {
-      const response = await ApiService.register({ username, email, password });
-      
-      // Token'ı kaydet
-      authToken = response.token;
-      localStorage.setItem('authToken', authToken);
-      
-      // Kullanıcı bilgilerini kaydet
-      currentUser = response.user;
-      
-      // UI'ı güncelle
-      updateUIForLoggedInUser();
-      
-      // Modalı kapat
-      closeModal(registerModal);
-      
-      // Formu temizle
-      registerForm.reset();
-    } catch (error) {
-      alert(`Kayıt başarısız: ${error.message}`);
-    }
-  });
+      try {
+        const response = await ApiService.login({ username, password });
+        
+        // Token'ı kaydet
+        authToken = response.token;
+        localStorage.setItem('authToken', authToken);
+        
+        // Kullanıcı bilgilerini kaydet
+        currentUser = response.user;
+        
+        // UI'ı güncelle
+        updateUIForLoggedInUser();
+        
+        // Modalı kapat
+        closeModal(loginModal);
+        
+        // Formu temizle
+        loginForm.reset();
+      } catch (error) {
+        alert(`Giriş başarısız: ${error.message}`);
+      }
+    });
+  }
   
   // Giriş yapmış kullanıcı için UI güncelleme
   function updateUIForLoggedInUser() {
-    if (currentUser) {
-      loginBtn.textContent = 'Hesabım';
-      registerBtn.textContent = 'Çıkış Yap';
-      
-      // Event listener'ları güncelle
-      loginBtn.removeEventListener('click', loginClickHandler);
-      registerBtn.removeEventListener('click', registerClickHandler);
-      
-      loginBtn.addEventListener('click', accountClickHandler);
-      registerBtn.addEventListener('click', logoutClickHandler);
+    if (currentUser && loginBtn) {
+      loginBtn.innerHTML = `<i class="fas fa-user"></i> ${currentUser.username}`;
     }
   }
   
@@ -800,129 +762,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  /**
-   * Market haberlerini yükle
-   * @param {boolean} refresh - Tüm haberleri yeniden yükle
-   */
-  async function loadMarketNews(refresh = false) {
-    if (refresh) {
-      currentNewsPage = 1;
-      if (newsContainer) {
-        newsContainer.innerHTML = '<div class="loading">Haberler yükleniyor...</div>';
-      }
-    }
-    
-    try {
-      // Haberleri getir
-      if (refresh || allNews.length === 0) {
-        // Aktif sembol için haberleri getir
-        const symbol = chartManager.symbol;
-        allNews = await ApiService.getMarketNews(symbol);
-      }
-      
-      // Haber containerı var mı kontrol et
-      if (!newsContainer) return;
-      
-      // İlk yüklemede loading yazısını temizle
-      if (refresh || currentNewsPage === 1) {
-        newsContainer.innerHTML = '';
-      }
-      
-      // Sayfaya göre haberleri filtrele
-      const startIndex = (currentNewsPage - 1) * newsPerPage;
-      const endIndex = startIndex + newsPerPage;
-      const pageNews = allNews.slice(startIndex, endIndex);
-      
-      // Haberler için HTML oluştur
-      let newsHTML = '';
-      
-      pageNews.forEach(news => {
-        const date = new Date(news.publishedAt);
-        const formattedDate = date.toLocaleDateString('tr-TR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        
-        newsHTML += `
-          <div class="news-item">
-            <h3 class="news-title">${news.title}</h3>
-            <p class="news-summary">${news.summary}</p>
-            <div class="news-meta">
-              <span class="news-source">${news.source}</span>
-              <span class="news-date">${formattedDate}</span>
-            </div>
-            ${news.url !== '#' ? `<a href="${news.url}" target="_blank" class="news-link">Haberi Oku</a>` : ''}
-          </div>
-        `;
-      });
-      
-      // Haberleri ekle
-      if (refresh || currentNewsPage === 1) {
-        newsContainer.innerHTML = newsHTML;
-      } else {
-        newsContainer.innerHTML += newsHTML;
-      }
-      
-      // Daha fazla haber yükle butonunu güncelle
-      if (loadMoreNewsBtn) {
-        if (endIndex >= allNews.length) {
-          loadMoreNewsBtn.style.display = 'none';
-        } else {
-          loadMoreNewsBtn.style.display = 'block';
-        }
-      }
-      
-    } catch (error) {
-      console.error('Haberler yüklenirken hata:', error);
-      if (newsContainer) {
-        newsContainer.innerHTML = '<div class="error">Haberler yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.</div>';
-      }
-    }
-  }
-  
-  // Haber sekmesine tıklandığında haberleri yükle
-  if (newsTabBtn) {
-    newsTabBtn.addEventListener('click', function() {
-      loadMarketNews(true);
-    });
-  }
-  
-  // Daha fazla haber butonuna tıklandığında
-  if (loadMoreNewsBtn) {
-    loadMoreNewsBtn.addEventListener('click', function() {
-      currentNewsPage++;
-      loadMarketNews(false);
-    });
-  }
-
-  // Başlangıçta watchlist'i doldur
-  populateWatchlist();
-  
-  // İlk haberleri yükle
-  if (newsContainer) {
-    loadMarketNews(true);
-  }
-  
-  // API'den hisseleri getir (API hazır olduğunda kullanılabilir)
-  async function fetchStocks() {
-    try {
-      const stocks = await ApiService.getAllStocks();
-      
-      if (stocks && stocks.length > 0) {
-        // Gerçek verilerle watchlist'i doldur
-        // populateWatchlist(stocks);
-      }
-    } catch (error) {
-      console.error('Hisseler yüklenirken hata:', error);
-    }
-  }
-  
-  // Başlangıçta hisseleri getirmeyi dene
-  // fetchStocks();
-
   // Market kategorileri için etkinlik
   if (marketCategories.length > 0) {
     marketCategories.forEach(category => {
@@ -958,6 +797,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Dil değiştirici
+  const languageSelector = document.getElementById('languageSelector');
+  if (languageSelector) {
+    languageSelector.addEventListener('change', function() {
+      const selectedLang = this.value;
+      changeLanguage(selectedLang);
+    });
+  }
+  
+  // Dil değiştirme fonksiyonu
+  function changeLanguage(lang) {
+    localStorage.setItem('preferredLanguage', lang);
+    
+    // i18next kütüphanesi kullanılıyorsa
+    if (window.i18next) {
+      window.i18next.changeLanguage(lang).then(() => {
+        // UI'daki metinleri güncelle
+        updateUITexts();
+      });
+    } else {
+      // Manuel dil değişimi
+      location.reload();
+    }
+  }
+  
+  // UI metinlerini güncelle
+  function updateUITexts() {
+    // Data-i18n attribute'una sahip tüm elementleri bul
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      
+      if (window.i18next) {
+        // Normal metin içeriği
+        if (!key.includes('[')) {
+          element.textContent = window.i18next.t(key);
+        } 
+        // Attribute içeriği (örn: placeholder)
+        else {
+          const parts = key.match(/\[(.*?)\](.*)/);
+          if (parts && parts.length >= 3) {
+            const attr = parts[1];
+            const attrKey = parts[2];
+            element.setAttribute(attr, window.i18next.t(attrKey));
+          }
+        }
+      }
+    });
+  }
+  
   // Uygulamayı başlat
   function initApp() {
     // Watchlist'i doldur
@@ -969,6 +857,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Market özeti grafik
     if (featuredChartEl) {
       createFeaturedChart();
+    }
+    
+    // Kullanıcı giriş yapmışsa UI'ı güncelle
+    if (authToken && currentUser) {
+      updateUIForLoggedInUser();
+    }
+    
+    // Tercih edilen dil varsa yükle
+    const preferredLang = localStorage.getItem('preferredLanguage');
+    if (preferredLang && languageSelector) {
+      languageSelector.value = preferredLang;
+      changeLanguage(preferredLang);
     }
   }
   

@@ -220,7 +220,58 @@ body {
   flex-direction: column;
 }
 
+/* Sol Kenar Çubuğu - İçerik Menüsü Stili */
 .left-sidebar {
+  padding: 15px;
+}
+
+.left-sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-section {
+  margin-bottom: 10px;
+}
+
+.sidebar-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2e39;
+}
+
+.sidebar-menu-list {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-menu-list li {
+  margin-bottom: 8px;
+}
+
+.sidebar-menu-list a {
+  color: #a0a7b4;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu-list a:hover {
+  color: #e0e3eb;
+  background-color: #2a2e39;
+}
+
+/* Sağ Kenar Çubuğu - İzleme Listesi Stili */
+.right-sidebar {
+  border-left: 1px solid #2a2e39;
+  border-right: none;
   padding: 15px;
 }
 
@@ -335,6 +386,7 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-bottom: 5px;
 }
 
 .watchlist li:hover {
@@ -346,9 +398,20 @@ body {
   border-left: 3px solid #2962FF;
 }
 
+.stock-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .stock-symbol {
   font-weight: 600;
   color: #fff;
+  font-size: 14px;
+}
+
+.stock-name {
+  font-size: 12px;
+  color: #a0a7b4;
 }
 
 .stock-price {
@@ -356,6 +419,15 @@ body {
   flex-direction: column;
   align-items: flex-end;
   font-size: 14px;
+}
+
+.price-value {
+  font-weight: 600;
+  color: #fff;
+}
+
+.price-change {
+  font-size: 12px;
 }
 
 /* Grafik Konteyner Stili */
@@ -1102,70 +1174,49 @@ body {
 }
 
 /* Mobil Uyumlu Tasarım */
+@media (max-width: 1400px) {
+  .sidebar {
+    width: 250px;
+  }
+}
+
 @media (max-width: 1200px) {
   .sidebar {
-    width: 240px;
-  }
-  
-  .main-pages {
-    display: none;
+    width: 220px;
   }
 }
 
 @media (max-width: 992px) {
+  .main-content {
+    flex-wrap: wrap;
+  }
+  
   .sidebar {
-    width: 200px;
+    width: 50%;
+    order: 2;
   }
   
-  .alerts-container {
-    grid-template-columns: 1fr;
+  .left-sidebar {
+    border-right: 1px solid #2a2e39;
   }
   
-  .main-pages {
-    display: none;
+  .right-sidebar {
+    border-left: none;
   }
   
-  .featured-chart {
-    height: 300px;
+  .chart-container {
+    width: 100%;
+    order: 1;
   }
 }
 
 @media (max-width: 768px) {
-  .main-content {
-    flex-direction: column;
-  }
-  
   .sidebar {
     width: 100%;
-    max-height: 300px;
   }
   
-  .watchlist li {
-    padding: 8px 10px;
-  }
-  
-  .chart-toolbar {
+  .main-content {
     flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  
-  .timeframe-selector {
-    width: 100%;
-    overflow-x: auto;
-  }
-  
-  .chart-tools {
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .market-item {
-    min-width: 180px;
-  }
-  
-  .featured-chart {
-    height: 250px;
   }
 }
 
@@ -1206,4 +1257,50 @@ body {
     width: 100%;
     overflow-x: auto;
   }
+}
+
+/* Piyasa İzleme Bölümü */
+.market-watchlist {
+  border-top: 1px solid #2a2e39;
+  background-color: #1e222d;
+  padding: 15px;
+}
+
+.market-category-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.market-category-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.market-category-tabs::-webkit-scrollbar-thumb {
+  background-color: #2a2e39;
+  border-radius: 2px;
+}
+
+/* Ayarlar Modalı Stili */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.settings-section {
+  background-color: #2a2e39;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.settings-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #fff;
+  border-bottom: 1px solid #363c4e;
+  padding-bottom: 8px;
 } 
