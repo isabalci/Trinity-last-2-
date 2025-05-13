@@ -555,11 +555,21 @@ body {
   color: #ef5350;
 }
 
-#chart {
+#chart, #nasdaqChart, #featuredChart {
+  width: 100%;
+  height: 100%;
+}
+
+#chart-container {
   flex: 1;
   position: relative;
   overflow: hidden;
   height: 45%;
+  min-height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .nasdaq-chart {
@@ -567,7 +577,36 @@ body {
   position: relative;
   overflow: hidden;
   height: 45%;
+  min-height: 300px;
   margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Featured Chart Container - Yeni pozisyona göre düzenlendi */
+.featured-chart-container {
+  background-color: #1e222d;
+  border-radius: 8px;
+  padding: 15px;
+  height: 45%;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.featured-chart {
+  flex: 1;
+  width: 100%;
+  min-height: 200px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Sekme Stili */
@@ -1280,67 +1319,20 @@ body {
 
 /* Market Summary Bölümü */
 .market-summary-section {
-  padding: 20px;
-  background-color: #131722;
-  border-top: 1px solid #2a2e39;
+  display: none;
 }
 
 .section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  color: #e0e3eb;
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.section-title i {
-  font-size: 14px;
-  color: #6b7280;
+  display: none;
 }
 
 /* Index Kategori Sekmeleri */
 .index-tabs {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #2a2e39;
+  display: none;
 }
 
 .index-tab {
-  padding: 8px 16px;
-  background-color: transparent;
-  border: none;
-  border-radius: 4px;
-  color: #6b7280;
-  font-size: 14px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.3s ease;
-}
-
-.index-tab:hover {
-  color: #e0e3eb;
-  background-color: rgba(42, 46, 57, 0.5);
-}
-
-.index-tab.active {
-  color: #e0e3eb;
-  background-color: #2a2e39;
-  font-weight: 500;
-}
-
-/* Featured Chart Container */
-.featured-chart-container {
-  background-color: #1e222d;
-  border-radius: 8px;
-  padding: 15px;
-  height: 470px;
-  display: flex;
-  flex-direction: column;
+  display: none;
 }
 
 /* Market Indeksleri */
@@ -1463,13 +1455,6 @@ body {
 #selectedIndexChange {
   font-size: 16px;
   font-weight: 600;
-}
-
-.featured-chart {
-  flex: 1;
-  width: 100%;
-  min-height: 300px;
-  margin-bottom: 10px;
 }
 
 /* Zaman Butonları Containeri (Grafiğin Altına) */

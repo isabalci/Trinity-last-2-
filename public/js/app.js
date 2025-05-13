@@ -4,16 +4,6 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Chart Manager'ı başlat
-  const chartManager = new ChartManager();
-  
-  // Nasdaq Chart Manager'ı başlat
-  const nasdaqChartManager = new ChartManager('nasdaqChart');
-  
-  // Auth managment
-  let currentUser = null;
-  let authToken = localStorage.getItem('authToken');
-  
   // UI elementleri
   const loginBtn = document.getElementById('loginBtn');
   const settingsBtn = document.getElementById('settingsBtn');
@@ -34,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const selectedIndexPrice = document.getElementById('selectedIndexPrice');
   const selectedIndexChange = document.getElementById('selectedIndexChange');
   
-  // Featured Chart için Chart Manager
-  const featuredChartManager = new ChartManager();
-  
   // Aktif indeks ve timeframe
   let activeIndex = 'sp500';
   let activeTimeframe = '1D';
@@ -51,17 +38,233 @@ document.addEventListener('DOMContentLoaded', function() {
    * Grafiklerin Başlatılması
    */
   function initializeCharts() {
-    // Üst grafik olarak Nasdaq göster (açılış sayfası)
-    chartManager.initializeChart();
-    chartManager.changeSymbol('NASDAQ');
-    
-    // Nasdaq grafiği - ikinci grafik olarak başka bir veri gösterebiliriz
-    nasdaqChartManager.initializeChart();
-    nasdaqChartManager.changeSymbol('BTCUSDT'); // Bitcoin verilerini gösterelim
-    
-    // Featured S&P 500 grafiği
-    if (featuredChartEl) {
-      loadFeaturedChart('nasdaq', '1D'); // Nasdaq'ı gösterelim
+    console.log('initializeCharts başlatılıyor...');
+    try {
+      // Ana grafik (Nasdaq) - Chart.js kullanarak basit bir grafik oluşturalım
+      const chartCtx = document.getElementById('chart');
+      if (chartCtx) {
+        console.log('Ana grafik oluşturuluyor...');
+        // Rastgele Nasdaq veri noktaları oluştur
+        const labels = [];
+        const data = [];
+        const now = new Date();
+        
+        // Son 30 günlük örnek veri oluştur
+        for (let i = 30; i >= 0; i--) {
+          const date = new Date(now);
+          date.setDate(date.getDate() - i);
+          labels.push(date.toLocaleDateString());
+          
+          // 16000 civarında dalgalanan değerler
+          const baseValue = 16000;
+          const randomChange = (Math.random() - 0.3) * 200; // Genel olarak artış trendi
+          data.push(baseValue + randomChange * (30-i)/3);
+        }
+        
+        // Grafik oluştur
+        new Chart(chartCtx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Nasdaq 100',
+              data: data,
+              borderColor: '#2962FF',
+              backgroundColor: 'rgba(41, 98, 255, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  color: '#e0e3eb'
+                }
+              },
+              tooltip: {
+                mode: 'index',
+                intersect: false
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(42, 46, 57, 0.3)'
+                },
+                ticks: {
+                  color: '#a0a7b4'
+                }
+              },
+              y: {
+                grid: {
+                  color: 'rgba(42, 46, 57, 0.3)'
+                },
+                ticks: {
+                  color: '#a0a7b4'
+                }
+              }
+            }
+          }
+        });
+        console.log('Ana grafik başarıyla oluşturuldu');
+      }
+      
+      // İkinci grafik (Bitcoin) - Chart.js kullanarak
+      const nasdaqChartCtx = document.getElementById('nasdaqChart');
+      if (nasdaqChartCtx) {
+        console.log('İkinci grafik oluşturuluyor...');
+        // Bitcoin örnek veri
+        const labels = [];
+        const data = [];
+        const now = new Date();
+        
+        // Son 30 günlük veri
+        for (let i = 30; i >= 0; i--) {
+          const date = new Date(now);
+          date.setDate(date.getDate() - i);
+          labels.push(date.toLocaleDateString());
+          
+          // 45000 civarında Bitcoin değerleri
+          const baseValue = 45000;
+          const randomChange = (Math.random() - 0.3) * 1500;
+          data.push(baseValue + randomChange * (30-i)/5);
+        }
+        
+        // Grafik oluştur
+        new Chart(nasdaqChartCtx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Bitcoin (BTC)',
+              data: data,
+              borderColor: '#F7931A',
+              backgroundColor: 'rgba(247, 147, 26, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  color: '#e0e3eb'
+                }
+              },
+              tooltip: {
+                mode: 'index',
+                intersect: false
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(42, 46, 57, 0.3)'
+                },
+                ticks: {
+                  color: '#a0a7b4'
+                }
+              },
+              y: {
+                grid: {
+                  color: 'rgba(42, 46, 57, 0.3)'
+                },
+                ticks: {
+                  color: '#a0a7b4'
+                }
+              }
+            }
+          }
+        });
+        console.log('İkinci grafik başarıyla oluşturuldu');
+      }
+      
+      // Featured Chart - S&P 500 grafiği
+      const featuredChartEl = document.getElementById('featuredChart');
+      if (featuredChartEl) {
+        console.log('Featured grafik oluşturuluyor...');
+        // S&P 500 örnek veri
+        const labels = [];
+        const data = [];
+        const now = new Date();
+        
+        // Son 30 günlük veri
+        for (let i = 30; i >= 0; i--) {
+          const date = new Date(now);
+          date.setDate(date.getDate() - i);
+          labels.push(date.toLocaleDateString());
+          
+          // 5800 civarında S&P 500 değerleri
+          const baseValue = 5800;
+          const randomChange = (Math.random() - 0.2) * 50;
+          data.push(baseValue + randomChange * (30-i)/6);
+        }
+        
+        // Grafik oluştur
+        new Chart(featuredChartEl, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'S&P 500',
+              data: data,
+              borderColor: '#5460E6',
+              backgroundColor: 'rgba(84, 96, 230, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                labels: {
+                  color: '#e0e3eb'
+                }
+              },
+              tooltip: {
+                mode: 'index',
+                intersect: false
+              }
+            },
+            scales: {
+              x: {
+                grid: {
+                  color: 'rgba(42, 46, 57, 0.3)'
+                },
+                ticks: {
+                  color: '#a0a7b4'
+                }
+              },
+              y: {
+                grid: {
+                  color: 'rgba(42, 46, 57, 0.3)'
+                },
+                ticks: {
+                  color: '#a0a7b4'
+                }
+              }
+            }
+          }
+        });
+        console.log('Featured grafik başarıyla oluşturuldu');
+      }
+      
+      console.log('initializeCharts tamamlandı.');
+    } catch (error) {
+      console.error('Grafik başlatma hatası:', error);
     }
   }
   
@@ -71,140 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
    * @param {string} timeframe - Zaman aralığı
    */
   function loadFeaturedChart(indexId, timeframe) {
-    // Yükleniyor göstergesi eklenebilir
-    featuredChartEl.innerHTML = '<div class="loading-spinner"></div>';
-    
-    // Simüle edilmiş veri oluştur (gerçek bir API çağrısı olmalı)
-    createIndexChartData(indexId, timeframe)
-      .then(data => {
-        // Chart oluştur
-        featuredChartManager.createChart(featuredChartEl, {
-          height: featuredChartEl.clientHeight,
-          width: featuredChartEl.clientWidth,
-          layout: {
-            background: { color: '#1e222d' },
-            textColor: '#e0e3eb',
-          },
-          grid: {
-            vertLines: { color: '#2a2e3955' },
-            horzLines: { color: '#2a2e3955' },
-          },
-          timeScale: {
-            timeVisible: timeframe === '1D',
-            secondsVisible: false,
-          },
-        });
-        
-        // Veriyi ekle
-        featuredChartManager.addAreaSeries('index', data, {
-          lineColor: '#2962FF',
-          topColor: 'rgba(41, 98, 255, 0.3)',
-          bottomColor: 'rgba(41, 98, 255, 0.05)',
-        });
-        
-        // Aktif indeks bilgilerini güncelle
-        updateIndexInfo(indexId);
-      })
-      .catch(error => {
-        console.error('Grafik yüklenirken hata oluştu:', error);
-        featuredChartEl.innerHTML = 'Grafik yüklenirken bir sorun oluştu.';
-      });
-  }
-  
-  /**
-   * Simüle Edilmiş İndeks Grafiği Verileri Oluştur
-   * @param {string} indexId - İndeks ID
-   * @param {string} timeframe - Zaman aralığı
-   * @returns {Promise} - Grafik verisi
-   */
-  function createIndexChartData(indexId, timeframe) {
-    return new Promise((resolve) => {
-      const data = [];
-      let baseValue;
-      let volatility;
-      let time = new Date();
-      time.setUTCHours(0, 0, 0, 0);
-      
-      // İndeks bazında farklı başlangıç değerleri ve volatilite
-      switch(indexId) {
-        case 'sp500':
-          baseValue = 5844;
-          volatility = 0.5;
-          break;
-        case 'nasdaq':
-          baseValue = 20868;
-          volatility = 0.8;
-          break;
-        case 'dow':
-          baseValue = 42410;
-          volatility = 0.4;
-          break;
-        case 'japan':
-          baseValue = 38183;
-          volatility = 0.6;
-          break;
-        case 'ftse':
-          baseValue = 8602;
-          volatility = 0.3;
-          break;
-        default:
-          baseValue = 5000;
-          volatility = 0.5;
-      }
-      
-      // Farklı zaman dilimleri için farklı nokta sayısı ve zaman aralığı
-      let dataPoints = 100;
-      let timeIncrement = 24 * 60 * 60 * 1000; // 1 gün
-      
-      switch(timeframe) {
-        case '1D':
-          dataPoints = 390; // 6.5 saat, dakikada bir
-          timeIncrement = 60 * 1000; // 1 dakika
-          time = new Date();
-          time.setHours(9, 30, 0, 0); // Piyasa açılış
-          break;
-        case '1M':
-          dataPoints = 23; // Yaklaşık 1 ay iş günü
-          break;
-        case '3M':
-          dataPoints = 66; // Yaklaşık 3 ay iş günü
-          break;
-        case '1Y':
-          dataPoints = 253; // Yaklaşık 1 yıl iş günü
-          break;
-        case '5Y':
-          dataPoints = 253 * 5; // Yaklaşık 5 yıl iş günü
-          break;
-        case 'ALL':
-          dataPoints = 253 * 10; // 10 yıl
-          break;
-      }
-      
-      // Zaman diliminin ilk noktasına geri git
-      time = new Date(time.getTime() - timeIncrement * dataPoints);
-      
-      // Veri oluştur
-      for (let i = 0; i < dataPoints; i++) {
-        // Gerçekçi fiyat hareketi simülasyonu
-        const change = (Math.random() * 2 - 1) * volatility;
-        baseValue = baseValue * (1 + change / 100);
-        
-        time = new Date(time.getTime() + timeIncrement);
-        
-        // Haftasonlarını atla
-        if (timeframe !== '1D' && (time.getDay() === 0 || time.getDay() === 6)) {
-          continue;
-        }
-        
-        // Bu noktayı ekle
-        data.push({
-          time: time.getTime() / 1000,
-          value: baseValue,
-        });
-      }
-      
-      setTimeout(() => resolve(data), 300); // Gerçek bir API gecikmesini simüle et
-    });
+    console.log(`loadFeaturedChart çağrıldı: indexId=${indexId}, timeframe=${timeframe}`);
   }
   
   /**
@@ -365,21 +435,15 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.target.closest('#exportChart')) {
         document.getElementById('exportDropdown').classList.toggle('show');
       }
-      
-      // İndikatör seçimi
-      if (e.target.closest('.indicator-item')) {
-        const type = e.target.closest('.indicator-item').getAttribute('data-type');
-        // İndikatör ekle
-        chartManager.addIndicator(type);
-        document.getElementById('indicatorsDropdown').classList.remove('show');
-      }
     });
 
     // Pencere boyutu değişikliklerinde grafikleri yeniden boyutlandır
     window.addEventListener('resize', function() {
-      chartManager.handleResize();
-      if (featuredChartManager) {
-        featuredChartManager.handleResize();
+      // Grafikleri yeniden oluştur
+      if (window.Chart && window.Chart.instances) {
+        Object.values(window.Chart.instances).forEach(chart => {
+          chart.resize();
+        });
       }
     });
   }
@@ -400,247 +464,4 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Watchlist ve Piyasa Datası API'den Alımı Burada Olabilir
-  
-});
-
-/**
- * ChartManager Sınıfı
- * TradingView Lightweight Charts API'si kullanılarak grafik yönetimi
- */
-class ChartManager {
-  constructor(containerId = 'chart') {
-    this.chart = null;
-    this.series = {};
-    this.timeframe = '1d';
-    this.currentSymbol = containerId === 'nasdaqChart' ? 'NASDAQ' : 'AAPL';
-    this.container = document.getElementById(containerId) || null;
-  }
-  
-  /**
-   * Grafiği başlat
-   * @param {HTMLElement} container - Grafik container elementi
-   * @param {Object} options - Chart ayarları
-   */
-  initializeChart(container = this.container, options = {}) {
-    if (!container) return;
-    
-    this.container = container;
-    
-    const defaultOptions = {
-      height: container.clientHeight,
-      width: container.clientWidth,
-      layout: {
-        background: { color: '#131722' },
-        textColor: '#e0e3eb',
-      },
-      grid: {
-        vertLines: { color: '#2a2e3930' },
-        horzLines: { color: '#2a2e3930' },
-      },
-      crosshair: {
-        mode: LightweightCharts.CrosshairMode.Normal,
-      },
-      rightPriceScale: {
-        borderColor: '#2a2e39',
-      },
-      timeScale: {
-        borderColor: '#2a2e39',
-        timeVisible: true,
-      },
-    };
-    
-    // Özel ayarları birleştir
-    const chartOptions = { ...defaultOptions, ...options };
-    
-    // Mevcut grafik varsa temizle
-    if (this.chart) {
-      this.chart.remove();
-      this.series = {};
-    }
-    
-    // Yeni grafik oluştur
-    this.chart = LightweightCharts.createChart(container, chartOptions);
-    
-    // Responsiveness için resize listener ekle
-    this.handleResize();
-    
-    // Sembol verisini yükle
-    this.loadChartData();
-    
-    return this.chart;
-  }
-  
-  /**
-   * Sembol için grafik verisi yükle
-   */
-  loadChartData() {
-    // Demo veri oluştur
-    ApiService.generateDemoCandleData(this.currentSymbol, this.timeframe)
-      .then(data => {
-        if (data && data.length > 0) {
-          // Ana seri ekle
-          this.series[this.currentSymbol] = this.chart.addAreaSeries({
-            lineColor: '#2962FF',
-            topColor: 'rgba(41, 98, 255, 0.3)',
-            bottomColor: 'rgba(41, 98, 255, 0.05)',
-          });
-          
-          // Veriyi ayarla
-          this.series[this.currentSymbol].setData(data);
-          
-          // Grafiği içeriğe göre ayarla
-          this.chart.timeScale().fitContent();
-        }
-      });
-  }
-  
-  /**
-   * Yeni Çizim Oluştur (createChart)
-   * @param {HTMLElement} container - Grafik container elementi
-   * @param {Object} options - Chart ayarları
-   */
-  createChart(container, options = {}) {
-    if (!container) return null;
-    
-    this.container = container;
-    
-    // Mevcut grafik varsa temizle
-    if (this.chart) {
-      this.chart.remove();
-      this.series = {};
-    }
-    
-    // Yeni grafik oluştur
-    this.chart = LightweightCharts.createChart(container, options);
-    
-    // Responsive için resize listener ekle
-    this.handleResize();
-    
-    return this.chart;
-  }
-  
-  /**
-   * Candlestick Grafik Serisi Ekle
-   * @param {string} id - Seri ID'si
-   * @param {Array} data - OHLC veri dizisi
-   * @param {Object} options - Seri seçenekleri
-   */
-  addCandlestickSeries(id, data, options = {}) {
-    if (!this.chart) return;
-    
-    const defaultOptions = {
-      upColor: '#26a69a',
-      downColor: '#ef5350',
-      borderVisible: false,
-      wickUpColor: '#26a69a',
-      wickDownColor: '#ef5350',
-    };
-    
-    const seriesOptions = { ...defaultOptions, ...options };
-    this.series[id] = this.chart.addCandlestickSeries(seriesOptions);
-    this.series[id].setData(data);
-    
-    return this.series[id];
-  }
-  
-  /**
-   * Alan Grafik Serisi Ekle
-   * @param {string} id - Seri ID'si
-   * @param {Array} data - Alan grafik verisi
-   * @param {Object} options - Seri seçenekleri
-   */
-  addAreaSeries(id, data, options = {}) {
-    if (!this.chart) return;
-    
-    const defaultOptions = {
-      topColor: 'rgba(38, 166, 154, 0.56)',
-      bottomColor: 'rgba(38, 166, 154, 0.04)',
-      lineColor: 'rgba(38, 166, 154, 1)',
-      lineWidth: 2,
-    };
-    
-    const seriesOptions = { ...defaultOptions, ...options };
-    this.series[id] = this.chart.addAreaSeries(seriesOptions);
-    this.series[id].setData(data);
-    
-    return this.series[id];
-  }
-  
-  /**
-   * Çizgi Grafik Serisi Ekle
-   * @param {string} id - Seri ID'si 
-   * @param {Array} data - Çizgi grafik verisi
-   * @param {Object} options - Seri seçenekleri
-   */
-  addLineSeries(id, data, options = {}) {
-    if (!this.chart) return;
-    
-    const defaultOptions = {
-      color: '#2962FF',
-      lineWidth: 2,
-    };
-    
-    const seriesOptions = { ...defaultOptions, ...options };
-    this.series[id] = this.chart.addLineSeries(seriesOptions);
-    this.series[id].setData(data);
-    
-    return this.series[id];
-  }
-  
-  /**
-   * Zaman Dilimi Değiştir
-   * @param {string} timeframe - Timeframe (1m, 5m, 15m, 1h, 4h, 1d, 1w)
-   */
-  changeTimeframe(timeframe) {
-    this.timeframe = timeframe;
-    // Burada API'yi çağırıp yeni timeframe için veri getirilebilir
-    // Bu uygulamada sadece simüle edeceğiz
-    console.log(`Timeframe changed to ${timeframe}`);
-  }
-  
-  /**
-   * Sembol Değiştir
-   * @param {string} symbol - Yeni sembol
-   */
-  changeSymbol(symbol) {
-    if (this.currentSymbol === symbol) return;
-    
-    this.currentSymbol = symbol;
-    console.log(`Symbol changed to ${symbol}`);
-    
-    // Eski seriyi kaldır
-    if (this.series[this.currentSymbol]) {
-      this.chart.removeSeries(this.series[this.currentSymbol]);
-      delete this.series[this.currentSymbol];
-    }
-    
-    // Yeni sembol için veri yükle
-    this.loadChartData();
-  }
-  
-  /**
-   * Responsiveness İçin Resize Yönetimi
-   */
-  handleResize() {
-    const resizeObserver = new ResizeObserver(entries => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        this.chart.applyOptions({ width, height });
-        this.chart.timeScale().fitContent();
-      }
-    });
-    
-    resizeObserver.observe(this.container);
-  }
-  
-  /**
-   * Gösterge Ekle
-   * @param {string} type - Gösterge tipi (ma, rsi, bb)
-   * @param {Object} options - Gösterge ayarları
-   */
-  addIndicator(type, options = {}) {
-    // Bu, gösterge eklemek için sadece bir şablondur
-    // Gerçek uygulamada daha karmaşık bir mantık gerekebilir
-    console.log(`Adding indicator ${type} with options:`, options);
-  }
-} 
+}); 
