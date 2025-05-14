@@ -229,15 +229,15 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  transform: translateX(0);
-  will-change: transform; /* GPU hızlandırma için */
-  backface-visibility: hidden; /* GPU hızlandırma için */
+  transform: translateX(100%); /* Varsayılan olarak gizli */
+  will-change: transform; /* GPU hızlandırma */
+  backface-visibility: hidden; /* GPU hızlandırma */
   -webkit-backface-visibility: hidden;
+  transition: transform 0.1s linear !important; /* Hızlı geçiş */
 }
 
-.right-sidebar.collapsed {
-  transform: translateX(100%);
-  /* CSS sınıf stil tanımı olarak kalacak, ancak transform özelliğini JavaScript içinde tanımlıyoruz */
+.right-sidebar.visible {
+  transform: translateX(0) !important;
 }
 
 .watchlist-container {
@@ -1717,4 +1717,18 @@ body {
   -webkit-tap-highlight-color: transparent; /* mobil dokunma vurgusunu kaldır */
   user-select: none; /* metin seçimini devre dışı bırak */
   touch-action: manipulation; /* dokunma aksiyonunu optimize et */
+}
+
+/* Sidebar Toggle Button - En Basit Haliyle */
+.right-toggle {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+  transition: right 0.1s linear !important;
+}
+
+/* Tıklanabilirlik için yedek stiller */
+button {
+  cursor: pointer;
+  pointer-events: auto;
 } 

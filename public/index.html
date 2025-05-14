@@ -277,7 +277,7 @@
     </section>
 
     <!-- Sağ Kenar Çubuğu - İzleme Listesi -->
-    <aside class="sidebar right-sidebar collapsed">
+    <aside id="rightSidebar" class="right-sidebar" style="position:fixed; top:60px; right:0; bottom:0; width:280px; background-color:#131722; border-left:1px solid #2a2e39; z-index:990; display:flex; flex-direction:column; overflow-y:auto; box-shadow:-5px 0 15px rgba(0,0,0,0.2); transform:translateX(100%); transition:transform 0.1s linear; will-change:transform; backface-visibility:hidden;">
       <div class="watchlist-container">
         <div class="watchlist-header">
           <h3 data-i18n="watchlist.title">İzleme Listesi</h3>
@@ -383,10 +383,10 @@
       </div>
     </aside>
     
-    <!-- Sağ Sidebar Toggle Button -->
-    <button id="rightToggleBtn" class="sidebar-toggle right-toggle" style="position:fixed; right:0; top:50%; z-index:9999; background-color:#2962FF; width:40px; height:100px; cursor:pointer; border:none; border-radius:6px 0 0 6px; box-shadow:-4px 0 12px rgba(0,0,0,0.5); transform:translateY(-50%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0; outline:none;">
-      <i class="fas fa-chevron-left" style="color:white; font-size:24px; text-shadow:0 0 5px rgba(0,0,0,0.3);"></i>
-      <span class="toggle-text" style="color:white; writing-mode:vertical-lr; transform:rotate(180deg); margin-top:15px; font-size:14px; font-weight:bold;">İzleme Listesi</span>
+    <!-- Sağ Sidebar Toggle Button - Daha Görünür ve Tıklanabilir -->
+    <button id="rightToggleBtn" onclick="document.getElementById('rightSidebar').classList.toggle('visible'); this.style.right = document.getElementById('rightSidebar').classList.contains('visible') ? '280px' : '0'; this.querySelector('i').className = document.getElementById('rightSidebar').classList.contains('visible') ? 'fas fa-chevron-right' : 'fas fa-chevron-left'; this.querySelector('.toggle-text').textContent = document.getElementById('rightSidebar').classList.contains('visible') ? 'Gizle' : 'İzleme Listesi';" style="position:fixed; right:0; top:50%; z-index:9999; background-color:#2962FF; width:45px; height:110px; cursor:pointer !important; border:none; outline:none; border-radius:8px 0 0 8px; box-shadow:-4px 0 15px rgba(0,0,0,0.5); transform:translateY(-50%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0; transition:right 0.1s linear;">
+      <i class="fas fa-chevron-left" style="color:white; font-size:26px; text-shadow:0 0 5px rgba(0,0,0,0.3);"></i>
+      <span class="toggle-text" style="color:white; writing-mode:vertical-lr; transform:rotate(180deg); margin-top:15px; font-size:15px; font-weight:bold;">İzleme Listesi</span>
     </button>
   </main>
   
@@ -512,112 +512,116 @@
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   
-  <!-- Watchlist Toggle için Optimize Edilmiş Script -->
+  <!-- Direkt Erişim Watchlist Toggle Script -->
   <script>
-    // Sayfa tamamen yüklendiğinde çalışacak (DOMContentLoaded yerine load kullanılıyor)
+    // Sayfa tamamen yüklendiğinde en son çalışacak script
     window.addEventListener('load', function() {
-      console.log('Sayfa tamamen yüklendi - watchlist toggle hazırlanıyor');
+      console.log('Sayfa yüklendi - Watchlist toggle hazırlanıyor');
       
-      // DOM elementlerini al
+      // Bir kerelik doğrudan erişim için elementleri seç
+      const rightSidebar = document.getElementById('rightSidebar');
       const toggleBtn = document.getElementById('rightToggleBtn');
-      const watchlist = document.querySelector('.right-sidebar');
       
-      if (!toggleBtn || !watchlist) {
-        console.error('Gerekli elementler bulunamadı:', { toggleBtn, watchlist });
+      if (!rightSidebar || !toggleBtn) {
+        console.error('Elementler bulunamadı');
         return;
       }
       
-      // Önceki olası event listener'ları temizle
-      toggleBtn.onclick = null;
-      const newToggleBtn = toggleBtn.cloneNode(true);
-      toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
-      
-      // Doğrudan CSS stillerini uygula - inline olarak
-      watchlist.style.position = 'fixed';
-      watchlist.style.top = '60px';
-      watchlist.style.right = '0';
-      watchlist.style.bottom = '0';
-      watchlist.style.width = '280px';
-      watchlist.style.backgroundColor = '#131722';
-      watchlist.style.zIndex = '990';
-      watchlist.style.transition = 'transform 0.15s ease-out'; // Daha hızlı geçiş
-      watchlist.style.boxShadow = '-5px 0 15px rgba(0, 0, 0, 0.2)';
-      watchlist.style.display = 'flex';
-      watchlist.style.flexDirection = 'column';
-      watchlist.style.overflowY = 'auto';
-      
-      // Başlangıçta gizli olacak
-      watchlist.classList.add('collapsed');
-      watchlist.style.transform = 'translateX(100%)';
-      
-      // Toggle butonuna tıklama olayı ekle - daha hızlı ve basit
-      function toggleWatchlist(e) {
-        // Event'i durdur ve diğer işlemleri engelle
-        if (e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
+      // DOM tamamen yüklendikten sonra ekstra stil ayarları
+      function applyStyles() {
+        // Watchlist görünümünü ayarla
+        rightSidebar.style.transform = 'translateX(100%)';
+        rightSidebar.classList.remove('visible');
         
-        // Mevcut durumu kontrol et
-        const isCollapsed = watchlist.classList.contains('collapsed');
-        
-        // Durumu değiştir
-        if (isCollapsed) {
-          // Açılma durumu
-          watchlist.classList.remove('collapsed');
-          watchlist.style.transform = 'translateX(0)';
-          newToggleBtn.style.right = '280px';
-          newToggleBtn.querySelector('i').className = 'fas fa-chevron-right';
-          newToggleBtn.querySelector('.toggle-text').textContent = 'Gizle';
-        } else {
-          // Kapanma durumu
-          watchlist.classList.add('collapsed');
-          watchlist.style.transform = 'translateX(100%)';
-          newToggleBtn.style.right = '0';
-          newToggleBtn.querySelector('i').className = 'fas fa-chevron-left';
-          newToggleBtn.querySelector('.toggle-text').textContent = 'İzleme Listesi';
-        }
-        
-        // Düğme geçişini daha hızlı yap
-        newToggleBtn.style.transition = 'right 0.15s ease-out';
-      }
-      
-      // Doğrudan tıklama işleyicisini ekle - performans için
-      newToggleBtn.addEventListener('click', toggleWatchlist, { passive: false });
-      
-      // Ayrıca eski yöntemle de ekle (uyumluluk için)
-      newToggleBtn.onclick = toggleWatchlist;
-      
-      // Global test fonksiyonu
-      window.toggleWatchlist = toggleWatchlist;
-      
-      // Direkt DOM özelliği olarak ekle
-      newToggleBtn.toggleWatchlist = toggleWatchlist;
-      
-      // İlk başlangıçta watchlist'in kapalı olduğundan emin ol
-      setTimeout(function() {
-        // Başlangıç durumunu ayarla
-        watchlist.classList.add('collapsed');
-        watchlist.style.transform = 'translateX(100%)';
-        newToggleBtn.style.right = '0';
-        
-        // Test için konsola mesaj
-        console.log('%c✅ Watchlist toggle optimizasyonu tamamlandı!', 'color: #26a69a; font-weight: bold;');
-        console.log('Tıklama sorunları için: Tarayıcıdaki toggleWatchlist() fonksiyonunu çağırabilirsiniz');
-        
-        // Otomatik olarak butonun tıklanabilir olduğunu göster
-        newToggleBtn.style.animation = 'pulse 1s ease-in-out 3';
-        // Kısa bir pulse animasyonu ekle
+        // CSS ile .visible sınıfını tanımla
         const style = document.createElement('style');
         style.textContent = `
-          @keyframes pulse {
-            0% { transform: translateY(-50%) scale(1); }
-            50% { transform: translateY(-50%) scale(1.1); box-shadow: -5px 0 20px rgba(0,0,0,0.6); }
-            100% { transform: translateY(-50%) scale(1); }
+          #rightSidebar.visible {
+            transform: translateX(0) !important;
           }
         `;
         document.head.appendChild(style);
-      }, 100);
+      }
+      
+      // Doğrudan stil uygulaması
+      applyStyles();
+      
+      // Toggle fonksiyonu (test için)
+      window.toggleSidebar = function() {
+        rightSidebar.classList.toggle('visible');
+        toggleBtn.style.right = rightSidebar.classList.contains('visible') ? '280px' : '0'; 
+        toggleBtn.querySelector('i').className = rightSidebar.classList.contains('visible') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+        toggleBtn.querySelector('.toggle-text').textContent = rightSidebar.classList.contains('visible') ? 'Gizle' : 'İzleme Listesi';
+        return 'Toggled sidebar: ' + (rightSidebar.classList.contains('visible') ? 'visible' : 'hidden');
+      };
+      
+      // Doğrudan DOM elementlerini erişilebilir kıl
+      window.rightSidebar = rightSidebar;
+      window.toggleBtn = toggleBtn;
+      
+      // Yedek bir tıklama eventi ekle
+      toggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        window.toggleSidebar();
+      }, true);
+      
+      // Konsola test mesajı yaz
+      console.log('%c✅ WatchList toggle hazır! Test etmek için toggleSidebar() fonksiyonunu çağırabilirsiniz', 'color:#4CAF50;font-weight:bold');
+    });
+  </script>
+  
+  <!-- Son Dokunuş Script - Tek Tıkla Çalışması İçin -->
+  <script>
+    // HTML tamamen yüklendikten hemen sonra çalışır
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sayfa açıldığında doğrudan butonların tıklanabilir olduğundan emin ol
+      function makeClickable() {
+        // Tüm butonları tıklanabilir yap
+        var allButtons = document.getElementsByTagName('button');
+        for (var i = 0; i < allButtons.length; i++) {
+          allButtons[i].style.pointerEvents = 'auto';
+          allButtons[i].style.cursor = 'pointer';
+        }
+        
+        // Özellikle toggle butonunu tıklanabilir yap
+        var toggleBtn = document.getElementById('rightToggleBtn');
+        if (toggleBtn) {
+          toggleBtn.style.pointerEvents = 'auto';
+          toggleBtn.style.cursor = 'pointer';
+          
+          // Ek tıklama olayı ekle
+          toggleBtn.onclick = function(e) {
+            // Tüm event propagation'ı engelle
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            
+            // Doğrudan DOM manipülasyonu
+            var sidebar = document.getElementById('rightSidebar');
+            if (sidebar) {
+              sidebar.classList.toggle('visible');
+              this.style.right = sidebar.classList.contains('visible') ? '280px' : '0';
+              
+              // İkon ve metin değiştir
+              var icon = this.querySelector('i');
+              var text = this.querySelector('.toggle-text');
+              
+              if (icon) icon.className = sidebar.classList.contains('visible') ? 'fas fa-chevron-right' : 'fas fa-chevron-left';
+              if (text) text.textContent = sidebar.classList.contains('visible') ? 'Gizle' : 'İzleme Listesi';
+            }
+            
+            // True döndür ki varsayılan davranışın engellendiğinden emin olalım
+            return true;
+          };
+        }
+      }
+      
+      // Hemen çalıştır
+      makeClickable();
+      
+      // Biraz bekleyip tekrar çalıştır (tarayıcı gecikmelerine karşı)
+      setTimeout(makeClickable, 100);
+      setTimeout(makeClickable, 500);
     });
   </script>
 </body>
