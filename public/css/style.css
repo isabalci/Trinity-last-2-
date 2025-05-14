@@ -223,83 +223,36 @@ body {
 
 /* Sağ Kenar Çubuğu - İzleme Listesi */
 .right-sidebar {
-  width: 280px;
-  border-left: 1px solid #2a2e39;
   overflow-y: auto;
-}
-
-/* Grafikler ve Ana İçerik Alanı */
-.chart-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px);
-  overflow: auto;
-  background-color: #131722;
 }
 
-.market-info {
-  padding: 15px;
-  background-color: #2a2e39;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.market-info h3 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #fff;
-}
-
-.price-info, .change-info, .high-low-info, .volume-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.high-low-info {
-  display: flex;
-  justify-content: space-between;
-}
-
-.high-low-info > div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.value {
-  font-weight: 600;
-  color: #fff;
-}
-
-.up {
-  color: #26a69a;
-}
-
-.down {
-  color: #ef5350;
+.right-sidebar.collapsed {
+  /* CSS sınıf stil tanımı olarak kalacak, ancak transform özelliğini JavaScript içinde tanımlıyoruz */
 }
 
 .watchlist-container {
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .watchlist-header {
+  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  border-bottom: 1px solid #2a2e39;
+  background-color: #1e222d;
 }
 
 .watchlist-header h3 {
+  margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: #e0e3eb;
 }
 
 .add-btn {
@@ -316,7 +269,12 @@ body {
 }
 
 .watchlist-filter {
-  margin-bottom: 15px;
+  padding: 10px 15px;
+  background-color: #131722;
+  border-bottom: 1px solid #2a2e39;
+  position: sticky;
+  top: 46px;
+  z-index: 9;
 }
 
 .watchlist-filter input {
@@ -346,14 +304,12 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 12px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-bottom: 5px;
+  border-bottom: 1px solid #1e222d;
+  transition: background-color 0.2s ease;
 }
 
 .watchlist li:hover {
-  background-color: #2a2e39;
+  background-color: #1e222d;
 }
 
 .watchlist li.active {
@@ -588,7 +544,7 @@ body {
 
 /* Featured Chart Container - Yeni pozisyona göre düzenlendi */
 .featured-chart-container {
-  background-color: #1e222d;
+  background-color: #131722;
   border-radius: 8px;
   padding: 15px;
   height: 45%;
@@ -597,13 +553,14 @@ body {
   flex-direction: column;
   margin-bottom: 20px;
   width: 100%;
+  border: 1px solid #2a2e39;
 }
 
 .featured-chart {
   flex: 1;
   width: 100%;
   min-height: 200px;
-  margin-bottom: 10px;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1271,6 +1228,39 @@ body {
   }
 }
 
+/* Pulse efekti için CSS */
+@keyframes pulse {
+  0% {
+    transform: translateY(-50%) scale(1);
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: -3px 0 15px rgba(41, 98, 255, 0.6);
+  }
+  100% {
+    transform: translateY(-50%) scale(1);
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.pulse-effect {
+  animation: pulse 0.8s ease-in-out 3;
+}
+
+/* Responsive düzenlemeler - pulse efektinden sonra eklendi */
+@media (max-width: 576px) {
+  .left-sidebar {
+    width: 48px;
+  }
+  
+  .tool-item {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
 /* Piyasa İzleme Bölümü */
 .market-watchlist {
   border-top: 1px solid #2a2e39;
@@ -1541,4 +1531,174 @@ body {
 
 .chart-toolbar .index-change {
   font-size: 12px;
+}
+
+/* Sol Kenar Çubuğu - Araçlar */
+.left-sidebar {
+  width: 56px;
+  border-right: 1px solid #2a2e39;
+  background-color: #131722;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 100;
+}
+
+/* Sol kenar çubuğunun kapalı hali */
+.left-sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+/* Sol kenar çubuğu toggle butonu - Görünürlüğü artırıldı */
+.sidebar-toggle.left-toggle {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 80px;
+  background-color: #2962FF;
+  border: 1px solid #1e56e8;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Çok yüksek z-index - her zaman en üstte gösterilsin */
+  color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar-toggle.left-toggle:hover {
+  background-color: #0D47A1;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.sidebar-toggle.left-toggle i {
+  font-size: 22px;
+  transition: transform 0.3s ease;
+}
+
+/* Araçlar konteyneri */
+.tools-container {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 0;
+  height: 100%;
+}
+
+.tool-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.tool-item {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: #a0a7b4;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.tool-item:hover {
+  background-color: #2a2e39;
+  color: #e0e3eb;
+}
+
+.tool-item.active {
+  color: #2962FF;
+}
+
+.tool-divider {
+  height: 1px;
+  width: 24px;
+  background-color: #2a2e39;
+  margin: 5px 0;
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 576px) {
+  .left-sidebar {
+    width: 48px;
+  }
+  
+  .tool-item {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+/* Grafikler ve Ana İçerik Alanı */
+.chart-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  overflow: auto;
+  background-color: #131722;
+}
+
+/* Timeframe buttons styling for all charts */
+.chart-timeframe-buttons {
+  display: flex;
+  justify-content: flex-end;
+  background: transparent;
+  padding: 6px 10px;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 100;
+}
+
+.chart-timeframe-buttons button {
+  background-color: transparent;
+  border: none;
+  color: #a0a7b4;
+  padding: 2px 6px;
+  margin: 0 2px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chart-timeframe-buttons button:hover {
+  color: #e0e3eb;
+}
+
+.chart-timeframe-buttons button.active {
+  color: #2962FF;
+}
+
+/* Chart containers with position relative for absolute positioning of buttons */
+#chart-container, #nasdaqChart-container {
+  position: relative;
+  margin-bottom: 20px;
+  border: 1px solid #2a2e39;
+  border-radius: 4px;
+  padding: 15px;
+  background-color: #131722;
+  min-height: 300px;
+}
+
+.up {
+  color: #26a69a;
+}
+
+.down {
+  color: #ef5350;
 } 

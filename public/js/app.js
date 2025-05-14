@@ -14,6 +14,40 @@ document.addEventListener('DOMContentLoaded', function() {
   const timeframeButtons = document.querySelectorAll('.timeframe');
   const watchlistEl = document.getElementById('watchlist');
   const languageSelector = document.getElementById('languageSelector');
+  const rightSidebarToggle = document.querySelector('.sidebar-toggle.right-toggle');
+  const rightSidebar = document.querySelector('.right-sidebar');
+  const leftSidebarToggle = document.querySelector('.sidebar-toggle.left-toggle');
+  const leftSidebar = document.querySelector('.left-sidebar');
+  
+  // Debug logging for UI elements 
+  console.log('DOM Elements:', {
+    rightSidebarToggle: rightSidebarToggle,
+    rightSidebar: rightSidebar,
+    leftSidebarToggle: leftSidebarToggle,
+    leftSidebar: leftSidebar
+  });
+  
+  // DIRECT TEST: Force blue arrow to be clickable
+  document.addEventListener('keydown', function(e) {
+    // Test shortcut: Press Ctrl+Alt+W to toggle watchlist
+    if (e.ctrlKey && e.altKey && e.key === 'w') {
+      console.log('Keyboard shortcut to toggle watchlist');
+      toggleWatchlist();
+    }
+  });
+  
+  // Make toggle functions global for browser console testing
+  window.toggleWatchlist = toggleWatchlist;
+  window.testLeftToggle = function() {
+    if (leftSidebarToggle) {
+      leftSidebarToggle.click();
+    } else {
+      console.error('Left toggle button not found');
+    }
+  };
+  
+  // Chart Timeframe Buttons
+  const chartTimeButtons = document.querySelectorAll('.chart-time-btn');
   
   // Market Summary Elementleri
   const marketIndices = document.querySelectorAll('.market-index');
@@ -28,11 +62,51 @@ document.addEventListener('DOMContentLoaded', function() {
   let activeIndex = 'sp500';
   let activeTimeframe = '1D';
   
+  // Ana grafik ve Nasdaq grafik için timeframe'ler
+  let mainChartTimeframe = '1D';
+  let nasdaqChartTimeframe = '1D';
+  
+  // Sayfa ilk yüklendiğinde sidebar ayarları
+  initializeSidebars();
+  
   // Grafikleri Yükle
   initializeCharts();
   
   // Event Listeners
   addEventListeners();
+  
+  /**
+   * Sidebar'ların başlangıç durumunu ayarla
+   */
+  function initializeSidebars() {
+    console.log('Initializing sidebars');
+    
+    // Sağ sidebar'ı başlangıçta gizle
+    if (rightSidebar) {
+      rightSidebar.classList.add('collapsed');
+      console.log('Right sidebar initialized as collapsed');
+    } else {
+      console.error('Right sidebar element not found');
+    }
+    
+    // Sağ sidebar toggle butonu için icon ayarla
+    if (rightSidebarToggle) {
+      const icon = rightSidebarToggle.querySelector('i');
+      if (icon) {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-left');
+      }
+      
+      const toggleText = rightSidebarToggle.querySelector('.toggle-text');
+      if (toggleText) {
+        toggleText.textContent = 'İzleme Listesi';
+      }
+      
+      console.log('Right sidebar toggle button initialized');
+    } else {
+      console.error('Right sidebar toggle button not found');
+    }
+  }
   
   /**
    * Grafiklerin Başlatılması
@@ -340,6 +414,213 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   /**
+   * Grafik verilerini zaman aralığına göre yükle
+   * @param {string} chartId - Grafik ID'si
+   * @param {string} timeframe - Zaman aralığı
+   */
+  function loadChartData(chartId, timeframe) {
+    console.log(`${chartId} grafiği için ${timeframe} zaman aralığında veri yükleniyor...`);
+    
+    // Gerçek bir API'den veri yüklenecek
+    // Şimdilik örnek veri oluşturalım
+    
+    // Zaman aralığına göre data nokta sayısını belirle
+    let dataPoints;
+    let baseDate = new Date();
+    let labels = [];
+    let data = [];
+    let step;
+    
+    switch(timeframe) {
+      case '1D':
+        dataPoints = 24; // Saatlik
+        step = 60 * 60 * 1000; // 1 saat
+        break;
+      case '1W':
+        dataPoints = 7; // Günlük
+        step = 24 * 60 * 60 * 1000; // 1 gün
+        break;
+      case '1M':
+        dataPoints = 30; // Günlük
+        step = 24 * 60 * 60 * 1000; // 1 gün
+        break;
+      case '3M':
+        dataPoints = 12; // Haftalık
+        step = 7 * 24 * 60 * 60 * 1000; // 1 hafta
+        break;
+      case '1Y':
+        dataPoints = 12; // Aylık
+        step = 30 * 24 * 60 * 60 * 1000; // 1 ay (yaklaşık)
+        break;
+      case 'ALL':
+        dataPoints = 10; // Yıllık
+        step = 365 * 24 * 60 * 60 * 1000; // 1 yıl
+        break;
+      default:
+        dataPoints = 24; // Varsayılan saatlik
+        step = 60 * 60 * 1000;
+    }
+    
+    // Grafik ID'sine göre başlangıç değeri ve trend belirle
+    let baseValue, trend, chartColor;
+    switch(chartId) {
+      case 'main':
+        baseValue = 16000;
+        trend = 0.3; // Artış trendi
+        chartColor = '#2962FF'; // Mavi
+        break;
+      case 'nasdaq':
+        baseValue = 45000;
+        trend = 0.25; // Artış trendi
+        chartColor = '#F7931A'; // Bitcoin rengi (turuncu)
+        break;
+      case 'featured':
+        baseValue = 5800;
+        trend = 0.2; // Artış trendi
+        chartColor = '#5460E6'; // Mor
+        break;
+      default:
+        baseValue = 5000;
+        trend = 0.2;
+        chartColor = '#5460E6';
+    }
+    
+    // Tarih ve veri noktaları oluştur
+    for (let i = dataPoints - 1; i >= 0; i--) {
+      let date = new Date(baseDate - (i * step));
+      
+      // Zaman formatını ayarla
+      let formattedDate;
+      if (timeframe === '1D') {
+        formattedDate = date.getHours() + ':00';
+      } else if (timeframe === '1W' || timeframe === '1M' || timeframe === '3M') {
+        formattedDate = date.toLocaleDateString();
+      } else {
+        formattedDate = date.toLocaleDateString('tr-TR', { month: 'short', year: 'numeric' });
+      }
+      
+      labels.push(formattedDate);
+      
+      // Uygun değerler oluştur (zaman dilimine göre farklı dalgalanmalar)
+      let randomFactor;
+      
+      // Zaman aralığı arttıkça, değişimi daha fazla yap ve volatiliteyi değiştir
+      let volatility, multiplier;
+      switch(timeframe) {
+        case '1D': 
+          volatility = 0.005; 
+          multiplier = 0.01;
+          randomFactor = Math.random() * 2 - (1 - trend) * 0.8; 
+          break;
+        case '1W': 
+          volatility = 0.01; 
+          multiplier = 0.03;
+          randomFactor = Math.random() * 2 - (1 - trend) * 0.7; 
+          break;
+        case '1M': 
+          volatility = 0.02; 
+          multiplier = 0.08;
+          randomFactor = Math.random() * 2 - (1 - trend) * 0.6; 
+          break;
+        case '3M': 
+          volatility = 0.05; 
+          multiplier = 0.15;
+          randomFactor = Math.random() * 2 - (1 - trend) * 0.5; 
+          break;
+        case '1Y': 
+          volatility = 0.1; 
+          multiplier = 0.25;
+          randomFactor = Math.random() * 2 - (1 - trend) * 0.4; 
+          break;
+        case 'ALL': 
+          volatility = 0.2; 
+          multiplier = 0.6;
+          randomFactor = Math.random() * 2 - (1 - trend) * 0.3; 
+          break;
+        default: 
+          volatility = 0.01;
+          multiplier = 0.02;
+          randomFactor = Math.random() * 2 - (1 - trend);
+      }
+      
+      let value = baseValue * (1 + ((dataPoints - i) / dataPoints * multiplier * trend) + randomFactor * volatility);
+      data.push(value);
+    }
+    
+    // Grafik güncelle
+    updateChart(chartId, labels, data, chartColor, timeframe);
+  }
+
+  /**
+   * Grafik verilerini güncelle
+   * @param {string} chartId - Grafiğin ID'si
+   * @param {Array} labels - Tarih etiketleri
+   * @param {Array} data - Veri noktaları
+   * @param {string} chartColor - Grafik rengi
+   * @param {string} timeframe - Zaman aralığı
+   */
+  function updateChart(chartId, labels, data, chartColor, timeframe) {
+    let chartElement;
+    
+    switch(chartId) {
+      case 'main':
+        chartElement = document.getElementById('chart');
+        break;
+      case 'nasdaq':
+        chartElement = document.getElementById('nasdaqChart');
+        break;
+      case 'featured':
+        chartElement = document.getElementById('featuredChart');
+        break;
+      default:
+        console.error('Bilinmeyen grafik ID:', chartId);
+        return;
+    }
+    
+    if (!chartElement) {
+      console.error('Grafik elementi bulunamadı:', chartId);
+      return;
+    }
+    
+    // Chart.js instance'ını bul ve güncelle
+    const chartInstance = Chart.getChart(chartElement);
+    if (chartInstance) {
+      // Grafik tipini belirleme (kısa zaman dilimlerinde çizgi, uzun zaman dilimlerinde alan grafiği)
+      let chartType = 'line';
+      let tension = 0.4;
+      let pointRadius = 0;
+      
+      // Zaman aralığına göre grafik ayarları
+      if (timeframe === '1D' || timeframe === '1W') {
+        tension = 0.2;
+        pointRadius = 2;
+      } else if (timeframe === '1M' || timeframe === '3M') {
+        tension = 0.3;
+        pointRadius = 1;
+      } else {
+        tension = 0.4;
+        pointRadius = 0;
+      }
+      
+      chartInstance.data.labels = labels;
+      chartInstance.data.datasets[0].data = data;
+      chartInstance.data.datasets[0].borderColor = chartColor;
+      chartInstance.data.datasets[0].backgroundColor = `${chartColor}20`; // %12 opaklık
+      chartInstance.data.datasets[0].tension = tension;
+      chartInstance.data.datasets[0].pointRadius = pointRadius;
+      
+      // Grid çizgisi ayarları
+      chartInstance.options.scales.x.grid.color = 'rgba(42, 46, 57, 0.2)';
+      chartInstance.options.scales.y.grid.color = 'rgba(42, 46, 57, 0.2)';
+      
+      chartInstance.update();
+      console.log(`${chartId} grafiği ${timeframe} zaman aralığında güncellendi`);
+    } else {
+      console.error('Grafik instance bulunamadı:', chartId);
+    }
+  }
+  
+  /**
    * Event Listener'ları Ekle
    */
   function addEventListeners() {
@@ -437,6 +718,70 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
 
+    // Chart Timeframe Buttons
+    chartTimeButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Hangi grafiğin düğmesine tıklandı
+        const chartId = this.getAttribute('data-chart');
+        const timeframe = this.getAttribute('data-timeframe');
+        
+        // İlgili grafiğin tüm düğmelerini bul ve aktif sınıfını kaldır
+        const buttons = document.querySelectorAll(`.chart-time-btn[data-chart="${chartId}"]`);
+        buttons.forEach(b => b.classList.remove('active'));
+        
+        // Tıklanan düğmeyi aktif yap
+        this.classList.add('active');
+        
+        // Zaman dilimini sakla ve grafiği güncelle
+        if (chartId === 'main') {
+          mainChartTimeframe = timeframe;
+        } else if (chartId === 'nasdaq') {
+          nasdaqChartTimeframe = timeframe;
+        } else if (chartId === 'featured') {
+          activeTimeframe = timeframe;
+        }
+        
+        // Grafiği güncelle
+        loadChartData(chartId, timeframe);
+      });
+    });
+    
+    // Directly make the left toggle clickable
+    if (leftSidebarToggle) {
+      // Remove any existing event listeners (just in case)
+      leftSidebarToggle.onclick = null;
+      
+      // Add a direct onclick handler
+      leftSidebarToggle.onclick = function(e) {
+        console.log('Left toggle clicked directly');
+        toggleWatchlist();
+        e.stopPropagation();
+      };
+    }
+    
+    // Sağ kenar çubuğu toggle işlemi (sağdaki buton)
+    if (rightSidebarToggle && rightSidebar) {
+      console.log('Adding click event to right sidebar toggle');
+      // Remove any existing event listeners
+      rightSidebarToggle.onclick = null;
+      
+      // Add a direct onclick handler
+      rightSidebarToggle.onclick = function(e) {
+        console.log('Right sidebar toggle clicked');
+        toggleWatchlist();
+        e.stopPropagation();
+      };
+    }
+    
+    // Araç butonları için aktif durum işlemi
+    const toolItems = document.querySelectorAll('.tool-item');
+    toolItems.forEach(item => {
+      item.addEventListener('click', function() {
+        // Aktif durumu değiştir
+        this.classList.toggle('active');
+      });
+    });
+    
     // Pencere boyutu değişikliklerinde grafikleri yeniden boyutlandır
     window.addEventListener('resize', function() {
       // Grafikleri yeniden oluştur
@@ -446,6 +791,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     });
+    
+    // Sayfa ilk yüklendiğinde graph timeframe butonlarını aktifleştir
+    loadChartData('main', mainChartTimeframe);
+    loadChartData('nasdaq', nasdaqChartTimeframe);
+    loadChartData('featured', activeTimeframe);
   }
   
   /**
@@ -461,6 +811,65 @@ document.addEventListener('DOMContentLoaded', function() {
       const key = element.getAttribute('data-i18n-placeholder');
       element.placeholder = i18next.t(key);
     });
+  }
+  
+  /**
+   * Watchlist'i aç/kapa
+   */
+  function toggleWatchlist() {
+    console.log('Toggling watchlist');
+    console.log('Before toggle - rightSidebar collapsed:', rightSidebar.classList.contains('collapsed'));
+    
+    // Sidebar'ı aç/kapa
+    rightSidebar.classList.toggle('collapsed');
+    
+    console.log('After toggle - rightSidebar collapsed:', rightSidebar.classList.contains('collapsed'));
+    
+    // Sağ toggle butonunun ikonunu değiştir
+    if (rightSidebarToggle) {
+      const rightIcon = rightSidebarToggle.querySelector('i');
+      if (rightIcon) {
+        if (rightSidebar.classList.contains('collapsed')) {
+          rightIcon.classList.remove('fa-chevron-right');
+          rightIcon.classList.add('fa-chevron-left');
+        } else {
+          rightIcon.classList.remove('fa-chevron-left');
+          rightIcon.classList.add('fa-chevron-right');
+        }
+      }
+      
+      const rightToggleText = rightSidebarToggle.querySelector('.toggle-text');
+      if (rightToggleText) {
+        rightToggleText.textContent = rightSidebar.classList.contains('collapsed') ? 'İzleme Listesi' : 'Gizle';
+      }
+      
+      // Toggle butonunun konumunu güncelle
+      if (rightSidebar.classList.contains('collapsed')) {
+        rightSidebarToggle.style.right = '0';
+      } else {
+        rightSidebarToggle.style.right = '280px';  // Sidebar genişliği
+      }
+    }
+    
+    // Sol toggle butonunun ikonunu değiştir
+    if (leftSidebarToggle) {
+      const leftIcon = leftSidebarToggle.querySelector('i');
+      if (leftIcon) {
+        if (rightSidebar.classList.contains('collapsed')) {
+          leftIcon.classList.remove('fa-chevron-left');
+          leftIcon.classList.add('fa-chevron-right');
+        } else {
+          leftIcon.classList.remove('fa-chevron-right');
+          leftIcon.classList.add('fa-chevron-left');
+        }
+      }
+    }
+  }
+  
+  // Just for debugging - add a global function to toggle watchlist
+  window.toggleWatchlistManually = function() {
+    console.log('Manual watchlist toggle called');
+    toggleWatchlist();
   }
   
   // Watchlist ve Piyasa Datası API'den Alımı Burada Olabilir
