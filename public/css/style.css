@@ -223,12 +223,20 @@ body {
 
 /* Sağ Kenar Çubuğu - İzleme Listesi */
 .right-sidebar {
+  width: 280px;
+  background-color: #131722;
+  border-left: 1px solid #2a2e39;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  transform: translateX(0);
+  will-change: transform; /* GPU hızlandırma için */
+  backface-visibility: hidden; /* GPU hızlandırma için */
+  -webkit-backface-visibility: hidden;
 }
 
 .right-sidebar.collapsed {
+  transform: translateX(100%);
   /* CSS sınıf stil tanımı olarak kalacak, ancak transform özelliğini JavaScript içinde tanımlıyoruz */
 }
 
@@ -1701,4 +1709,12 @@ body {
 
 .down {
   color: #ef5350;
+}
+
+/* Performans optimizasyonu için */
+.sidebar-toggle {
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent; /* mobil dokunma vurgusunu kaldır */
+  user-select: none; /* metin seçimini devre dışı bırak */
+  touch-action: manipulation; /* dokunma aksiyonunu optimize et */
 } 

@@ -384,9 +384,9 @@
     </aside>
     
     <!-- Sağ Sidebar Toggle Button -->
-    <button id="rightToggleBtn" class="sidebar-toggle right-toggle" style="position:fixed; right:0; top:50%; z-index:9999; background-color:#2962FF; width:40px; height:100px; cursor:pointer; border:none; border-radius:6px 0 0 6px; box-shadow:-4px 0 12px rgba(0,0,0,0.5);">
-      <i class="fas fa-chevron-left" style="color:white; font-size:20px;"></i>
-      <span class="toggle-text" style="color:white; writing-mode:vertical-lr; transform:rotate(180deg); margin-top:10px; font-size:14px;">İzleme Listesi</span>
+    <button id="rightToggleBtn" class="sidebar-toggle right-toggle" style="position:fixed; right:0; top:50%; z-index:9999; background-color:#2962FF; width:40px; height:100px; cursor:pointer; border:none; border-radius:6px 0 0 6px; box-shadow:-4px 0 12px rgba(0,0,0,0.5); transform:translateY(-50%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0; outline:none;">
+      <i class="fas fa-chevron-left" style="color:white; font-size:24px; text-shadow:0 0 5px rgba(0,0,0,0.3);"></i>
+      <span class="toggle-text" style="color:white; writing-mode:vertical-lr; transform:rotate(180deg); margin-top:15px; font-size:14px; font-weight:bold;">İzleme Listesi</span>
     </button>
   </main>
   
@@ -512,13 +512,13 @@
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   
-  <!-- Watchlist Toggle için Düzeltilmiş Script -->
+  <!-- Watchlist Toggle için Optimize Edilmiş Script -->
   <script>
-    // Sayfa tamamen yüklendiğinde çalışacak
+    // Sayfa tamamen yüklendiğinde çalışacak (DOMContentLoaded yerine load kullanılıyor)
     window.addEventListener('load', function() {
-      console.log('Sayfa tamamen yüklendi, watchlist script başlatılıyor');
+      console.log('Sayfa tamamen yüklendi - watchlist toggle hazırlanıyor');
       
-      // Gerekli elementleri seç
+      // DOM elementlerini al
       const toggleBtn = document.getElementById('rightToggleBtn');
       const watchlist = document.querySelector('.right-sidebar');
       
@@ -527,9 +527,12 @@
         return;
       }
       
-      console.log('Toggle butonu ve watchlist bulundu');
+      // Önceki olası event listener'ları temizle
+      toggleBtn.onclick = null;
+      const newToggleBtn = toggleBtn.cloneNode(true);
+      toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
       
-      // CSS stillerini doğrudan uygula
+      // Doğrudan CSS stillerini uygula - inline olarak
       watchlist.style.position = 'fixed';
       watchlist.style.top = '60px';
       watchlist.style.right = '0';
@@ -537,76 +540,84 @@
       watchlist.style.width = '280px';
       watchlist.style.backgroundColor = '#131722';
       watchlist.style.zIndex = '990';
-      watchlist.style.transition = 'transform 0.3s ease-in-out';
+      watchlist.style.transition = 'transform 0.15s ease-out'; // Daha hızlı geçiş
       watchlist.style.boxShadow = '-5px 0 15px rgba(0, 0, 0, 0.2)';
+      watchlist.style.display = 'flex';
+      watchlist.style.flexDirection = 'column';
+      watchlist.style.overflowY = 'auto';
       
       // Başlangıçta gizli olacak
-      if (watchlist.classList.contains('collapsed')) {
-        watchlist.style.transform = 'translateX(100%)';
-      } else {
-        watchlist.style.transform = 'translateX(0)';
-      }
+      watchlist.classList.add('collapsed');
+      watchlist.style.transform = 'translateX(100%)';
       
-      // Toggle butonuna tıklama olayı ekle
-      function handleToggleClick(e) {
-        console.log('Toggle butonuna tıklandı');
+      // Toggle butonuna tıklama olayı ekle - daha hızlı ve basit
+      function toggleWatchlist(e) {
+        // Event'i durdur ve diğer işlemleri engelle
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         
-        // Sidebar durumunu değiştir
+        // Mevcut durumu kontrol et
         const isCollapsed = watchlist.classList.contains('collapsed');
         
+        // Durumu değiştir
         if (isCollapsed) {
-          // Eğer kapalıysa, aç
+          // Açılma durumu
           watchlist.classList.remove('collapsed');
           watchlist.style.transform = 'translateX(0)';
-          toggleBtn.style.right = '280px';
-          toggleBtn.querySelector('i').className = 'fas fa-chevron-right';
-          toggleBtn.querySelector('.toggle-text').textContent = 'Gizle';
-          console.log('Watchlist açıldı');
+          newToggleBtn.style.right = '280px';
+          newToggleBtn.querySelector('i').className = 'fas fa-chevron-right';
+          newToggleBtn.querySelector('.toggle-text').textContent = 'Gizle';
         } else {
-          // Eğer açıksa, kapat
+          // Kapanma durumu
           watchlist.classList.add('collapsed');
           watchlist.style.transform = 'translateX(100%)';
-          toggleBtn.style.right = '0';
-          toggleBtn.querySelector('i').className = 'fas fa-chevron-left';
-          toggleBtn.querySelector('.toggle-text').textContent = 'İzleme Listesi';
-          console.log('Watchlist kapandı');
+          newToggleBtn.style.right = '0';
+          newToggleBtn.querySelector('i').className = 'fas fa-chevron-left';
+          newToggleBtn.querySelector('.toggle-text').textContent = 'İzleme Listesi';
         }
+        
+        // Düğme geçişini daha hızlı yap
+        newToggleBtn.style.transition = 'right 0.15s ease-out';
       }
       
-      // Birden fazla olay dinleyici ekle (maksimum uyumluluk için)
-      toggleBtn.addEventListener('click', handleToggleClick);
-      toggleBtn.onclick = handleToggleClick;
+      // Doğrudan tıklama işleyicisini ekle - performans için
+      newToggleBtn.addEventListener('click', toggleWatchlist, { passive: false });
       
-      // Başlangıçta bir kez çalıştır
-      setTimeout(function() {
-        console.log('Başlangıç durumu ayarlanıyor');
-        watchlist.classList.add('collapsed');
-        watchlist.style.transform = 'translateX(100%)';
-        toggleBtn.style.right = '0';
-        
-        // Sayfada başlangıçta konsol ile test edebilmek için konsola mesaj bırakalım
-        console.log('%c📌 Watchlist fonksiyonunu test etmek için konsolda "testWatchlistToggle()" yazabilirsiniz', 'color: #2962FF; font-size: 14px; font-weight: bold;');
-        
-        // Sayfadaki diğer script etkileşimlerinden kaçınmak için başlangıçta bir test yapalım
-        setTimeout(function() {
-          console.log('Otomatik test - watchlist açılıyor');
-          handleToggleClick();
-          
-          // 2 saniye sonra geri kapatalım
-          setTimeout(function() {
-            console.log('Otomatik test - watchlist kapanıyor');
-            handleToggleClick();
-          }, 2000);
-        }, 2000);
-      }, 100);
+      // Ayrıca eski yöntemle de ekle (uyumluluk için)
+      newToggleBtn.onclick = toggleWatchlist;
       
       // Global test fonksiyonu
-      window.testWatchlistToggle = function() {
-        handleToggleClick();
-        return 'Test edildi';
-      };
+      window.toggleWatchlist = toggleWatchlist;
       
-      console.log('Watchlist toggle hazır');
+      // Direkt DOM özelliği olarak ekle
+      newToggleBtn.toggleWatchlist = toggleWatchlist;
+      
+      // İlk başlangıçta watchlist'in kapalı olduğundan emin ol
+      setTimeout(function() {
+        // Başlangıç durumunu ayarla
+        watchlist.classList.add('collapsed');
+        watchlist.style.transform = 'translateX(100%)';
+        newToggleBtn.style.right = '0';
+        
+        // Test için konsola mesaj
+        console.log('%c✅ Watchlist toggle optimizasyonu tamamlandı!', 'color: #26a69a; font-weight: bold;');
+        console.log('Tıklama sorunları için: Tarayıcıdaki toggleWatchlist() fonksiyonunu çağırabilirsiniz');
+        
+        // Otomatik olarak butonun tıklanabilir olduğunu göster
+        newToggleBtn.style.animation = 'pulse 1s ease-in-out 3';
+        // Kısa bir pulse animasyonu ekle
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); box-shadow: -5px 0 20px rgba(0,0,0,0.6); }
+            100% { transform: translateY(-50%) scale(1); }
+          }
+        `;
+        document.head.appendChild(style);
+      }, 100);
     });
   </script>
 </body>
