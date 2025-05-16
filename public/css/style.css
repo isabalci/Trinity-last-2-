@@ -1869,32 +1869,61 @@ button {
 }
 
 .light-theme .modal-content {
-  background-color: var(--bg-secondary);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background-color: #f5f7fa;
+  color: #131722;
+  border: 1px solid #e0e3eb;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-.light-theme .modal h2,
-.light-theme .modal label,
-.light-theme .modal-content .form-group label,
+.light-theme .modal h2 {
+  color: #131722;
+}
+
+.light-theme .form-group label {
+  color: #434651;
+}
+
+.light-theme .settings-section {
+  background-color: #eef1f6;
+  border: 1px solid #e0e3eb;
+  color: #131722;
+}
+
 .light-theme .settings-section h3 {
-  color: var(--text-primary);
+  color: #131722;
+  border-bottom: 1px solid #d0d5dd;
 }
 
-.light-theme #rightToggleBtn {
-  background-color: var(--accent-color);
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+.light-theme .form-group input, 
+.light-theme .form-group select {
+  background-color: #ffffff;
+  border: 1px solid #d0d5dd;
+  color: #131722;
 }
 
-.light-theme .stock-symbol {
-  color: var(--text-primary);
+.light-theme .form-group input:focus, 
+.light-theme .form-group select:focus {
+  border-color: #2962FF;
+  box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
 }
 
-.light-theme .price-value {
-  color: var(--text-primary);
+.light-theme .close {
+  color: #434651;
 }
 
-.light-theme .main-nav-menu .nav-link.active {
-  font-weight: 600;
+.light-theme .close:hover {
+  color: #131722;
+}
+
+.light-theme .btn-primary {
+  background-color: #2962FF;
+  border-color: #2962FF;
+  color: #ffffff;
+}
+
+.light-theme .btn-primary:hover {
+  background-color: #1e56e8;
+  border-color: #1e56e8;
 }
 
 /* Grafik konteynerler için özel ışık tema stilleri */
@@ -2172,4 +2201,51 @@ button {
 .light-theme canvas + .chartjs-legend ul li span {
   color: var(--chart-title-color);
   font-weight: 600;
+}
+
+/* Light theme - select ve option elementleri düzeltmesi */
+.light-theme select {
+  background-color: #ffffff;
+  color: #131722;
+  border: 1px solid #d0d5dd;
+  padding: 8px 10px;
+  border-radius: 4px;
+}
+
+.light-theme select option {
+  background-color: #ffffff;
+  color: #131722;
+}
+
+.light-theme .settings-section select:focus {
+  border-color: #2962FF;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
+}
+
+/* Light theme - ayarlar için kullanılan modal ve ayarlar container */
+.light-theme .settings-container {
+  color: #131722;
+}
+
+.light-theme #settingsModal .modal-content {
+  background-color: #f5f7fa;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  color: #131722;
+}
+
+.light-theme #settingsModal .settings-section {
+  background-color: #eef1f6;
+  border: 1px solid #e0e3eb;
+  border-radius: 6px;
+}
+
+.light-theme #settingsModal h2 {
+  color: #131722;
+}
+
+.light-theme #settingsModal .form-group label {
+  color: #434651;
+  margin-bottom: 5px;
+  font-weight: 500;
 } 
