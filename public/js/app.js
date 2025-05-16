@@ -21,24 +21,56 @@ function applyThemeSettings() {
     // Grafikler güncellenebilir (eğer Chart.js kullanılıyorsa)
     if (window.Chart && window.Chart.instances) {
       const isDark = selectedTheme === 'dark';
+      
+      // Tema renkleri
       const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(170, 175, 190, 0.25)';
       const textColor = isDark ? '#a0a7b4' : '#434651';
+      const backgroundColor = isDark ? '#131722' : '#ffffff';
       
+      // Her bir grafiği güncelle
       Object.values(window.Chart.instances).forEach(chart => {
         try {
-          if (chart.options.scales && chart.options.scales.x) {
-            chart.options.scales.x.grid.color = gridColor;
-            chart.options.scales.x.ticks.color = textColor;
+          // Yeni stil değerlerini uygula
+          chart.options.scales.x.grid.color = gridColor;
+          chart.options.scales.x.ticks.color = textColor;
+          chart.options.scales.y.grid.color = gridColor;
+          chart.options.scales.y.ticks.color = textColor;
+          
+          // Chart.js container'ın arkaplan rengini ayarla
+          chart.canvas.parentNode.style.backgroundColor = backgroundColor;
+          
+          // Legend renklerini güncelle
+          if (chart.options.plugins && chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = textColor;
           }
-          if (chart.options.scales && chart.options.scales.y) {
-            chart.options.scales.y.grid.color = gridColor;
-            chart.options.scales.y.ticks.color = textColor;
+          
+          // Tooltip renklerini güncelle
+          if (chart.options.plugins && chart.options.plugins.tooltip) {
+            chart.options.plugins.tooltip.backgroundColor = isDark ? 'rgba(28, 32, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+            chart.options.plugins.tooltip.titleColor = textColor;
+            chart.options.plugins.tooltip.bodyColor = textColor;
+            chart.options.plugins.tooltip.borderColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(224, 227, 235, 0.9)';
           }
+          
+          // Grafik dataseti renklerini güncelle
+          chart.data.datasets.forEach((dataset, i) => {
+            // Ana veri renkleri korunur, ama arka plan rengi değişir
+            if (dataset.type === 'line' && dataset.fill) {
+              // Dolgu rengini temaya göre ayarla (daha hafif opaklık)
+              dataset.backgroundColor = isDark 
+                ? dataset.borderColor + '20' // %12 opaklık
+                : dataset.borderColor + '10'; // %6 opaklık
+            }
+          });
+          
+          // Değişiklikleri uygula
           chart.update();
         } catch (error) {
           console.error('Grafik güncelleme hatası:', error);
         }
       });
+      
+      console.log('Grafikler tema değişikliğine göre güncellendi');
     }
     
     // Modalı kapat
@@ -491,25 +523,44 @@ document.addEventListener('DOMContentLoaded', function() {
       // Tema renkleri
       const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(170, 175, 190, 0.25)';
       const textColor = isDark ? '#a0a7b4' : '#434651';
+      const backgroundColor = isDark ? '#131722' : '#ffffff';
       
       Object.values(window.Chart.instances).forEach(chart => {
         try {
-          // X ve Y ekseni stil güncellemeleri
-          if (chart.options.scales && chart.options.scales.x) {
-            chart.options.scales.x.grid.color = gridColor;
-            chart.options.scales.x.ticks.color = textColor;
-          }
-          if (chart.options.scales && chart.options.scales.y) {
-            chart.options.scales.y.grid.color = gridColor;
-            chart.options.scales.y.ticks.color = textColor;
-          }
+          // Yeni stil değerlerini uygula
+          chart.options.scales.x.grid.color = gridColor;
+          chart.options.scales.x.ticks.color = textColor;
+          chart.options.scales.y.grid.color = gridColor;
+          chart.options.scales.y.ticks.color = textColor;
           
-          // Legend stil güncellemeleri
+          // Chart.js container'ın arkaplan rengini ayarla
+          chart.canvas.parentNode.style.backgroundColor = backgroundColor;
+          
+          // Legend renklerini güncelle
           if (chart.options.plugins && chart.options.plugins.legend) {
             chart.options.plugins.legend.labels.color = textColor;
           }
           
-          // Grafik güncelle
+          // Tooltip renklerini güncelle
+          if (chart.options.plugins && chart.options.plugins.tooltip) {
+            chart.options.plugins.tooltip.backgroundColor = isDark ? 'rgba(28, 32, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+            chart.options.plugins.tooltip.titleColor = textColor;
+            chart.options.plugins.tooltip.bodyColor = textColor;
+            chart.options.plugins.tooltip.borderColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(224, 227, 235, 0.9)';
+          }
+          
+          // Grafik dataseti renklerini güncelle
+          chart.data.datasets.forEach((dataset, i) => {
+            // Ana veri renkleri korunur, ama arka plan rengi değişir
+            if (dataset.type === 'line' && dataset.fill) {
+              // Dolgu rengini temaya göre ayarla (daha hafif opaklık)
+              dataset.backgroundColor = isDark 
+                ? dataset.borderColor + '20' // %12 opaklık
+                : dataset.borderColor + '10'; // %6 opaklık
+            }
+          });
+          
+          // Değişiklikleri uygula
           chart.update();
         } catch (error) {
           console.error('Grafik güncelleme hatası:', error);

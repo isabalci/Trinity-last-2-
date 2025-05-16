@@ -1715,7 +1715,7 @@ body {
   flex-direction: column;
   height: calc(100vh - 60px);
   overflow: auto;
-  background-color: #131722;
+  background-color: var(--bg-primary);
 }
 
 /* Timeframe buttons styling for all charts */
@@ -1804,10 +1804,13 @@ button {
 .light-theme .market-index {
   border: 1px solid var(--border-color);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  background-color: var(--bg-secondary);
 }
 
 .light-theme .watchlist li {
   border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .light-theme .user-nav a {
@@ -1837,6 +1840,11 @@ button {
 .light-theme .watchlist-filter {
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
+}
+
+.light-theme .watchlist-filter input {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
 }
 
 .light-theme .chart-timeframe-buttons button {
@@ -1894,7 +1902,15 @@ button {
 }
 
 .light-theme .modal-content {
+  background-color: var(--bg-secondary);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .modal h2,
+.light-theme .modal label,
+.light-theme .modal-content .form-group label,
+.light-theme .settings-section h3 {
+  color: var(--text-primary);
 }
 
 .light-theme #rightToggleBtn {
@@ -1921,4 +1937,91 @@ button {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+/* En alttaki S&P 500 grafiği için özel stiller */
+.light-theme .featured-chart-container {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .chart-header {
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.light-theme .selected-index-info {
+  color: var(--text-primary);
+}
+
+.light-theme #selectedIndexName,
+.light-theme #selectedIndexPrice {
+  color: var(--text-primary);
+}
+
+/* Right sidebar */
+.light-theme .right-sidebar {
+  background-color: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Left sidebar ve toollar */
+.light-theme .left-sidebar {
+  background-color: var(--bg-primary);
+  border-right: 1px solid var(--border-color);
+}
+
+.light-theme .tool-item {
+  color: var(--text-secondary);
+}
+
+.light-theme .tool-item:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.light-theme .tool-divider {
+  background-color: var(--border-color);
+}
+
+/* Form elementleri */
+.light-theme .form-group input, 
+.light-theme .form-group select {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.light-theme .form-group input:focus, 
+.light-theme .form-group select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.2);
+}
+
+/* Badge ve index */
+.light-theme .badge-circle {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+.light-theme .index-name,
+.light-theme .index-price {
+  color: var(--text-primary);
+}
+
+/* Ana grafikler için canvas elementleri */
+.light-theme canvas {
+  background-color: var(--bg-primary);
+}
+
+/* Chart.js tooltip ve legend */
+.light-theme .chartjs-tooltip,
+.light-theme .chartjs-legend {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 } 
