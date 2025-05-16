@@ -26,23 +26,23 @@
   --negative-color: #ef5350;
 }
 
-/* Light theme */
+/* Light theme - TradingView tarzı optimizasyon */
 .light-theme {
   --bg-primary: #ffffff;
-  --bg-secondary: #f7f7f7;
-  --bg-tertiary: #e6e6e6;
-  --bg-input: #f0f0f0;
-  --bg-hover: rgba(0, 0, 0, 0.05);
-  --text-primary: #333333;
-  --text-secondary: #555555;
-  --text-tertiary: #888888;
-  --border-color: #dddddd;
+  --bg-secondary: #f8f9fd;
+  --bg-tertiary: #f0f3fa;
+  --bg-input: #f5f7fa;
+  --bg-hover: rgba(35, 55, 105, 0.05);
+  --text-primary: #131722;
+  --text-secondary: #434651;
+  --text-tertiary: #787b86;
+  --border-color: #e0e3eb;
   --accent-color: #2962FF;
   --accent-hover: #1e50d3;
   --shadow-color: rgba(0, 0, 0, 0.1);
-  --grid-lines: rgba(200, 200, 200, 0.5);
-  --positive-color: #26a69a;
-  --negative-color: #ef5350;
+  --grid-lines: rgba(170, 175, 190, 0.25);
+  --positive-color: #089981;
+  --negative-color: #f23645;
 }
 
 body {
@@ -1798,4 +1798,127 @@ body {
 button {
   cursor: pointer;
   pointer-events: auto;
+}
+
+/* LIGHT THEME İÇİN ÖZEL STİLLER */
+.light-theme .market-index {
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .watchlist li {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.light-theme .user-nav a {
+  color: var(--text-primary);
+}
+
+.light-theme .user-nav a:hover {
+  color: var(--accent-color);
+  background-color: var(--bg-hover);
+}
+
+.light-theme #languageSelector {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.light-theme .watchlist-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.light-theme .watchlist-header h3 {
+  color: var(--text-primary);
+}
+
+.light-theme .watchlist-filter {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.light-theme .chart-timeframe-buttons button {
+  background-color: rgba(240, 243, 250, 0.9);
+  border: 1px solid rgba(224, 227, 235, 0.8);
+  color: var(--text-tertiary);
+}
+
+.light-theme .chart-timeframe-buttons button:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.light-theme .chart-timeframe-buttons button.active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Açık tema için ek düzenlemeler */
+.light-theme .chart-container {
+  background-color: var(--bg-primary);
+}
+
+.light-theme .chart-toolbar {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.light-theme .tool-btn {
+  color: var(--text-secondary);
+}
+
+.light-theme .tool-btn:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--accent-color);
+}
+
+.light-theme .dropdown-menu {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .indicator-item, 
+.light-theme .comparison-suggestion, 
+.light-theme .export-item {
+  color: var(--text-primary);
+}
+
+.light-theme .indicator-item:hover, 
+.light-theme .comparison-suggestion:hover, 
+.light-theme .export-item:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.light-theme .modal-content {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme #rightToggleBtn {
+  background-color: var(--accent-color);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.light-theme .stock-symbol {
+  color: var(--text-primary);
+}
+
+.light-theme .price-value {
+  color: var(--text-primary);
+}
+
+.light-theme .main-nav-menu .nav-link.active {
+  font-weight: 600;
+}
+
+/* Grafik konteynerler için özel ışık tema stilleri */
+.light-theme #chart-container, 
+.light-theme #nasdaqChart-container, 
+.light-theme .featured-chart {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 } 

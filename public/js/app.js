@@ -643,6 +643,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (settingsBtn) {
       settingsBtn.addEventListener('click', function() {
         settingsModal.style.display = 'flex';
+        
+        // Ayarlar modalı açıldığında mevcut tema değerini güncelle
+        if (themeSelector) {
+          themeSelector.value = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        }
       });
     }
     
@@ -679,6 +684,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (themeSelector) {
       themeSelector.addEventListener('change', function() {
         const theme = this.value;
+        console.log('Tema seçildi:', theme);
         switchTheme(theme);
       });
     }
@@ -898,8 +904,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Temayı localStorage'a kaydet
     localStorage.setItem('theme', theme);
     
-    // Body'nin class'ını değiştir
-    document.body.className = theme + '-theme';
+    // Önce tüm tema sınıflarını kaldır
+    document.body.classList.remove('dark-theme', 'light-theme');
+    
+    // Yeni tema sınıfını ekle
+    document.body.classList.add(theme + '-theme');
     
     // Seçici değerini güncelle (başka bir yerden çağrıldıysa)
     if (themeSelector) {
@@ -909,7 +918,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Grafikleri güncelle
     updateChartsForTheme(theme);
     
-    console.log('Tema başarıyla değiştirildi:', theme);
+    // Global tema değişkeni
+    window.currentTheme = theme;
+    
+    console.log('Tema başarıyla değiştirildi:', theme, 'Body sınıfı:', document.body.className);
   }
   
   /**
@@ -922,7 +934,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const isDark = theme === 'dark';
       
       // Tema renkleri
-      const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(230, 230, 230, 0.3)';
+      const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(180, 180, 180, 0.3)';
       const textColor = isDark ? '#a0a7b4' : '#333333';
       
       Object.values(window.Chart.instances).forEach(chart => {
