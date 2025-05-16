@@ -73,6 +73,28 @@ function applyThemeSettings() {
       console.log('Grafikler tema değişikliğine göre güncellendi');
     }
     
+    // Market indekslerinin görünümünü yeni temaya göre güncelle
+    document.querySelectorAll('.market-index').forEach(marketIndex => {
+      // Aktif indeks varsa, aktif indeksin görünümünü vurgula
+      if (marketIndex.classList.contains('active')) {
+        const priceUnit = marketIndex.querySelector('.price-unit');
+        if (priceUnit) {
+          priceUnit.style.opacity = '1';
+          priceUnit.style.fontWeight = '500';
+        }
+        
+        // Aktif indeksi güncelle
+        const indexId = marketIndex.getAttribute('data-index');
+        if (indexId) {
+          // İndeks bilgilerini yeni temaya göre güncelle
+          const selectedIndex = document.querySelector(`[data-index="${indexId}"]`);
+          if (selectedIndex) {
+            // Gerekirse diğer özel tema ayarlamaları
+          }
+        }
+      }
+    });
+    
     // Modalı kapat
     const settingsModal = document.getElementById('settingsModal');
     if (settingsModal) {
@@ -812,6 +834,12 @@ document.addEventListener('DOMContentLoaded', function() {
    */
   function loadFeaturedChart(indexId, timeframe) {
     console.log(`loadFeaturedChart çağrıldı: indexId=${indexId}, timeframe=${timeframe}`);
+    
+    // Seçilen indeks bilgilerini güncelle
+    updateIndexInfo(indexId);
+    
+    // Grafiği güncelle
+    loadChartData('featured', timeframe);
   }
   
   /**
@@ -819,7 +847,7 @@ document.addEventListener('DOMContentLoaded', function() {
    * @param {string} indexId - İndeks ID
    */
   function updateIndexInfo(indexId) {
-    let name, price, change, changeClass;
+    let name, price, change, changeClass, priceUnit;
     
     // İndeks bazında farklı isim, fiyat ve değişim
     switch(indexId) {
@@ -828,52 +856,79 @@ document.addEventListener('DOMContentLoaded', function() {
         price = '5,844.20';
         change = '+3.26%';
         changeClass = 'up';
+        priceUnit = 'USD';
         break;
       case 'nasdaq':
         name = 'Nasdaq 100';
         price = '20,868.15';
         change = '+4.02%';
         changeClass = 'up';
+        priceUnit = 'USD';
         break;
       case 'dow':
         name = 'Dow 30';
         price = '42,410.11';
         change = '+2.81%';
         changeClass = 'up';
+        priceUnit = 'USD';
         break;
       case 'japan':
         name = 'Japan 225';
         price = '38,183.04';
         change = '+1.43%';
         changeClass = 'up';
+        priceUnit = 'JPY';
         break;
       case 'ftse':
         name = 'FTSE 100';
         price = '8,602.92';
         change = '-0.02%';
         changeClass = 'down';
+        priceUnit = 'GBP';
         break;
       default:
         name = 'S&P 500';
         price = '5,844.20';
         change = '+3.26%';
         changeClass = 'up';
+        priceUnit = 'USD';
     }
     
-    // DOM'u güncelle
-    selectedIndexName.textContent = name;
-    selectedIndexPrice.textContent = price;
-    selectedIndexChange.textContent = change;
-    selectedIndexChange.className = changeClass;
+    // DOM'daki tüm ilgili öğeleri de güncelle
+    // 1. Featured chart header
+    if (selectedIndexName) selectedIndexName.textContent = name;
+    if (selectedIndexPrice) selectedIndexPrice.textContent = price;
+    if (selectedIndexChange) {
+      selectedIndexChange.textContent = change;
+      selectedIndexChange.className = changeClass;
+    }
     
-    // Aktif indeks butonunu vurgula
-    marketIndices.forEach(index => {
-      if (index.dataset.index === indexId) {
+    // 2. Toolbar'daki market indekslerini güncelle
+    document.querySelectorAll('.market-index').forEach(index => {
+      const indexID = index.getAttribute('data-index');
+      if (indexID === indexId) {
         index.classList.add('active');
       } else {
         index.classList.remove('active');
       }
+      
+      // Bu indeks öğesindeki price-unit'i belirginleştir
+      if (indexID === indexId) {
+        const priceUnitElement = index.querySelector('.price-unit');
+        if (priceUnitElement) {
+          priceUnitElement.style.opacity = '1';
+          priceUnitElement.style.fontWeight = '500';
+        }
+      } else {
+        const priceUnitElement = index.querySelector('.price-unit');
+        if (priceUnitElement) {
+          priceUnitElement.style.opacity = '0.9';
+          priceUnitElement.style.fontWeight = 'normal';
+        }
+      }
     });
+    
+    console.log(`${name} indeksi için bilgiler güncellendi: ${price} ${priceUnit} (${change})`);
   }
   
   /**

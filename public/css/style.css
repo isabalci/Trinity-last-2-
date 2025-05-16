@@ -1411,16 +1411,19 @@ body {
   transition: all 0.3s ease;
   min-width: 190px;
   border: 1px solid #2a2e39;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .market-index:hover {
   background-color: #2a2e39;
   transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .market-index.active {
   border: 1px solid rgba(41, 98, 255, 0.5);
   background-color: rgba(41, 98, 255, 0.05);
+  box-shadow: 0 0 0 1px rgba(41, 98, 255, 0.2);
 }
 
 .index-badge {
@@ -1478,6 +1481,14 @@ body {
   font-size: 13px;
   color: #a0a7b4;
   margin-bottom: 3px;
+  white-space: nowrap;
+}
+
+.price-unit {
+  color: #6b7280;
+  font-size: 11px;
+  margin-left: 3px;
+  opacity: 0.9;
 }
 
 .index-change {
@@ -1485,119 +1496,51 @@ body {
   font-size: 14px;
 }
 
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+/* Light tema indeksler için özel stiller */
+.light-theme .market-index {
+  background-color: #f8f9fd;
+  border: 1px solid #e0e3eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.selected-index-info {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+.light-theme .market-index:hover {
+  background-color: #f0f3fa;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-#selectedIndexName {
-  font-size: 18px;
-  font-weight: 600;
-  color: #e0e3eb;
+.light-theme .market-index.active {
+  border: 1px solid rgba(41, 98, 255, 0.3);
+  background-color: rgba(41, 98, 255, 0.03);
 }
 
-#selectedIndexPrice {
-  font-size: 16px;
-  color: #a0a7b4;
+.light-theme .index-name {
+  color: #131722;
 }
 
-#selectedIndexChange {
-  font-size: 16px;
-  font-weight: 600;
+.light-theme .index-price {
+  color: #434651;
 }
 
-/* Zaman Butonları Containeri (Grafiğin Altına) */
-.timeframe-buttons-container {
-  padding-top: 10px;
-  display: flex;
-  justify-content: center;
-  border-top: 1px solid rgba(42, 46, 57, 0.5);
+.light-theme .price-unit {
+  color: #787b86;
 }
 
-.timeframe-buttons {
-  display: flex;
-  gap: 5px;
-  justify-content: center;
+/* Fiyat işareti renkleri */
+.up {
+  color: var(--positive-color);
 }
 
-.time-btn {
-  padding: 5px 10px;
-  background-color: transparent;
-  border: 1px solid #2a2e39;
-  border-radius: 4px;
-  color: #6b7280;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.down {
+  color: var(--negative-color);
 }
 
-.time-btn:hover {
-  color: #e0e3eb;
-  background-color: #2a2e39;
-}
-
-.time-btn.active {
-  background-color: #2962FF;
-  border-color: #2962FF;
-  color: white;
-}
-
-/* Modify market-indices in chart-toolbar */
-.chart-toolbar .market-indices {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 5px;
-  margin-bottom: 0;
-  max-width: 70%;
-}
-
-.chart-toolbar .market-index {
-  min-width: 130px;
-  padding: 8px 10px;
-  background-color: #1e222d;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid #2a2e39;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.chart-toolbar .index-badge {
-  margin-right: 5px;
-}
-
-.chart-toolbar .badge-circle {
-  width: 30px;
-  height: 30px;
-  font-size: 12px;
-}
-
-.chart-toolbar .index-details {
-  white-space: nowrap;
-  font-size: 12px;
-}
-
-.chart-toolbar .index-name {
-  font-size: 12px;
-}
-
-.chart-toolbar .index-price {
-  font-size: 11px;
-}
-
-.chart-toolbar .index-change {
-  font-size: 12px;
+/* Chart.js tooltip ve legend */
+.light-theme .chartjs-tooltip,
+.light-theme .chartjs-legend {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Sol Kenar Çubuğu - Araçlar */
@@ -2024,4 +1967,137 @@ button {
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart header */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.selected-index-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#selectedIndexName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e0e3eb;
+}
+
+#selectedIndexPrice {
+  font-size: 16px;
+  color: #a0a7b4;
+}
+
+#selectedIndexChange {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Zaman Butonları Containeri (Grafiğin Altına) */
+.timeframe-buttons-container {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(42, 46, 57, 0.5);
+}
+
+.timeframe-buttons {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.time-btn {
+  padding: 5px 10px;
+  background-color: transparent;
+  border: 1px solid #2a2e39;
+  border-radius: 4px;
+  color: #6b7280;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.time-btn:hover {
+  color: #e0e3eb;
+  background-color: #2a2e39;
+}
+
+.time-btn.active {
+  background-color: #2962FF;
+  border-color: #2962FF;
+  color: white;
+}
+
+/* Chart toolbar market indeksleri */
+.chart-toolbar .market-indices {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  max-width: 70%;
+}
+
+.chart-toolbar .market-index {
+  min-width: 130px;
+  padding: 8px 10px;
+  background-color: #1e222d;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #2a2e39;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chart-toolbar .index-badge {
+  margin-right: 5px;
+}
+
+.chart-toolbar .badge-circle {
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.chart-toolbar .index-details {
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.chart-toolbar .index-name {
+  font-size: 12px;
+}
+
+.chart-toolbar .index-price {
+  font-size: 11px;
+}
+
+.chart-toolbar .index-change {
+  font-size: 12px;
+}
+
+/* Light tema indeksler için özel stiller */
+.light-theme .market-index {
+  background-color: #f8f9fd;
+  border: 1px solid #e0e3eb;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .market-index:hover {
+  background-color: #f0f3fa;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .market-index.active {
+  border: 1px solid rgba(41, 98, 255, 0.3);
+  background-color: rgba(41, 98, 255, 0.03);
 } 
