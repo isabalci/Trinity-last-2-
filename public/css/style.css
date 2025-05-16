@@ -600,11 +600,13 @@ body {
   height: 100%;
 }
 
-#chart-container {
-  flex: 1;
+#chart-container, #nasdaqChart-container, .featured-chart {
   position: relative;
-  overflow: hidden;
-  height: 45%;
+  margin-bottom: 0;
+  border: 1px solid #2a2e39;
+  border-radius: 4px 4px 0 0;
+  padding: 15px;
+  background-color: #131722;
   min-height: 300px;
   width: 100%;
   display: flex;
@@ -1685,22 +1687,78 @@ body {
   background-color: var(--bg-primary);
 }
 
-/* Timeframe buttons styling for all charts */
+/* Düzeltilmiş chart-timeframe-buttons */
 .chart-timeframe-buttons {
   display: flex;
-  justify-content: flex-start;
-  background: transparent;
-  padding: 4px;
-  margin: 5px 0 10px 15px;
-  position: relative;
-  bottom: auto;
-  right: auto;
-  z-index: 100;
-  border-radius: 6px;
-  max-width: fit-content;
-  gap: 2px;
+  justify-content: center;
+  background-color: rgba(19, 23, 34, 0.95);
+  padding: 8px 4px 5px 4px;
+  margin: 0;
+  border: 1px solid #2a2e39;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  margin-bottom: 20px;
+  z-index: 10;
 }
 
+/* Eski chart-timeframe-buttons button stillerini kaldırıyorum */
+.chart-timeframe-buttons button {
+  background-color: rgba(25, 30, 45, 0.9);
+  border: 1px solid rgba(37, 40, 45, 0.5);
+  color: #888;
+  padding: 7px 14px;
+  margin: 0 2px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 3px;
+}
+
+.chart-timeframe-buttons button:hover {
+  color: #e0e3eb;
+  background-color: rgba(37, 40, 45, 0.8);
+}
+
+.chart-timeframe-buttons button.active {
+  color: white;
+  background-color: rgba(41, 98, 255, 0.9);
+  border-color: #2962FF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Light Theme için grafik container ve butonlar */
+.light-theme #chart-container, 
+.light-theme #nasdaqChart-container, 
+.light-theme .featured-chart {
+  background-color: #ffffff;
+  border: 1px solid #e0e3eb;
+}
+
+.light-theme .chart-timeframe-buttons {
+  background-color: rgba(245, 247, 250, 0.95);
+  border: 1px solid #e0e3eb;
+  border-top: none;
+}
+
+.light-theme .chart-timeframe-buttons button {
+  background-color: rgba(240, 243, 250, 0.95);
+  border: 1px solid #e0e3eb;
+  color: #434651;
+}
+
+.light-theme .chart-timeframe-buttons button:hover {
+  background-color: rgba(224, 227, 235, 0.8);
+  color: #131722;
+}
+
+.light-theme .chart-timeframe-buttons button.active {
+  background-color: rgba(41, 98, 255, 0.9);
+  color: white;
+  border-color: #2962FF;
+}
+
+/* Chart.js timeframe buttons styling */
 .chart-timeframe-buttons button {
   background-color: rgba(25, 30, 45, 0.9);
   border: 1px solid rgba(37, 40, 45, 0.5);
@@ -1726,15 +1784,25 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* Chart containers with position relative for absolute positioning of buttons */
+/* Chart containers */
 #chart-container, #nasdaqChart-container, .featured-chart {
   position: relative;
-  margin-bottom: 30px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
+  margin-bottom: 0;
+  border: 1px solid #2a2e39;
+  border-radius: 4px 4px 0 0;
   padding: 15px;
-  background-color: var(--bg-primary);
+  background-color: #131722;
   min-height: 300px;
+  width: 100%;
+}
+
+/* Timeframe buttons container (Grafiğin Altına) */
+.timeframe-buttons-container {
+  padding-top: 0;
+  display: flex;
+  justify-content: center;
+  border-top: none;
+  margin-top: -5px;
 }
 
 .up {
@@ -1816,8 +1884,8 @@ button {
 
 .light-theme .chart-timeframe-buttons button {
   background-color: rgba(240, 243, 250, 0.9);
-  border: 1px solid rgba(224, 227, 235, 0.8);
-  color: var(--text-tertiary);
+  border: 1px solid #e0e3eb;
+  color: #434651;
 }
 
 .light-theme .chart-timeframe-buttons button:hover {
@@ -2248,4 +2316,24 @@ button {
   color: #434651;
   margin-bottom: 5px;
   font-weight: 500;
+}
+
+/* Light theme chart-timeframe-buttons */
+.light-theme .chart-timeframe-buttons {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e0e3eb;
+  border-top: none;
+}
+
+.light-theme #chart-container, 
+.light-theme #nasdaqChart-container, 
+.light-theme .featured-chart {
+  background-color: #ffffff;
+  border: 1px solid #e0e3eb;
+}
+
+.light-theme .chart-timeframe-buttons button {
+  background-color: rgba(240, 243, 250, 0.9);
+  border: 1px solid #e0e3eb;
+  color: #434651;
 } 
