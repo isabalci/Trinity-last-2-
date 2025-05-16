@@ -3,6 +3,59 @@
  * Uygulamanın başlatılması ve UI event'lerinin yönetimi
  */
 
+// Global tema değiştirme fonksiyonu
+function applyThemeSettings() {
+  console.log("applyThemeSettings fonksiyonu çağrıldı");
+  const themeSelector = document.getElementById('theme');
+  if (themeSelector) {
+    const selectedTheme = themeSelector.value;
+    console.log('Tema değişikliği uygulanıyor:', selectedTheme);
+    
+    // Temayı localStorage'a kaydet
+    localStorage.setItem('theme', selectedTheme);
+    
+    // Tema sınıflarını değiştir
+    document.body.classList.remove('dark-theme', 'light-theme');
+    document.body.classList.add(selectedTheme + '-theme');
+    
+    // Grafikler güncellenebilir (eğer Chart.js kullanılıyorsa)
+    if (window.Chart && window.Chart.instances) {
+      const isDark = selectedTheme === 'dark';
+      const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(170, 175, 190, 0.25)';
+      const textColor = isDark ? '#a0a7b4' : '#434651';
+      
+      Object.values(window.Chart.instances).forEach(chart => {
+        try {
+          if (chart.options.scales && chart.options.scales.x) {
+            chart.options.scales.x.grid.color = gridColor;
+            chart.options.scales.x.ticks.color = textColor;
+          }
+          if (chart.options.scales && chart.options.scales.y) {
+            chart.options.scales.y.grid.color = gridColor;
+            chart.options.scales.y.ticks.color = textColor;
+          }
+          chart.update();
+        } catch (error) {
+          console.error('Grafik güncelleme hatası:', error);
+        }
+      });
+    }
+    
+    // Modalı kapat
+    const settingsModal = document.getElementById('settingsModal');
+    if (settingsModal) {
+      settingsModal.style.display = 'none';
+    }
+    
+    console.log('Tema başarıyla değiştirildi:', selectedTheme);
+  } else {
+    console.error('Tema seçici bulunamadı');
+  }
+}
+
+// Sayfa tamamen yüklendikten sonra çalıştır
+window.applyThemeSettings = applyThemeSettings;
+
 document.addEventListener('DOMContentLoaded', function() {
   // UI elementleri
   const loginBtn = document.getElementById('loginBtn');
@@ -28,12 +81,28 @@ document.addEventListener('DOMContentLoaded', function() {
     leftSidebar: leftSidebar
   });
   
-  // Sayfa yüklendiğinde mevcut temayı ayarla
-  const currentTheme = localStorage.getItem('theme') || 'dark';
-  document.body.className = currentTheme + '-theme';
-  if (themeSelector) {
-    themeSelector.value = currentTheme;
+  // TEMA AYARLARINI BAŞLAT - düzeltildi ve geliştirildi
+  function initializeTheme() {
+    // localStorage'dan tema tercihini al (yoksa "dark" varsayılan olarak kullan)
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    console.log('Kaydedilmiş tema:', savedTheme);
+    
+    // Tema sınıflarını temizle ve doğru temayı uygula
+    document.body.classList.remove('dark-theme', 'light-theme');
+    document.body.classList.add(savedTheme + '-theme');
+    console.log('Tema uygulandı:', savedTheme, 'Body sınıfları:', document.body.className);
+    
+    // Tema seçici varsa, değerini ayarla
+    if (themeSelector) {
+      themeSelector.value = savedTheme;
+      console.log('Tema seçici değeri ayarlandı:', savedTheme);
+    } else {
+      console.warn('Tema seçici (themeSelector) bulunamadı');
+    }
   }
+  
+  // Sayfa yüklendiğinde temayı başlat
+  initializeTheme();
   
   // DIRECT TEST: Force blue arrow to be clickable
   document.addEventListener('keydown', function(e) {
@@ -42,10 +111,18 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Keyboard shortcut to toggle watchlist');
       toggleWatchlist();
     }
+    
+    // Test shortcut: Press Ctrl+Alt+T to toggle theme
+    if (e.ctrlKey && e.altKey && e.key === 't') {
+      console.log('Keyboard shortcut to toggle theme');
+      const newTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+      switchTheme(newTheme);
+    }
   });
   
   // Make toggle functions global for browser console testing
   window.toggleWatchlist = toggleWatchlist;
+  window.switchTheme = switchTheme; // Temayı değiştirme fonksiyonunu tarayıcıdan erişilebilir yap
   window.testLeftToggle = function() {
     if (leftSidebarToggle) {
       leftSidebarToggle.click();
@@ -116,6 +193,333 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
+  /**
+   * Event Listener'ları Ekle
+   */
+  function addEventListeners() {
+    // Giriş modal açma
+    if (loginBtn) {
+      loginBtn.addEventListener('click', function() {
+        loginModal.style.display = 'flex';
+      });
+    }
+    
+    // Ayarlar modal açma
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', function() {
+        // Tema seçicinin mevcut değerini güncelle
+        if (themeSelector) {
+          // Mevcut temayı al (body'deki sınıftan veya localStorage'dan)
+          const currentTheme = localStorage.getItem('theme') || 
+                            (document.body.classList.contains('light-theme') ? 'light' : 'dark');
+          
+          // Tema seçicinin değerini ayarla
+          themeSelector.value = currentTheme;
+          console.log('Mevcut tema değeri (ayarlar açıldığında):', currentTheme);
+        }
+        
+        // Modalı göster
+        settingsModal.style.display = 'flex';
+      });
+    }
+    
+    // Modal kapatma
+    closeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const modal = this.closest('.modal');
+        modal.style.display = 'none';
+      });
+    });
+    
+    // Dışarı tıklayınca modalları kapat
+    window.addEventListener('click', function(e) {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+      }
+    });
+    
+    // Dil Değiştirme
+    if (languageSelector) {
+      languageSelector.addEventListener('change', function() {
+        const lang = this.value;
+        i18next.changeLanguage(lang, function() {
+          updateLanguage();
+        });
+      });
+      
+      // Mevcut dili ayarla
+      const currentLanguage = i18next.language || 'tr';
+      languageSelector.value = currentLanguage;
+    }
+    
+    // TEMA DEĞİŞTİRME OLAYI
+    if (themeSelector) {
+      console.log('Tema seçici bulundu, event listener ekleniyor');
+      
+      // Önceki event listener'ları temizle
+      themeSelector.removeEventListener('change', handleThemeChange);
+      
+      // Yeni event listener ekle
+      themeSelector.addEventListener('change', handleThemeChange);
+      
+      // Mevcut temayı seçicide ayarla
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      themeSelector.value = currentTheme;
+      console.log('Tema seçici değeri ayarlandı:', themeSelector.value);
+    } else {
+      console.error('Tema seçici bulunamadı!');
+    }
+    
+    // Market İndeksleri Tıklama
+    marketIndices.forEach(indexEl => {
+      indexEl.addEventListener('click', function() {
+        // Aktif sınıfını kaldır
+        marketIndices.forEach(idx => idx.classList.remove('active'));
+        
+        // Bu öğeyi aktif yap
+        this.classList.add('active');
+        
+        // İndeks ID'sini al ve grafiği güncelle
+        activeIndex = this.dataset.index;
+        loadFeaturedChart(activeIndex, activeTimeframe);
+      });
+    });
+    
+    // Chart Timeframe Buttons
+    chartTimeButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Hangi grafiğin düğmesine tıklandı
+        const chartId = this.getAttribute('data-chart');
+        const timeframe = this.getAttribute('data-timeframe');
+        
+        // İlgili grafiğin tüm düğmelerini bul ve aktif sınıfını kaldır
+        const buttons = document.querySelectorAll(`.chart-time-btn[data-chart="${chartId}"]`);
+        buttons.forEach(b => b.classList.remove('active'));
+        
+        // Tıklanan düğmeyi aktif yap
+        this.classList.add('active');
+        
+        // Zaman dilimini sakla ve grafiği güncelle
+        if (chartId === 'main') {
+          mainChartTimeframe = timeframe;
+        } else if (chartId === 'nasdaq') {
+          nasdaqChartTimeframe = timeframe;
+        } else if (chartId === 'featured') {
+          activeTimeframe = timeframe;
+        }
+        
+        // Grafiği güncelle
+        loadChartData(chartId, timeframe);
+      });
+    });
+    
+    // Directly make the left toggle clickable
+    if (leftSidebarToggle) {
+      // Remove any existing event listeners (just in case)
+      leftSidebarToggle.onclick = null;
+      
+      // Add a direct onclick handler
+      leftSidebarToggle.onclick = function(e) {
+        console.log('Left toggle clicked directly');
+        toggleWatchlist();
+        e.stopPropagation();
+      };
+    }
+    
+    // Sağ kenar çubuğu toggle işlemi (sağdaki buton)
+    if (rightSidebarToggle && rightSidebar) {
+      console.log('Adding click event to right sidebar toggle');
+      // Remove any existing event listeners
+      rightSidebarToggle.onclick = null;
+      
+      // Add a direct onclick handler
+      rightSidebarToggle.onclick = function(e) {
+        console.log('Right sidebar toggle clicked');
+        toggleWatchlist();
+        e.stopPropagation();
+      };
+    }
+    
+    // Sayfa ilk yüklendiğinde graph timeframe butonlarını aktifleştir
+    loadChartData('main', mainChartTimeframe);
+    loadChartData('nasdaq', nasdaqChartTimeframe);
+    loadChartData('featured', activeTimeframe);
+    
+    // Ayarları Uygula butonuna event listener ekle
+    const applySettingsBtn = document.getElementById('applySettings');
+    if (applySettingsBtn) {
+      applySettingsBtn.addEventListener('click', function() {
+        // Tema değişikliğini uygula
+        if (themeSelector) {
+          const selectedTheme = themeSelector.value;
+          switchTheme(selectedTheme);
+          console.log('Tema değişikliği uygulandı:', selectedTheme);
+        }
+        
+        // Diğer ayarları uygula (gerekirse)
+        
+        // Modalı kapat
+        settingsModal.style.display = 'none';
+      });
+    }
+  }
+  
+  // Tema değiştirme event handler'ı
+  function handleThemeChange(e) {
+    const newTheme = e.target.value;
+    console.log('Tema değiştirme tetiklendi:', newTheme);
+    switchTheme(newTheme);
+  }
+  
+  /**
+   * Dili Güncelle
+   */
+  function updateLanguage() {
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      element.textContent = i18next.t(key);
+    });
+    
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+      const key = element.getAttribute('data-i18n-placeholder');
+      element.placeholder = i18next.t(key);
+    });
+  }
+  
+  /**
+   * Watchlist'i aç/kapa
+   */
+  function toggleWatchlist() {
+    console.log('Toggling watchlist');
+    console.log('Before toggle - rightSidebar collapsed:', rightSidebar.classList.contains('collapsed'));
+    
+    // Sidebar'ı aç/kapa
+    rightSidebar.classList.toggle('collapsed');
+    
+    console.log('After toggle - rightSidebar collapsed:', rightSidebar.classList.contains('collapsed'));
+    
+    // Sağ toggle butonunun ikonunu değiştir
+    if (rightSidebarToggle) {
+      const rightIcon = rightSidebarToggle.querySelector('i');
+      if (rightIcon) {
+        if (rightSidebar.classList.contains('collapsed')) {
+          rightIcon.classList.remove('fa-chevron-right');
+          rightIcon.classList.add('fa-chevron-left');
+        } else {
+          rightIcon.classList.remove('fa-chevron-left');
+          rightIcon.classList.add('fa-chevron-right');
+        }
+      }
+      
+      const rightToggleText = rightSidebarToggle.querySelector('.toggle-text');
+      if (rightToggleText) {
+        rightToggleText.textContent = rightSidebar.classList.contains('collapsed') ? 'İzleme Listesi' : 'Gizle';
+      }
+      
+      // Toggle butonunun konumunu güncelle
+      if (rightSidebar.classList.contains('collapsed')) {
+        rightSidebarToggle.style.right = '0';
+      } else {
+        rightSidebarToggle.style.right = '280px';  // Sidebar genişliği
+      }
+    }
+    
+    // Sol toggle butonunun ikonunu değiştir
+    if (leftSidebarToggle) {
+      const leftIcon = leftSidebarToggle.querySelector('i');
+      if (leftIcon) {
+        if (rightSidebar.classList.contains('collapsed')) {
+          leftIcon.classList.remove('fa-chevron-left');
+          leftIcon.classList.add('fa-chevron-right');
+        } else {
+          leftIcon.classList.remove('fa-chevron-right');
+          leftIcon.classList.add('fa-chevron-left');
+        }
+      }
+    }
+  }
+  
+  /**
+   * Tema değiştirme fonksiyonu - Tamamen yeniden düzenlendi
+   * @param {string} theme - 'dark' veya 'light'
+   */
+  function switchTheme(theme) {
+    console.log('🔄 Tema değiştiriliyor:', theme);
+    
+    if (theme !== 'dark' && theme !== 'light') {
+      console.error('Geçersiz tema değeri:', theme);
+      return;
+    }
+    
+    // Temayı localStorage'a kaydet
+    localStorage.setItem('theme', theme);
+    console.log('Tema localStorage\'a kaydedildi:', theme);
+    
+    // Önceki tema sınıflarını kaldır
+    document.body.classList.remove('dark-theme');
+    document.body.classList.remove('light-theme');
+    
+    // Yeni tema sınıfını ekle
+    document.body.classList.add(theme + '-theme');
+    console.log('Body sınıfları güncellendi:', document.body.className);
+    
+    // Tema seçicinin değerini güncelle (varsa)
+    if (themeSelector) {
+      themeSelector.value = theme;
+      console.log('Tema seçici değeri güncellendi:', themeSelector.value);
+    }
+    
+    // Grafikleri temaya göre güncelle
+    updateChartsForTheme(theme);
+    
+    // DOM'da tema değişikliği için bir olay yayınla (diğer componentlerin dinleyebilmesi için)
+    const themeChangeEvent = new CustomEvent('themeChanged', { detail: { theme: theme } });
+    document.dispatchEvent(themeChangeEvent);
+    
+    console.log('✅ Tema başarıyla değiştirildi:', theme);
+  }
+  
+  /**
+   * Temaya göre grafikleri güncelle
+   * @param {string} theme - 'dark' veya 'light'
+   */
+  function updateChartsForTheme(theme) {
+    // Tüm grafikleri temaya uygun olarak güncelle
+    if (window.Chart && window.Chart.instances) {
+      const isDark = theme === 'dark';
+      
+      // Tema renkleri
+      const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(170, 175, 190, 0.25)';
+      const textColor = isDark ? '#a0a7b4' : '#434651';
+      
+      Object.values(window.Chart.instances).forEach(chart => {
+        try {
+          // X ve Y ekseni stil güncellemeleri
+          if (chart.options.scales && chart.options.scales.x) {
+            chart.options.scales.x.grid.color = gridColor;
+            chart.options.scales.x.ticks.color = textColor;
+          }
+          if (chart.options.scales && chart.options.scales.y) {
+            chart.options.scales.y.grid.color = gridColor;
+            chart.options.scales.y.ticks.color = textColor;
+          }
+          
+          // Legend stil güncellemeleri
+          if (chart.options.plugins && chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = textColor;
+          }
+          
+          // Grafik güncelle
+          chart.update();
+        } catch (error) {
+          console.error('Grafik güncelleme hatası:', error);
+        }
+      });
+      
+      console.log('Grafikler tema değişikliğine göre güncellendi');
+    }
+  }
+
   /**
    * Grafiklerin Başlatılması
    */
@@ -627,337 +1031,4 @@ document.addEventListener('DOMContentLoaded', function() {
       console.error('Grafik instance bulunamadı:', chartId);
     }
   }
-  
-  /**
-   * Event Listener'ları Ekle
-   */
-  function addEventListeners() {
-    // Giriş modal açma
-    if (loginBtn) {
-      loginBtn.addEventListener('click', function() {
-        loginModal.style.display = 'flex';
-      });
-    }
-    
-    // Ayarlar modal açma
-    if (settingsBtn) {
-      settingsBtn.addEventListener('click', function() {
-        settingsModal.style.display = 'flex';
-        
-        // Ayarlar modalı açıldığında mevcut tema değerini güncelle
-        if (themeSelector) {
-          themeSelector.value = document.body.classList.contains('light-theme') ? 'light' : 'dark';
-        }
-      });
-    }
-    
-    // Modal kapatma
-    closeButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        const modal = this.closest('.modal');
-        modal.style.display = 'none';
-      });
-    });
-    
-    // Dışarı tıklayınca modalları kapat
-    window.addEventListener('click', function(e) {
-      if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-      }
-    });
-    
-    // Dil Değiştirme
-    if (languageSelector) {
-      languageSelector.addEventListener('change', function() {
-        const lang = this.value;
-        i18next.changeLanguage(lang, function() {
-          updateLanguage();
-        });
-      });
-      
-      // Mevcut dili ayarla
-      const currentLanguage = i18next.language || 'tr';
-      languageSelector.value = currentLanguage;
-    }
-    
-    // Tema değiştirme
-    if (themeSelector) {
-      themeSelector.addEventListener('change', function() {
-        const theme = this.value;
-        console.log('Tema seçildi:', theme);
-        switchTheme(theme);
-      });
-    }
-    
-    // Market İndeksleri Tıklama
-    marketIndices.forEach(indexEl => {
-      indexEl.addEventListener('click', function() {
-        // Aktif sınıfını kaldır
-        marketIndices.forEach(idx => idx.classList.remove('active'));
-        
-        // Bu öğeyi aktif yap
-        this.classList.add('active');
-        
-        // İndeks ID'sini al ve grafiği güncelle
-        activeIndex = this.dataset.index;
-        loadFeaturedChart(activeIndex, activeTimeframe);
-      });
-    });
-    
-    // Zaman Butonu Tıklama (S&P 500 Grafiği için)
-    timeButtons.forEach(btn => {
-      btn.addEventListener('click', function() {
-        timeButtons.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        activeTimeframe = this.getAttribute('data-timeframe');
-        loadFeaturedChart(activeIndex, activeTimeframe);
-      });
-    });
-
-    // Göster/gizle tıklamaları için event delegation
-    document.body.addEventListener('click', function(e) {
-      // Tüm açık dropdown'ları kapat, ancak şimdi tıklanan hariç
-      const dropdowns = document.querySelectorAll('.dropdown-menu.show');
-      dropdowns.forEach(function(dropdown) {
-        if (e.target.closest('.tool-btn') !== dropdown.previousElementSibling) {
-          dropdown.classList.remove('show');
-        }
-      });
-      
-      // Indicator dropdown toggle
-      if (e.target.closest('#indicatorsBtn')) {
-        document.getElementById('indicatorsDropdown').classList.toggle('show');
-      }
-      
-      // Comparison dropdown toggle
-      if (e.target.closest('#addComparison')) {
-        document.getElementById('comparisonDropdown').classList.toggle('show');
-      }
-      
-      // Export dropdown toggle
-      if (e.target.closest('#exportChart')) {
-        document.getElementById('exportDropdown').classList.toggle('show');
-      }
-    });
-
-    // Chart Timeframe Buttons
-    chartTimeButtons.forEach(btn => {
-      btn.addEventListener('click', function() {
-        // Hangi grafiğin düğmesine tıklandı
-        const chartId = this.getAttribute('data-chart');
-        const timeframe = this.getAttribute('data-timeframe');
-        
-        // İlgili grafiğin tüm düğmelerini bul ve aktif sınıfını kaldır
-        const buttons = document.querySelectorAll(`.chart-time-btn[data-chart="${chartId}"]`);
-        buttons.forEach(b => b.classList.remove('active'));
-        
-        // Tıklanan düğmeyi aktif yap
-        this.classList.add('active');
-        
-        // Zaman dilimini sakla ve grafiği güncelle
-        if (chartId === 'main') {
-          mainChartTimeframe = timeframe;
-        } else if (chartId === 'nasdaq') {
-          nasdaqChartTimeframe = timeframe;
-        } else if (chartId === 'featured') {
-          activeTimeframe = timeframe;
-        }
-        
-        // Grafiği güncelle
-        loadChartData(chartId, timeframe);
-      });
-    });
-    
-    // Directly make the left toggle clickable
-    if (leftSidebarToggle) {
-      // Remove any existing event listeners (just in case)
-      leftSidebarToggle.onclick = null;
-      
-      // Add a direct onclick handler
-      leftSidebarToggle.onclick = function(e) {
-        console.log('Left toggle clicked directly');
-        toggleWatchlist();
-        e.stopPropagation();
-      };
-    }
-    
-    // Sağ kenar çubuğu toggle işlemi (sağdaki buton)
-    if (rightSidebarToggle && rightSidebar) {
-      console.log('Adding click event to right sidebar toggle');
-      // Remove any existing event listeners
-      rightSidebarToggle.onclick = null;
-      
-      // Add a direct onclick handler
-      rightSidebarToggle.onclick = function(e) {
-        console.log('Right sidebar toggle clicked');
-        toggleWatchlist();
-        e.stopPropagation();
-      };
-    }
-    
-    // Araç butonları için aktif durum işlemi
-    const toolItems = document.querySelectorAll('.tool-item');
-    toolItems.forEach(item => {
-      item.addEventListener('click', function() {
-        // Aktif durumu değiştir
-        this.classList.toggle('active');
-      });
-    });
-    
-    // Pencere boyutu değişikliklerinde grafikleri yeniden boyutlandır
-    window.addEventListener('resize', function() {
-      // Grafikleri yeniden oluştur
-      if (window.Chart && window.Chart.instances) {
-        Object.values(window.Chart.instances).forEach(chart => {
-          chart.resize();
-        });
-      }
-    });
-    
-    // Sayfa ilk yüklendiğinde graph timeframe butonlarını aktifleştir
-    loadChartData('main', mainChartTimeframe);
-    loadChartData('nasdaq', nasdaqChartTimeframe);
-    loadChartData('featured', activeTimeframe);
-  }
-  
-  /**
-   * Dili Güncelle
-   */
-  function updateLanguage() {
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-      const key = element.getAttribute('data-i18n');
-      element.textContent = i18next.t(key);
-    });
-    
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-      const key = element.getAttribute('data-i18n-placeholder');
-      element.placeholder = i18next.t(key);
-    });
-  }
-  
-  /**
-   * Watchlist'i aç/kapa
-   */
-  function toggleWatchlist() {
-    console.log('Toggling watchlist');
-    console.log('Before toggle - rightSidebar collapsed:', rightSidebar.classList.contains('collapsed'));
-    
-    // Sidebar'ı aç/kapa
-    rightSidebar.classList.toggle('collapsed');
-    
-    console.log('After toggle - rightSidebar collapsed:', rightSidebar.classList.contains('collapsed'));
-    
-    // Sağ toggle butonunun ikonunu değiştir
-    if (rightSidebarToggle) {
-      const rightIcon = rightSidebarToggle.querySelector('i');
-      if (rightIcon) {
-        if (rightSidebar.classList.contains('collapsed')) {
-          rightIcon.classList.remove('fa-chevron-right');
-          rightIcon.classList.add('fa-chevron-left');
-        } else {
-          rightIcon.classList.remove('fa-chevron-left');
-          rightIcon.classList.add('fa-chevron-right');
-        }
-      }
-      
-      const rightToggleText = rightSidebarToggle.querySelector('.toggle-text');
-      if (rightToggleText) {
-        rightToggleText.textContent = rightSidebar.classList.contains('collapsed') ? 'İzleme Listesi' : 'Gizle';
-      }
-      
-      // Toggle butonunun konumunu güncelle
-      if (rightSidebar.classList.contains('collapsed')) {
-        rightSidebarToggle.style.right = '0';
-      } else {
-        rightSidebarToggle.style.right = '280px';  // Sidebar genişliği
-      }
-    }
-    
-    // Sol toggle butonunun ikonunu değiştir
-    if (leftSidebarToggle) {
-      const leftIcon = leftSidebarToggle.querySelector('i');
-      if (leftIcon) {
-        if (rightSidebar.classList.contains('collapsed')) {
-          leftIcon.classList.remove('fa-chevron-left');
-          leftIcon.classList.add('fa-chevron-right');
-        } else {
-          leftIcon.classList.remove('fa-chevron-right');
-          leftIcon.classList.add('fa-chevron-left');
-        }
-      }
-    }
-  }
-  
-  // Just for debugging - add a global function to toggle watchlist
-  window.toggleWatchlistManually = function() {
-    console.log('Manual watchlist toggle called');
-    toggleWatchlist();
-  }
-  
-  /**
-   * Tema değiştirme fonksiyonu
-   * @param {string} theme - 'dark' veya 'light'
-   */
-  function switchTheme(theme) {
-    console.log('Tema değiştiriliyor:', theme);
-    
-    // Temayı localStorage'a kaydet
-    localStorage.setItem('theme', theme);
-    
-    // Önce tüm tema sınıflarını kaldır
-    document.body.classList.remove('dark-theme', 'light-theme');
-    
-    // Yeni tema sınıfını ekle
-    document.body.classList.add(theme + '-theme');
-    
-    // Seçici değerini güncelle (başka bir yerden çağrıldıysa)
-    if (themeSelector) {
-      themeSelector.value = theme;
-    }
-    
-    // Grafikleri güncelle
-    updateChartsForTheme(theme);
-    
-    // Global tema değişkeni
-    window.currentTheme = theme;
-    
-    console.log('Tema başarıyla değiştirildi:', theme, 'Body sınıfı:', document.body.className);
-  }
-  
-  /**
-   * Temaya göre grafikleri güncelle
-   * @param {string} theme - 'dark' veya 'light'
-   */
-  function updateChartsForTheme(theme) {
-    // Tüm grafikleri temaya uygun olarak güncelle
-    if (window.Chart && window.Chart.instances) {
-      const isDark = theme === 'dark';
-      
-      // Tema renkleri
-      const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(180, 180, 180, 0.3)';
-      const textColor = isDark ? '#a0a7b4' : '#333333';
-      
-      Object.values(window.Chart.instances).forEach(chart => {
-        // X ve Y ekseni stil güncellemeleri
-        if (chart.options.scales && chart.options.scales.x) {
-          chart.options.scales.x.grid.color = gridColor;
-          chart.options.scales.x.ticks.color = textColor;
-        }
-        if (chart.options.scales && chart.options.scales.y) {
-          chart.options.scales.y.grid.color = gridColor;
-          chart.options.scales.y.ticks.color = textColor;
-        }
-        
-        // Legend stil güncellemeleri
-        if (chart.options.plugins && chart.options.plugins.legend) {
-          chart.options.plugins.legend.labels.color = textColor;
-        }
-        
-        // Grafik güncelle
-        chart.update();
-      });
-    }
-  }
-  
-  // Watchlist ve Piyasa Datası API'den Alımı Burada Olabilir
 }); 
