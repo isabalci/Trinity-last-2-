@@ -42,6 +42,14 @@ function applyThemeSettings() {
           // Legend renklerini güncelle
           if (chart.options.plugins && chart.options.plugins.legend) {
             chart.options.plugins.legend.labels.color = textColor;
+            // Light mode için legend font kalınlığını arttır
+            chart.options.plugins.legend.labels.font = {
+              weight: isDark ? 'normal' : 'bold',
+              size: isDark ? 12 : 13
+            };
+            // Marker'ları tamamen kaldır
+            chart.options.plugins.legend.labels.boxWidth = 0;
+            chart.options.plugins.legend.labels.boxHeight = 0;
           }
           
           // Tooltip renklerini güncelle
@@ -82,16 +90,24 @@ function applyThemeSettings() {
           priceUnit.style.opacity = '1';
           priceUnit.style.fontWeight = '500';
         }
-        
-        // Aktif indeksi güncelle
-        const indexId = marketIndex.getAttribute('data-index');
-        if (indexId) {
-          // İndeks bilgilerini yeni temaya göre güncelle
-          const selectedIndex = document.querySelector(`[data-index="${indexId}"]`);
-          if (selectedIndex) {
-            // Gerekirse diğer özel tema ayarlamaları
-          }
-        }
+      }
+      
+      // Rozet (badge) elemanını bul ve yenilenmesini sağla
+      const badge = marketIndex.querySelector('.badge-circle');
+      if (badge) {
+        // Tüm CSS yenilenmesi için bir küçük DOM yenileme hilesi
+        badge.style.display = 'none';
+        setTimeout(() => {
+          badge.style.display = 'flex';
+          
+          // Ekstra ışıltı efekti ekleyelim
+          badge.style.transition = 'all 0.3s ease';
+          badge.style.transform = 'scale(1.1)';
+          
+          setTimeout(() => {
+            badge.style.transform = 'scale(1)';
+          }, 300);
+        }, 10);
       }
     });
     
@@ -544,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Tema renkleri
       const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(170, 175, 190, 0.25)';
-      const textColor = isDark ? '#a0a7b4' : '#434651';
+      const textColor = isDark ? '#a0a7b4' : '#131722'; // Light mode için metni daha koyu yaptım
       const backgroundColor = isDark ? '#131722' : '#ffffff';
       
       Object.values(window.Chart.instances).forEach(chart => {
@@ -561,13 +577,48 @@ document.addEventListener('DOMContentLoaded', function() {
           // Legend renklerini güncelle
           if (chart.options.plugins && chart.options.plugins.legend) {
             chart.options.plugins.legend.labels.color = textColor;
+            // Light mode için legend font kalınlığını arttır
+            chart.options.plugins.legend.labels.font = {
+              weight: isDark ? 'normal' : 'bold',
+              size: isDark ? 12 : 13
+            };
+            // Marker'ları tamamen kaldır
+            chart.options.plugins.legend.labels.boxWidth = 0;
+            chart.options.plugins.legend.labels.boxHeight = 0;
+            
+            // Grafik tipine göre özel sembolleri ayarla
+            if (chart.canvas.id === 'chart') {
+              // Nasdaq grafiği için özel sembol
+              chart.options.plugins.legend.labels.generateLabels = function(chart) {
+                const originalGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+                const labels = originalGenerateLabels(chart);
+                labels[0].text = '$NDX | Nasdaq 100';
+                return labels;
+              };
+            } else if (chart.canvas.id === 'nasdaqChart') {
+              // Bitcoin grafiği için özel sembol
+              chart.options.plugins.legend.labels.generateLabels = function(chart) {
+                const originalGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+                const labels = originalGenerateLabels(chart);
+                labels[0].text = '฿ | Bitcoin (BTC)';
+                return labels;
+              };
+            } else if (chart.canvas.id === 'featuredChart') {
+              // S&P 500 grafiği için özel sembol
+              chart.options.plugins.legend.labels.generateLabels = function(chart) {
+                const originalGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+                const labels = originalGenerateLabels(chart);
+                labels[0].text = '$SPX | S&P 500';
+                return labels;
+              };
+            }
           }
           
           // Tooltip renklerini güncelle
           if (chart.options.plugins && chart.options.plugins.tooltip) {
             chart.options.plugins.tooltip.backgroundColor = isDark ? 'rgba(28, 32, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)';
-            chart.options.plugins.tooltip.titleColor = textColor;
-            chart.options.plugins.tooltip.bodyColor = textColor;
+            chart.options.plugins.tooltip.titleColor = isDark ? textColor : '#131722'; // Light mode için daha koyu
+            chart.options.plugins.tooltip.bodyColor = isDark ? textColor : '#131722'; // Light mode için daha koyu
             chart.options.plugins.tooltip.borderColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(224, 227, 235, 0.9)';
           }
           
@@ -592,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Grafikler tema değişikliğine göre güncellendi');
     }
   }
-
+  
   /**
    * Grafiklerin Başlatılması
    */
@@ -620,13 +671,18 @@ document.addEventListener('DOMContentLoaded', function() {
           data.push(baseValue + randomChange * (30-i)/3);
         }
         
+        // Tema bilgisini al
+        const isDark = document.body.classList.contains('dark-theme');
+        const legendTextColor = isDark ? '#e0e3eb' : '#131722';
+        const legendFontWeight = isDark ? 'normal' : 'bold';
+        
         // Grafik oluştur
         new Chart(chartCtx, {
           type: 'line',
           data: {
             labels: labels,
             datasets: [{
-              label: 'Nasdaq 100',
+              label: 'NDX | Nasdaq 100',
               data: data,
               borderColor: '#2962FF',
               backgroundColor: 'rgba(41, 98, 255, 0.1)',
@@ -642,7 +698,23 @@ document.addEventListener('DOMContentLoaded', function() {
               legend: {
                 display: true,
                 labels: {
-                  color: '#e0e3eb'
+                  usePointStyle: false,
+                  boxWidth: 0,
+                  boxHeight: 0,
+                  color: legendTextColor,
+                  font: {
+                    weight: legendFontWeight,
+                    size: isDark ? 12 : 14
+                  },
+                  generateLabels: function(chart) {
+                    const datasets = chart.data.datasets;
+                    const originalGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+                    const labels = originalGenerateLabels(chart);
+                    
+                    // Özel sembol ekle
+                    labels[0].text = '$NDX | Nasdaq 100';              
+                    return labels;
+                  }
                 }
               },
               tooltip: {
@@ -656,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   color: 'rgba(42, 46, 57, 0.3)'
                 },
                 ticks: {
-                  color: '#a0a7b4'
+                  color: isDark ? '#a0a7b4' : '#131722'
                 }
               },
               y: {
@@ -664,7 +736,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   color: 'rgba(42, 46, 57, 0.3)'
                 },
                 ticks: {
-                  color: '#a0a7b4'
+                  color: isDark ? '#a0a7b4' : '#131722'
                 }
               }
             }
@@ -694,6 +766,11 @@ document.addEventListener('DOMContentLoaded', function() {
           data.push(baseValue + randomChange * (30-i)/5);
         }
         
+        // Tema bilgisini al
+        const isDark = document.body.classList.contains('dark-theme');
+        const legendTextColor = isDark ? '#e0e3eb' : '#131722';
+        const legendFontWeight = isDark ? 'normal' : 'bold';
+        
         // Grafik oluştur
         new Chart(nasdaqChartCtx, {
           type: 'line',
@@ -716,7 +793,23 @@ document.addEventListener('DOMContentLoaded', function() {
               legend: {
                 display: true,
                 labels: {
-                  color: '#e0e3eb'
+                  usePointStyle: false,
+                  boxWidth: 0,
+                  boxHeight: 0,
+                  color: legendTextColor,
+                  font: {
+                    weight: legendFontWeight,
+                    size: isDark ? 12 : 14
+                  },
+                  generateLabels: function(chart) {
+                    const datasets = chart.data.datasets;
+                    const originalGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+                    const labels = originalGenerateLabels(chart);
+                    
+                    // Özel sembol ekle
+                    labels[0].text = '฿ | Bitcoin (BTC)';
+                    return labels;
+                  }
                 }
               },
               tooltip: {
@@ -730,7 +823,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   color: 'rgba(42, 46, 57, 0.3)'
                 },
                 ticks: {
-                  color: '#a0a7b4'
+                  color: isDark ? '#a0a7b4' : '#131722'
                 }
               },
               y: {
@@ -738,7 +831,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   color: 'rgba(42, 46, 57, 0.3)'
                 },
                 ticks: {
-                  color: '#a0a7b4'
+                  color: isDark ? '#a0a7b4' : '#131722'
                 }
               }
             }
@@ -768,6 +861,11 @@ document.addEventListener('DOMContentLoaded', function() {
           data.push(baseValue + randomChange * (30-i)/6);
         }
         
+        // Tema bilgisini al
+        const isDark = document.body.classList.contains('dark-theme');
+        const legendTextColor = isDark ? '#e0e3eb' : '#131722';
+        const legendFontWeight = isDark ? 'normal' : 'bold';
+        
         // Grafik oluştur
         new Chart(featuredChartEl, {
           type: 'line',
@@ -790,7 +888,23 @@ document.addEventListener('DOMContentLoaded', function() {
               legend: {
                 display: true,
                 labels: {
-                  color: '#e0e3eb'
+                  usePointStyle: false,
+                  boxWidth: 0,
+                  boxHeight: 0,
+                  color: legendTextColor,
+                  font: {
+                    weight: legendFontWeight,
+                    size: isDark ? 12 : 14
+                  },
+                  generateLabels: function(chart) {
+                    const datasets = chart.data.datasets;
+                    const originalGenerateLabels = Chart.defaults.plugins.legend.labels.generateLabels;
+                    const labels = originalGenerateLabels(chart);
+                    
+                    // Özel sembol ekle
+                    labels[0].text = '$SPX | S&P 500';
+                    return labels;
+                  }
                 }
               },
               tooltip: {
@@ -804,7 +918,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   color: 'rgba(42, 46, 57, 0.3)'
                 },
                 ticks: {
-                  color: '#a0a7b4'
+                  color: isDark ? '#a0a7b4' : '#131722'
                 }
               },
               y: {
@@ -812,7 +926,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   color: 'rgba(42, 46, 57, 0.3)'
                 },
                 ticks: {
-                  color: '#a0a7b4'
+                  color: isDark ? '#a0a7b4' : '#131722'
                 }
               }
             }
@@ -899,8 +1013,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (selectedIndexName) selectedIndexName.textContent = name;
     if (selectedIndexPrice) selectedIndexPrice.textContent = price;
     if (selectedIndexChange) {
-      selectedIndexChange.textContent = change;
-      selectedIndexChange.className = changeClass;
+    selectedIndexChange.textContent = change;
+    selectedIndexChange.className = changeClass;
     }
     
     // 2. Toolbar'daki market indekslerini güncelle

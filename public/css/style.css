@@ -24,6 +24,13 @@
   --grid-lines: rgba(42, 46, 57, 0.3);
   --positive-color: #26a69a;
   --negative-color: #ef5350;
+  
+  /* Piyasa endeks renkleri */
+  --sp500-color: #5460E6;
+  --nasdaq-color: #2962FF;
+  --dow-color: #339DFF;
+  --japan-color: #E91E63;
+  --ftse-color: #00BCD4;
 }
 
 /* Light theme - TradingView tarzı optimizasyon */
@@ -43,6 +50,16 @@
   --grid-lines: rgba(170, 175, 190, 0.25);
   --positive-color: #089981;
   --negative-color: #f23645;
+  
+  /* Piyasa endeks renkleri - Light temada da aynı */
+  --sp500-color: #5460E6;
+  --nasdaq-color: #2962FF;
+  --dow-color: #339DFF;
+  --japan-color: #E91E63;
+  --ftse-color: #00BCD4;
+  
+  /* Light mode'da grafik başlıkları için eklendi */
+  --chart-title-color: #131722;
 }
 
 body {
@@ -1442,26 +1459,33 @@ body {
   color: #fff;
   font-weight: 700;
   font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .badge-circle.sp500 {
-  background-color: #5460E6;
+  background-color: var(--sp500-color);
+  box-shadow: 0 2px 6px rgba(84, 96, 230, 0.3);
 }
 
 .badge-circle.nasdaq {
-  background-color: #2962FF;
+  background-color: var(--nasdaq-color);
+  box-shadow: 0 2px 6px rgba(41, 98, 255, 0.3);
 }
 
 .badge-circle.dow {
-  background-color: #339DFF;
+  background-color: var(--dow-color);
+  box-shadow: 0 2px 6px rgba(51, 157, 255, 0.3);
 }
 
 .badge-circle.japan {
-  background-color: #E91E63;
+  background-color: var(--japan-color);
+  box-shadow: 0 2px 6px rgba(233, 30, 99, 0.3);
 }
 
 .badge-circle.ftse {
-  background-color: #00BCD4;
+  background-color: var(--ftse-color);
+  box-shadow: 0 2px 6px rgba(0, 188, 212, 0.3);
 }
 
 .index-details {
@@ -1537,7 +1561,7 @@ body {
 /* Chart.js tooltip ve legend */
 .light-theme .chartjs-tooltip,
 .light-theme .chartjs-legend {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -1950,6 +1974,78 @@ button {
   border: 1px solid var(--border-color);
 }
 
+/* Light theme için endeks rozet renkleri - orijinal renkleri koruyarak */
+.light-theme .badge-circle.sp500 {
+  background-color: #5460E6;
+  border: 1px solid #3f4ad8;
+  color: white;
+  box-shadow: 0 1px 3px rgba(84, 96, 230, 0.4);
+}
+
+.light-theme .badge-circle.nasdaq {
+  background-color: #2962FF;
+  border: 1px solid #1355ff;
+  color: white;
+  box-shadow: 0 1px 3px rgba(41, 98, 255, 0.4);
+}
+
+.light-theme .badge-circle.dow {
+  background-color: #339DFF;
+  border: 1px solid #1090ff;
+  color: white;
+  box-shadow: 0 1px 2px rgba(51, 157, 255, 0.3);
+}
+
+.light-theme .badge-circle.japan {
+  background-color: #E91E63;
+  border: 1px solid #d81557;
+  color: white;
+  box-shadow: 0 1px 2px rgba(233, 30, 99, 0.3);
+}
+
+.light-theme .badge-circle.ftse {
+  background-color: #00BCD4;
+  border: 1px solid #00a5bb;
+  color: white;
+  box-shadow: 0 1px 2px rgba(0, 188, 212, 0.3);
+}
+
+/* Light badge-circle styles for market indices */
+.light-theme .badge-circle.sp500 {
+  background-color: var(--sp500-color);
+  border: 1px solid rgba(84, 96, 230, 0.4);
+  color: white;
+  box-shadow: 0 2px 4px rgba(84, 96, 230, 0.25);
+}
+
+.light-theme .badge-circle.nasdaq {
+  background-color: var(--nasdaq-color);
+  border: 1px solid rgba(41, 98, 255, 0.4);
+  color: white;
+  box-shadow: 0 2px 4px rgba(41, 98, 255, 0.25);
+}
+
+.light-theme .badge-circle.dow {
+  background-color: var(--dow-color);
+  border: 1px solid rgba(51, 157, 255, 0.4);
+  color: white;
+  box-shadow: 0 2px 4px rgba(51, 157, 255, 0.25);
+}
+
+.light-theme .badge-circle.japan {
+  background-color: var(--japan-color);
+  border: 1px solid rgba(233, 30, 99, 0.4);
+  color: white;
+  box-shadow: 0 2px 4px rgba(233, 30, 99, 0.25);
+}
+
+.light-theme .badge-circle.ftse {
+  background-color: var(--ftse-color);
+  border: 1px solid rgba(0, 188, 212, 0.4);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 188, 212, 0.25);
+}
+
 .light-theme .index-name,
 .light-theme .index-price {
   color: var(--text-primary);
@@ -1963,141 +2059,117 @@ button {
 /* Chart.js tooltip ve legend */
 .light-theme .chartjs-tooltip,
 .light-theme .chartjs-legend {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Chart header */
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.selected-index-info {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-#selectedIndexName {
-  font-size: 18px;
-  font-weight: 600;
-  color: #e0e3eb;
-}
-
-#selectedIndexPrice {
-  font-size: 16px;
-  color: #a0a7b4;
-}
-
-#selectedIndexChange {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-/* Zaman Butonları Containeri (Grafiğin Altına) */
-.timeframe-buttons-container {
-  padding-top: 10px;
-  display: flex;
-  justify-content: center;
-  border-top: 1px solid rgba(42, 46, 57, 0.5);
-}
-
-.timeframe-buttons {
-  display: flex;
-  gap: 5px;
-  justify-content: center;
-}
-
-.time-btn {
-  padding: 5px 10px;
-  background-color: transparent;
-  border: 1px solid #2a2e39;
-  border-radius: 4px;
-  color: #6b7280;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.time-btn:hover {
-  color: #e0e3eb;
-  background-color: #2a2e39;
-}
-
-.time-btn.active {
-  background-color: #2962FF;
-  border-color: #2962FF;
+/* Chart toolbar'daki endeks rozetleri için light tema ayarları */
+.light-theme .chart-toolbar .badge-circle.sp500 {
+  background-color: var(--sp500-color);
+  border: 1px solid rgba(84, 96, 230, 0.4);
   color: white;
+  box-shadow: 0 1px 2px rgba(84, 96, 230, 0.25);
 }
 
-/* Chart toolbar market indeksleri */
-.chart-toolbar .market-indices {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 5px;
-  margin-bottom: 0;
-  max-width: 70%;
+.light-theme .chart-toolbar .badge-circle.nasdaq {
+  background-color: var(--nasdaq-color);
+  border: 1px solid rgba(41, 98, 255, 0.4);
+  color: white;
+  box-shadow: 0 1px 2px rgba(41, 98, 255, 0.25);
 }
 
-.chart-toolbar .market-index {
-  min-width: 130px;
-  padding: 8px 10px;
-  background-color: #1e222d;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid #2a2e39;
+.light-theme .chart-toolbar .badge-circle.dow {
+  background-color: var(--dow-color);
+  border: 1px solid rgba(51, 157, 255, 0.4);
+  color: white;
+  box-shadow: 0 1px 2px rgba(51, 157, 255, 0.25);
+}
+
+.light-theme .chart-toolbar .badge-circle.japan {
+  background-color: var(--japan-color);
+  border: 1px solid rgba(233, 30, 99, 0.4);
+  color: white;
+  box-shadow: 0 1px 2px rgba(233, 30, 99, 0.25);
+}
+
+.light-theme .chart-toolbar .badge-circle.ftse {
+  background-color: var(--ftse-color);
+  border: 1px solid rgba(0, 188, 212, 0.4);
+  color: white;
+  box-shadow: 0 1px 2px rgba(0, 188, 212, 0.25);
+}
+
+/* Light tema için Chart.js legend ve başlık stillerini güçlendir */
+.light-theme .chartjs-tooltip,
+.light-theme .chartjs-legend {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Light theme için grafik başlıklarını daha belirgin hale getir */
+.light-theme canvas {
+  background-color: var(--bg-primary);
+}
+
+/* Chart.js legend stillerini geliştir */
+.light-theme .chart-legend li span,
+.light-theme canvas + .chartjs-legend ul li span {
+  color: var(--chart-title-color);
+  font-weight: 600;
+}
+
+/* Grafik başlığı ve legend metinlerini güçlendir */
+.light-theme .chart-title {
+  color: var(--chart-title-color);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Grafik başlıkları için sembol stilleri */
+.chart-js-legend-symbol {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+.symbol-nasdaq {
+  background-color: #2962FF;
+  color: white;
+  font-size: 10px;
+}
+
+.symbol-bitcoin {
+  background-color: #F7931A;
+  color: white;
+  font-size: 14px;
+}
+
+.symbol-sp500 {
+  background-color: #5460E6;
+  color: white;
+  font-size: 10px;
+}
+
+/* Chart.js custom legend */
+.chart-container .chart-js-custom-legend {
+  margin-top: 10px;
+  padding: 5px 10px;
   display: flex;
   align-items: center;
-  gap: 5px;
 }
 
-.chart-toolbar .index-badge {
-  margin-right: 5px;
-}
-
-.chart-toolbar .badge-circle {
-  width: 30px;
-  height: 30px;
-  font-size: 12px;
-}
-
-.chart-toolbar .index-details {
-  white-space: nowrap;
-  font-size: 12px;
-}
-
-.chart-toolbar .index-name {
-  font-size: 12px;
-}
-
-.chart-toolbar .index-price {
-  font-size: 11px;
-}
-
-.chart-toolbar .index-change {
-  font-size: 12px;
-}
-
-/* Light tema indeksler için özel stiller */
-.light-theme .market-index {
-  background-color: #f8f9fd;
-  border: 1px solid #e0e3eb;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.light-theme .market-index:hover {
-  background-color: #f0f3fa;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-}
-
-.light-theme .market-index.active {
-  border: 1px solid rgba(41, 98, 255, 0.3);
-  background-color: rgba(41, 98, 255, 0.03);
+/* Düzelten stil */
+.light-theme .chart-legend li span,
+.light-theme canvas + .chartjs-legend ul li span {
+  color: var(--chart-title-color);
+  font-weight: 600;
 } 
