@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const timeframeButtons = document.querySelectorAll('.timeframe');
   const watchlistEl = document.getElementById('watchlist');
   const languageSelector = document.getElementById('languageSelector');
+  const themeSelector = document.getElementById('theme');
   const rightSidebarToggle = document.querySelector('.sidebar-toggle.right-toggle');
   const rightSidebar = document.querySelector('.right-sidebar');
   const leftSidebarToggle = document.querySelector('.sidebar-toggle.left-toggle');
@@ -26,6 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
     leftSidebarToggle: leftSidebarToggle,
     leftSidebar: leftSidebar
   });
+  
+  // Sayfa yüklendiğinde mevcut temayı ayarla
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  document.body.className = currentTheme + '-theme';
+  if (themeSelector) {
+    themeSelector.value = currentTheme;
+  }
   
   // DIRECT TEST: Force blue arrow to be clickable
   document.addEventListener('keydown', function(e) {
@@ -667,6 +675,14 @@ document.addEventListener('DOMContentLoaded', function() {
       languageSelector.value = currentLanguage;
     }
     
+    // Tema değiştirme
+    if (themeSelector) {
+      themeSelector.addEventListener('change', function() {
+        const theme = this.value;
+        switchTheme(theme);
+      });
+    }
+    
     // Market İndeksleri Tıklama
     marketIndices.forEach(indexEl => {
       indexEl.addEventListener('click', function() {
@@ -870,6 +886,65 @@ document.addEventListener('DOMContentLoaded', function() {
   window.toggleWatchlistManually = function() {
     console.log('Manual watchlist toggle called');
     toggleWatchlist();
+  }
+  
+  /**
+   * Tema değiştirme fonksiyonu
+   * @param {string} theme - 'dark' veya 'light'
+   */
+  function switchTheme(theme) {
+    console.log('Tema değiştiriliyor:', theme);
+    
+    // Temayı localStorage'a kaydet
+    localStorage.setItem('theme', theme);
+    
+    // Body'nin class'ını değiştir
+    document.body.className = theme + '-theme';
+    
+    // Seçici değerini güncelle (başka bir yerden çağrıldıysa)
+    if (themeSelector) {
+      themeSelector.value = theme;
+    }
+    
+    // Grafikleri güncelle
+    updateChartsForTheme(theme);
+    
+    console.log('Tema başarıyla değiştirildi:', theme);
+  }
+  
+  /**
+   * Temaya göre grafikleri güncelle
+   * @param {string} theme - 'dark' veya 'light'
+   */
+  function updateChartsForTheme(theme) {
+    // Tüm grafikleri temaya uygun olarak güncelle
+    if (window.Chart && window.Chart.instances) {
+      const isDark = theme === 'dark';
+      
+      // Tema renkleri
+      const gridColor = isDark ? 'rgba(42, 46, 57, 0.3)' : 'rgba(230, 230, 230, 0.3)';
+      const textColor = isDark ? '#a0a7b4' : '#333333';
+      
+      Object.values(window.Chart.instances).forEach(chart => {
+        // X ve Y ekseni stil güncellemeleri
+        if (chart.options.scales && chart.options.scales.x) {
+          chart.options.scales.x.grid.color = gridColor;
+          chart.options.scales.x.ticks.color = textColor;
+        }
+        if (chart.options.scales && chart.options.scales.y) {
+          chart.options.scales.y.grid.color = gridColor;
+          chart.options.scales.y.ticks.color = textColor;
+        }
+        
+        // Legend stil güncellemeleri
+        if (chart.options.plugins && chart.options.plugins.legend) {
+          chart.options.plugins.legend.labels.color = textColor;
+        }
+        
+        // Grafik güncelle
+        chart.update();
+      });
+    }
   }
   
   // Watchlist ve Piyasa Datası API'den Alımı Burada Olabilir
