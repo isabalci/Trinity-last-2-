@@ -267,6 +267,8 @@ document.addEventListener('DOMContentLoaded', function() {
    * Event Listener'ları Ekle
    */
   function addEventListeners() {
+    console.log('Event listeners ekleniyor');
+    
     // Giriş modal açma
     if (loginBtn) {
       loginBtn.addEventListener('click', function() {
@@ -358,18 +360,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Chart Timeframe Buttons
     chartTimeButtons.forEach(btn => {
       btn.addEventListener('click', function() {
-        // Hangi grafiğin düğmesine tıklandı
+        // Mevcut düğmenin veri özelliklerini al
         const chartId = this.getAttribute('data-chart');
         const timeframe = this.getAttribute('data-timeframe');
         
-        // İlgili grafiğin tüm düğmelerini bul ve aktif sınıfını kaldır
-        const buttons = document.querySelectorAll(`.chart-time-btn[data-chart="${chartId}"]`);
-        buttons.forEach(b => b.classList.remove('active'));
+        // İlgili grafik grubundaki diğer düğmelerden aktif sınıfı kaldır
+        document.querySelectorAll(`.chart-time-btn[data-chart="${chartId}"]`).forEach(btn => {
+          btn.classList.remove('active');
+        });
         
-        // Tıklanan düğmeyi aktif yap
+        // Tıklanan düğmeye aktif sınıfını ekle
         this.classList.add('active');
         
-        // Zaman dilimini sakla ve grafiği güncelle
+        // Timeframe değerini güncelle
         if (chartId === 'main') {
           mainChartTimeframe = timeframe;
         } else if (chartId === 'nasdaq') {
@@ -378,8 +381,35 @@ document.addEventListener('DOMContentLoaded', function() {
           activeTimeframe = timeframe;
         }
         
-        // Grafiği güncelle
+        // Grafik verilerini yükle
         loadChartData(chartId, timeframe);
+      });
+    });
+    
+    // Summary Kategorileri - Summary sayfasındaki kategoriler arasında geçiş yapmak için
+    document.querySelectorAll('.summary-category').forEach(button => {
+      button.addEventListener('click', function() {
+        // Tıklanan kategoriyi al
+        const targetSection = this.getAttribute('data-target');
+        
+        // Tüm kategorilerden aktif sınıfını kaldır
+        document.querySelectorAll('.summary-category').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        // Tıklanan kategoriye aktif sınıfını ekle
+        this.classList.add('active');
+        
+        // Tüm bölümleri gizle
+        document.querySelectorAll('.summary-section').forEach(section => {
+          section.style.display = 'none';
+        });
+        
+        // Hedef bölümü göster
+        const targetElement = document.querySelector(`.${targetSection}-section`);
+        if (targetElement) {
+          targetElement.style.display = 'block';
+        }
       });
     });
     
@@ -935,6 +965,28 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Featured grafik başarıyla oluşturuldu');
       }
       
+      // Kategori bölümlerini düzenle ve ilk sekmeyi göster
+      const summaryCategories = document.querySelectorAll('.summary-category');
+      const summarySections = document.querySelectorAll('.summary-section');
+      
+      // İlk başta tüm bölümleri gizle
+      summarySections.forEach(section => {
+        section.style.display = 'none';
+      });
+      
+      // İlk kategoriyi aktif yap ve ilgili bölümü göster
+      if (summaryCategories.length > 0 && summarySections.length > 0) {
+        const firstCategory = summaryCategories[0];
+        const firstTarget = firstCategory.getAttribute('data-target');
+        
+        firstCategory.classList.add('active');
+        
+        const targetSection = document.querySelector(`.${firstTarget}-section`);
+        if (targetSection) {
+          targetSection.style.display = 'block';
+        }
+      }
+      
       console.log('initializeCharts tamamlandı.');
     } catch (error) {
       console.error('Grafik başlatma hatası:', error);
@@ -1250,5 +1302,130 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       console.error('Grafik instance bulunamadı:', chartId);
     }
+  }
+
+  /**
+   * Mini grafikleri başlat - Hisseler, Kripto ve ETF kartları için
+   */
+  function initializeMiniCharts() {
+    // Mini grafikleri seç
+    const miniCharts = document.querySelectorAll('.mini-chart');
+    
+    // Her mini grafik için
+    miniCharts.forEach(chartCanvas => {
+      const symbol = chartCanvas.getAttribute('data-symbol');
+      if (!symbol) return;
+      
+      // Rastgele veriler oluştur
+      const data = generateRandomData(30);
+      
+      // Grafik oluştur
+      if (chartCanvas.getContext) {
+        const ctx = chartCanvas.getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: Array(data.length).fill(''),  // Etiketler boş
+            datasets: [{
+              data: data,
+              borderColor: data[0] <= data[data.length - 1] ? '#26a69a' : '#ef5350',
+              borderWidth: 1.5,
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                enabled: false
+              }
+            },
+            scales: {
+              x: {
+                display: false
+              },
+              y: {
+                display: false
+              }
+            },
+            animation: false
+          }
+        });
+      }
+    });
+    
+    // Community Ideas için mini grafikleri de başlat
+    const ideaMiniCharts = document.querySelectorAll('.idea-mini-chart');
+    
+    ideaMiniCharts.forEach(chartCanvas => {
+      const symbol = chartCanvas.getAttribute('data-symbol');
+      if (!symbol) return;
+      
+      // Rastgele veriler oluştur
+      const data = generateRandomData(30);
+      
+      // Grafik oluştur
+      if (chartCanvas.getContext) {
+        const ctx = chartCanvas.getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: Array(data.length).fill(''),  // Etiketler boş
+            datasets: [{
+              data: data,
+              borderColor: '#2962FF',
+              borderWidth: 1.5,
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                enabled: false
+              }
+            },
+            scales: {
+              x: {
+                display: false
+              },
+              y: {
+                display: false
+              }
+            },
+            animation: false
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Rastgele veri oluştur
+   * @param {number} length - Veri noktalarının sayısı
+   * @returns {Array} - Rastgele veri dizisi
+   */
+  function generateRandomData(length) {
+    const data = [];
+    let value = Math.random() * 100 + 50;
+    
+    for (let i = 0; i < length; i++) {
+      value += (Math.random() - 0.5) * 10;
+      data.push(value);
+    }
+    
+    return data;
   }
 }); 

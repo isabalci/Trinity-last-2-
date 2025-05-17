@@ -125,9 +125,22 @@
 
     <!-- Grafik ve Araçlar Ana Bölümü -->
     <section class="chart-container" id="marketSummary">
-      <!-- Üst Araç Çubuğu -->
-      <div class="chart-toolbar">
-        <!-- Market Indices moved to top -->
+      <!-- Başlık ve Kategori Bölümü -->
+      <div class="summary-header">
+        <h2>Piyasa Özeti</h2>
+        <div class="summary-categories">
+          <button class="summary-category active" data-target="indeksler">İndeksler</button>
+          <button class="summary-category" data-target="hisseler">Hisseler</button>
+          <button class="summary-category" data-target="community">Community Ideas</button>
+          <button class="summary-category" data-target="kripto">Kripto</button>
+          <button class="summary-category" data-target="etf">ETF</button>
+        </div>
+      </div>
+      
+      <!-- 1. İndeksler Özeti Bölümü -->
+      <div class="summary-section indeksler-section">
+        <h3 class="section-title">Popüler İndeksler</h3>
+        <!-- Market Indices moved to here -->
         <div class="market-indices">
           <div class="market-index" data-index="sp500">
             <div class="index-badge">
@@ -185,94 +198,301 @@
           </div>
         </div>
         
-        <div class="chart-tools">
-          <button id="indicatorsBtn" class="tool-btn" title="Göstergeler">
-            <i class="fas fa-chart-line"></i>
-          </button>
-          <div id="indicatorsDropdown" class="dropdown-menu">
-            <div class="indicator-item" data-type="ma">Hareketli Ortalama (MA)</div>
-            <div class="indicator-item" data-type="bb">Bollinger Bantları (BB)</div>
-            <div class="indicator-item" data-type="rsi">Göreceli Güç Endeksi (RSI)</div>
-            <div class="indicator-item" data-type="macd">MACD</div>
-            <div class="indicator-item" data-type="volume">Hacim</div>
-          </div>
-          
-          <button id="addComparison" class="tool-btn" title="Karşılaştır">
-            <i class="fas fa-chart-area"></i>
-          </button>
-          <div id="comparisonDropdown" class="dropdown-menu">
-            <div class="dropdown-header">
-              <input type="text" id="comparisonSearch" placeholder="Sembol ara...">
-            </div>
-            <div id="comparisonSuggestions" class="comparison-suggestions"></div>
-          </div>
-          
-          <button id="exportChart" class="tool-btn" title="Dışa Aktar">
-            <i class="fas fa-download"></i>
-          </button>
-          <div id="exportDropdown" class="dropdown-menu">
-            <div class="export-item" data-format="png">PNG Olarak Kaydet</div>
-            <div class="export-item" data-format="csv">CSV Olarak İndir</div>
-            <div class="export-item" data-format="json">JSON Olarak İndir</div>
-          </div>
-          
-          <button id="settingsChart" class="tool-btn" title="Ayarlar">
-            <i class="fas fa-cog"></i>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Karşılaştırma Sembolleri Görüntüleme Alanı -->
-      <div id="activeComparisons" class="active-comparisons"></div>
-      
-      <!-- Ana Grafik -->
-      <div id="chart-container" class="chart">
-        <canvas id="chart"></canvas>
-      </div>
-      <div class="chart-timeframe-buttons">
-        <button class="chart-time-btn active" data-chart="main" data-timeframe="1D">1D</button>
-        <button class="chart-time-btn" data-chart="main" data-timeframe="1W">1M</button>
-        <button class="chart-time-btn" data-chart="main" data-timeframe="1M">3M</button>
-        <button class="chart-time-btn" data-chart="main" data-timeframe="3M">1Y</button>
-        <button class="chart-time-btn" data-chart="main" data-timeframe="1Y">5Y</button>
-        <button class="chart-time-btn" data-chart="main" data-timeframe="ALL">All</button>
-      </div>
-
-      <!-- Nasdaq Grafik -->
-      <div id="nasdaqChart-container" class="chart nasdaq-chart">
-        <canvas id="nasdaqChart"></canvas>
-      </div>
-      <div class="chart-timeframe-buttons">
-        <button class="chart-time-btn active" data-chart="nasdaq" data-timeframe="1D">1D</button>
-        <button class="chart-time-btn" data-chart="nasdaq" data-timeframe="1W">1M</button>
-        <button class="chart-time-btn" data-chart="nasdaq" data-timeframe="1M">3M</button>
-        <button class="chart-time-btn" data-chart="nasdaq" data-timeframe="3M">1Y</button>
-        <button class="chart-time-btn" data-chart="nasdaq" data-timeframe="1Y">5Y</button>
-        <button class="chart-time-btn" data-chart="nasdaq" data-timeframe="ALL">All</button>
-      </div>
-      
-      <!-- Seçilen İndeks Grafiği Bölümü (Taşındı) -->
-      <div class="featured-chart-container">
-        <!-- Grafik Başlık Bölümü -->
-        <div class="chart-header">
-          <div class="selected-index-info">
-            <span id="selectedIndexName">S&P 500</span>
-            <span id="selectedIndexPrice">5,844.20</span>
-            <span id="selectedIndexChange" class="up">+3.26%</span>
-          </div>
-        </div>
-        
-        <!-- Grafik -->
-        <div class="featured-chart">
-          <canvas id="featuredChart"></canvas>
+        <!-- Ana İndeks Grafiği -->
+        <div id="chart-container" class="chart">
+          <canvas id="chart"></canvas>
         </div>
         <div class="chart-timeframe-buttons">
-          <button class="chart-time-btn active" data-chart="featured" data-timeframe="1D">1D</button>
-          <button class="chart-time-btn" data-chart="featured" data-timeframe="1W">1M</button>
-          <button class="chart-time-btn" data-chart="featured" data-timeframe="1M">3M</button>
-          <button class="chart-time-btn" data-chart="featured" data-timeframe="3M">1Y</button>
-          <button class="chart-time-btn" data-chart="featured" data-timeframe="1Y">5Y</button>
-          <button class="chart-time-btn" data-chart="featured" data-timeframe="ALL">All</button>
+          <button class="chart-time-btn active" data-chart="main" data-timeframe="1D">1D</button>
+          <button class="chart-time-btn" data-chart="main" data-timeframe="1W">1M</button>
+          <button class="chart-time-btn" data-chart="main" data-timeframe="1M">3M</button>
+          <button class="chart-time-btn" data-chart="main" data-timeframe="3M">1Y</button>
+          <button class="chart-time-btn" data-chart="main" data-timeframe="1Y">5Y</button>
+          <button class="chart-time-btn" data-chart="main" data-timeframe="ALL">All</button>
+        </div>
+      </div>
+      
+      <!-- 2. Hisseler Özeti Bölümü -->
+      <div class="summary-section hisseler-section" style="display: none;">
+        <h3 class="section-title">Popüler Hisseler</h3>
+        <div class="stocks-grid">
+          <div class="stock-card">
+            <div class="stock-header">
+              <div class="stock-logo">AAPL</div>
+              <div class="stock-name">Apple Inc.</div>
+            </div>
+            <div class="stock-price">$210.35</div>
+            <div class="stock-change up">+2.15%</div>
+            <div class="stock-chart">
+              <canvas class="mini-chart" data-symbol="AAPL"></canvas>
+            </div>
+          </div>
+          
+          <div class="stock-card">
+            <div class="stock-header">
+              <div class="stock-logo">MSFT</div>
+              <div class="stock-name">Microsoft Corp.</div>
+            </div>
+            <div class="stock-price">$354.97</div>
+            <div class="stock-change up">+1.14%</div>
+            <div class="stock-chart">
+              <canvas class="mini-chart" data-symbol="MSFT"></canvas>
+            </div>
+          </div>
+          
+          <div class="stock-card">
+            <div class="stock-header">
+              <div class="stock-logo">TSLA</div>
+              <div class="stock-name">Tesla Inc.</div>
+            </div>
+            <div class="stock-price">$238.89</div>
+            <div class="stock-change up">+3.42%</div>
+            <div class="stock-chart">
+              <canvas class="mini-chart" data-symbol="TSLA"></canvas>
+            </div>
+          </div>
+          
+          <div class="stock-card">
+            <div class="stock-header">
+              <div class="stock-logo">AMZN</div>
+              <div class="stock-name">Amazon.com Inc.</div>
+            </div>
+            <div class="stock-price">$183.43</div>
+            <div class="stock-change down">-0.37%</div>
+            <div class="stock-chart">
+              <canvas class="mini-chart" data-symbol="AMZN"></canvas>
+            </div>
+          </div>
+          
+          <div class="stock-card">
+            <div class="stock-header">
+              <div class="stock-logo">GOOGL</div>
+              <div class="stock-name">Alphabet Inc.</div>
+            </div>
+            <div class="stock-price">$152.19</div>
+            <div class="stock-change down">-0.22%</div>
+            <div class="stock-chart">
+              <canvas class="mini-chart" data-symbol="GOOGL"></canvas>
+            </div>
+          </div>
+          
+          <div class="stock-card">
+            <div class="stock-header">
+              <div class="stock-logo">META</div>
+              <div class="stock-name">Meta Platforms Inc.</div>
+            </div>
+            <div class="stock-price">$517.58</div>
+            <div class="stock-change up">+0.83%</div>
+            <div class="stock-chart">
+              <canvas class="mini-chart" data-symbol="META"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 3. Community Ideas Bölümü -->
+      <div class="summary-section community-section" style="display: none;">
+        <h3 class="section-title">Community Ideas</h3>
+        <div class="community-ideas">
+          <div class="idea-card">
+            <div class="idea-header">
+              <img src="img/avatar1.jpg" alt="User Avatar" class="idea-avatar" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%232962FF\'/><text x=\'50\' y=\'65\' font-size=\'50\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>U</text></svg>'">
+              <div class="idea-user">
+                <div class="idea-username">TradingExpert</div>
+                <div class="idea-date">17 Mayıs 2025</div>
+              </div>
+            </div>
+            <div class="idea-content">
+              <h4>MSFT Breakout Yaklaşıyor</h4>
+              <p>Microsoft 355$ direncine yaklaşıyor. Kırılması durumunda 380$ hedefli bir yükseliş beklenebilir.</p>
+            </div>
+            <div class="idea-chart">
+              <canvas class="idea-mini-chart" data-symbol="MSFT"></canvas>
+            </div>
+            <div class="idea-stats">
+              <span><i class="fas fa-thumbs-up"></i> 128</span>
+              <span><i class="fas fa-comment"></i> 24</span>
+              <span><i class="fas fa-share"></i> 12</span>
+            </div>
+          </div>
+          
+          <div class="idea-card">
+            <div class="idea-header">
+              <img src="img/avatar2.jpg" alt="User Avatar" class="idea-avatar" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><rect width=\'100\' height=\'100\' fill=\'%232962FF\'/><text x=\'50\' y=\'65\' font-size=\'50\' text-anchor=\'middle\' fill=\'white\' font-family=\'Arial\'>M</text></svg>'">
+              <div class="idea-user">
+                <div class="idea-username">MarketAnalyst</div>
+                <div class="idea-date">16 Mayıs 2025</div>
+              </div>
+            </div>
+            <div class="idea-content">
+              <h4>S&P 500 Teknik Analiz</h4>
+              <p>S&P 500 indeksi 5,850 seviyesindeki direnci test ediyor. Kısa vadeli göstergeler aşırı alım bölgesinde.</p>
+            </div>
+            <div class="idea-chart">
+              <canvas class="idea-mini-chart" data-symbol="SPX"></canvas>
+            </div>
+            <div class="idea-stats">
+              <span><i class="fas fa-thumbs-up"></i> 95</span>
+              <span><i class="fas fa-comment"></i> 17</span>
+              <span><i class="fas fa-share"></i> 8</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 4. Kripto Bölümü -->
+      <div class="summary-section kripto-section" style="display: none;">
+        <h3 class="section-title">Kripto Para Piyasası</h3>
+        <div class="crypto-grid">
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-logo">BTC</div>
+              <div class="crypto-name">Bitcoin</div>
+            </div>
+            <div class="crypto-price">$48,235.67</div>
+            <div class="crypto-change up">+1.82%</div>
+            <div class="crypto-chart">
+              <canvas class="mini-chart" data-symbol="BTC"></canvas>
+            </div>
+          </div>
+          
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-logo">ETH</div>
+              <div class="crypto-name">Ethereum</div>
+            </div>
+            <div class="crypto-price">$3,452.18</div>
+            <div class="crypto-change up">+2.34%</div>
+            <div class="crypto-chart">
+              <canvas class="mini-chart" data-symbol="ETH"></canvas>
+            </div>
+          </div>
+          
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-logo">BNB</div>
+              <div class="crypto-name">Binance Coin</div>
+            </div>
+            <div class="crypto-price">$587.61</div>
+            <div class="crypto-change down">-0.75%</div>
+            <div class="crypto-chart">
+              <canvas class="mini-chart" data-symbol="BNB"></canvas>
+            </div>
+          </div>
+          
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-logo">XRP</div>
+              <div class="crypto-name">Ripple</div>
+            </div>
+            <div class="crypto-price">$0.6721</div>
+            <div class="crypto-change up">+3.12%</div>
+            <div class="crypto-chart">
+              <canvas class="mini-chart" data-symbol="XRP"></canvas>
+            </div>
+          </div>
+          
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-logo">ADA</div>
+              <div class="crypto-name">Cardano</div>
+            </div>
+            <div class="crypto-price">$0.4823</div>
+            <div class="crypto-change up">+1.46%</div>
+            <div class="crypto-chart">
+              <canvas class="mini-chart" data-symbol="ADA"></canvas>
+            </div>
+          </div>
+          
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-logo">SOL</div>
+              <div class="crypto-name">Solana</div>
+            </div>
+            <div class="crypto-price">$124.87</div>
+            <div class="crypto-change down">-1.23%</div>
+            <div class="crypto-chart">
+              <canvas class="mini-chart" data-symbol="SOL"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 5. ETF Bölümü -->
+      <div class="summary-section etf-section" style="display: none;">
+        <h3 class="section-title">ETF Piyasası</h3>
+        <div class="etf-grid">
+          <div class="etf-card">
+            <div class="etf-header">
+              <div class="etf-logo">SPY</div>
+              <div class="etf-name">SPDR S&P 500 ETF</div>
+            </div>
+            <div class="etf-price">$584.42</div>
+            <div class="etf-change up">+1.26%</div>
+            <div class="etf-chart">
+              <canvas class="mini-chart" data-symbol="SPY"></canvas>
+            </div>
+          </div>
+          
+          <div class="etf-card">
+            <div class="etf-header">
+              <div class="etf-logo">QQQ</div>
+              <div class="etf-name">Invesco QQQ Trust</div>
+            </div>
+            <div class="etf-price">$426.68</div>
+            <div class="etf-change up">+1.83%</div>
+            <div class="etf-chart">
+              <canvas class="mini-chart" data-symbol="QQQ"></canvas>
+            </div>
+          </div>
+          
+          <div class="etf-card">
+            <div class="etf-header">
+              <div class="etf-logo">VTI</div>
+              <div class="etf-name">Vanguard Total Stock Market</div>
+            </div>
+            <div class="etf-price">$252.17</div>
+            <div class="etf-change up">+0.92%</div>
+            <div class="etf-chart">
+              <canvas class="mini-chart" data-symbol="VTI"></canvas>
+            </div>
+          </div>
+          
+          <div class="etf-card">
+            <div class="etf-header">
+              <div class="etf-logo">ARKK</div>
+              <div class="etf-name">ARK Innovation ETF</div>
+            </div>
+            <div class="etf-price">$47.89</div>
+            <div class="etf-change down">-0.38%</div>
+            <div class="etf-chart">
+              <canvas class="mini-chart" data-symbol="ARKK"></canvas>
+            </div>
+          </div>
+          
+          <div class="etf-card">
+            <div class="etf-header">
+              <div class="etf-logo">GLD</div>
+              <div class="etf-name">SPDR Gold Shares</div>
+            </div>
+            <div class="etf-price">$195.32</div>
+            <div class="etf-change up">+0.65%</div>
+            <div class="etf-chart">
+              <canvas class="mini-chart" data-symbol="GLD"></canvas>
+            </div>
+          </div>
+          
+          <div class="etf-card">
+            <div class="etf-header">
+              <div class="etf-logo">IEMG</div>
+              <div class="etf-name">iShares Core MSCI EM</div>
+            </div>
+            <div class="etf-price">$53.41</div>
+            <div class="etf-change down">-0.24%</div>
+            <div class="etf-chart">
+              <canvas class="mini-chart" data-symbol="IEMG"></canvas>
+            </div>
+          </div>
         </div>
       </div>
     </section>
