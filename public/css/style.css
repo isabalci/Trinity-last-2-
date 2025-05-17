@@ -479,9 +479,7 @@ body {
 }
 
 .chart-tools {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+  display: none; /* Sağ üst köşedeki araç butonlarını gizle */
 }
 
 .tool-btn {
@@ -1972,6 +1970,7 @@ button {
 .light-theme .form-group input:focus, 
 .light-theme .form-group select:focus {
   border-color: #2962FF;
+  outline: none;
   box-shadow: 0 0 0 2px rgba(41, 98, 255, 0.1);
 }
 
