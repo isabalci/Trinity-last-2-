@@ -596,6 +596,7 @@ body {
 #chart, #nasdaqChart, #featuredChart {
   width: 100%;
   height: 100%;
+  max-height: 350px; /* Yeni: grafik canvas'ının maksimum yüksekliği */
 }
 
 #chart-container, #nasdaqChart-container, .featured-chart {
@@ -605,21 +606,20 @@ body {
   border-radius: 4px 4px 0 0;
   padding: 15px;
   background-color: #131722;
-  min-height: 300px;
+  min-height: 150px; /* 200px'den 150px'e düşürdüm */
+  max-height: 350px; /* 400px'den 350px'e düşürdüm */
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 350px; /* 400px'den 350px'e düşürdüm */
 }
 
 .nasdaq-chart {
   flex: 1;
   position: relative;
   overflow: hidden;
-  height: 45%;
-  min-height: 300px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  height: 30%; /* 35%'ten 30%'a düşürdüm */
+  min-height: 200px; /* 240px'den 200px'e düşürdüm */
+  margin-top: 10px; /* 15px'den 10px'e düşürdüm */
+  margin-bottom: 10px; /* 15px'den 10px'e düşürdüm */
   width: 100%;
   display: flex;
   justify-content: center;
@@ -631,11 +631,11 @@ body {
   background-color: #131722;
   border-radius: 8px;
   padding: 15px;
-  height: 45%;
-  min-height: 300px;
+  height: 30%; /* 35%'ten 30%'a düşürdüm */
+  min-height: 200px; /* 240px'den 200px'e düşürdüm */
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* 20px'den 15px'e düşürdüm */
   width: 100%;
   border: 1px solid #2a2e39;
 }
@@ -643,7 +643,7 @@ body {
 .featured-chart {
   flex: 1;
   width: 100%;
-  min-height: 200px;
+  min-height: 150px; /* 200px'den 150px'e düşürdüm */
   position: relative;
   display: flex;
   justify-content: center;
@@ -1412,21 +1412,21 @@ body {
 /* Market Indeksleri */
 .market-indices {
   display: flex;
-  gap: 15px;
+  gap: 10px; /* 15px'ten 10px'e düşürüldü */
   overflow-x: auto;
-  padding-bottom: 15px;
-  margin-bottom: 10px;
+  padding-bottom: 10px; /* 15px'ten 10px'e düşürüldü */
+  margin-bottom: 5px; /* 10px'den 5px'e düşürüldü */
 }
 
 .market-index {
   display: flex;
-  gap: 10px;
-  padding: 12px 15px;
+  gap: 8px; /* 10px'den 8px'e düşürüldü */
+  padding: 8px 12px; /* 12px 15px'ten 8px 12px'e düşürüldü */
   background-color: #1e222d;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 190px;
+  min-width: 170px; /* 190px'ten 170px'e düşürüldü */
   border: 1px solid #2a2e39;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -1453,12 +1453,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px; /* 40px'ten 32px'e düşürüldü */
+  height: 32px; /* 40px'ten 32px'e düşürüldü */
   border-radius: 50%;
   color: #fff;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12px; /* 14px'ten 12px'e düşürüldü */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: none;
 }
@@ -1681,6 +1681,7 @@ body {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 60px);
+  max-height: 800px; /* Yeni: ana içerik alanını sınırla */
   overflow: auto;
   background-color: var(--bg-primary);
 }
@@ -1695,7 +1696,7 @@ body {
   border: 1px solid #2a2e39;
   border-top: none;
   border-radius: 0 0 4px 4px;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* 20px'den 10px'e düşürüldü */
   z-index: 10;
 }
 
@@ -1729,8 +1730,9 @@ body {
 .light-theme #chart-container, 
 .light-theme #nasdaqChart-container, 
 .light-theme .featured-chart {
-  background-color: #ffffff;
-  border: 1px solid #e0e3eb;
+  background-color: white;
+  border-color: #e0e3eb;
+  min-height: 200px; /* 240px'den 200px'e düşürdüm */
 }
 
 .light-theme .chart-timeframe-buttons {
@@ -1790,8 +1792,10 @@ body {
   border-radius: 4px 4px 0 0;
   padding: 15px;
   background-color: #131722;
-  min-height: 300px;
+  min-height: 150px; /* 200px'den 150px'e düşürdüm */
+  max-height: 350px; /* 400px'den 350px'e düşürdüm */
   width: 100%;
+  height: 350px; /* 400px'den 350px'e düşürdüm */
 }
 
 /* Timeframe buttons container (Grafiğin Altına) */
@@ -2007,7 +2011,8 @@ button {
 .light-theme .featured-chart-container {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  min-height: 200px; /* 240px'den 200px'e düşürdüm */
+  height: 30%; /* 35%'ten 30%'a düşürdüm */
 }
 
 .light-theme .chart-header {
@@ -2341,16 +2346,16 @@ button {
 .summary-header {
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1rem; /* 1.5rem'den 1rem'e düşürüldü */
   background-color: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
 }
 
 .summary-header h2 {
-  font-size: 1.6rem;
+  font-size: 1.4rem; /* 1.6rem'den 1.4rem'e düşürüldü */
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem; /* 1rem'den 0.8rem'e düşürüldü */
 }
 
 .summary-categories {
